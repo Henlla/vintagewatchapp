@@ -1,5 +1,5 @@
 // import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import authApi from "../api/authAPI";
 
 function SignInForm() {
@@ -7,24 +7,17 @@ function SignInForm() {
     email: "",
     password: ""
   });
-  const [message, setMessage] = useState([]);
 
-  // useEffect(() => {
-    const fetchLogin = async () => {
-      var data = {
-        username: state.email,
-        password: state.password
-      }
-
+  useEffect(() => {
+    const fetchLogin = async (data) => {
       try {
         var response = await authApi.login(data);
-        setMessage(response)
-        console.log(message)
+        console.log(response)
       } catch (error) {
         console.log(error)
       }
     }
-  // }, [])
+  }, [])
 
   const handleChange = evt => {
     const value = evt.target.value;
@@ -37,8 +30,13 @@ function SignInForm() {
   const handleOnSubmit = evt => {
     evt.preventDefault();
 
-    // const { email, password } = state;
-    fetchLogin()
+    const { email, password } = state;
+
+    var data = {
+      username: email,
+      password: password
+    }
+
 
     for (const key in state) {
       setState({
