@@ -28,7 +28,7 @@ class AuthAPI {
     return axiosClient.post(url, params) as Promise<APIResponse>;
   };
 
-  getUserFromToken = (params: string) => {
+  getUserFromToken = (params: any) => {
     const url = "auth/getUserFromToken";
     return axiosClient.post(url, params) as Promise<APIResponse>;
   }

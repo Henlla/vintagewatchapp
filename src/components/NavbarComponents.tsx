@@ -1,6 +1,11 @@
+import { useEffect, useState } from 'react';
 import authApi from '../api/authAPI';
+import UserDropDownComponents from './UserDropDownComponents';
 
 export default function NavbarComponents() {
+    const [isAuthenticate, setAuthenticate] = useState<boolean>(false)
+    const [loggedUser, setLoggedUser] = useState<any>()
+
     const navigation = [
         { name: 'Home', href: '/', current: true },
         { name: 'Shop', href: '/shop', current: false },
@@ -11,7 +16,9 @@ export default function NavbarComponents() {
     const logout = async () => {
         try {
             var response = await authApi.logOut();
-            console.log(response);
+            if (response.isSuccess) {
+                window.location.href = "/"
+            }
         } catch (error) {
             console.log(error);
         }
@@ -22,6 +29,24 @@ export default function NavbarComponents() {
         logout();
         localStorage.removeItem("access_token");
     };
+    useEffect(() => {
+        const getUserFromToken = async () => {
+            var tokenString = localStorage.getItem("access_token")
+            var data = {
+                token: tokenString
+            }
+            if (tokenString == null) {
+                setAuthenticate(false)
+            } else {
+                var result = await authApi.getUserFromToken(data)
+                if (result.isSuccess) {
+                    setLoggedUser(result.data)
+                    setAuthenticate(true)
+                }
+            }
+        }
+        getUserFromToken()
+    }, [])
 
 
     return (
@@ -38,7 +63,7 @@ export default function NavbarComponents() {
                     <div className="ml-auto max-lg:mt-4">
 
                         <ul className='flex items-center'>
-                            <li className='max-sm:hidden flex text-[15px] max-lg:py-2 px-3 font-medium text-[#333] cursor-pointer'>
+                            {/* <li className='max-sm:hidden flex text-[15px] max-lg:py-2 px-3 font-medium text-[#333] cursor-pointer'>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" className="mr-2" viewBox="0 0 24 24">
                                     <g data-name="Layer 2">
                                         <path
@@ -72,13 +97,16 @@ export default function NavbarComponents() {
                                     <span
                                         className="absolute left-auto -ml-1 -top-1 rounded-full bg-red-500 px-1 py-0 text-xs text-white">0</span>
                                 </span>
+                            </li> */}
+                            <li className={`flex ${isAuthenticate ? 'hidden' : ''} text-[15px] max-lg:py-2 px-3 hover:text-[#007bff] hover:fill-[#007bff]`}>
+                                <a href='/signin' className={`${isAuthenticate ? `hidden` : ``} px-4 py-2 text-sm rounded font-semibold text-[#333] border-2 border-[#333] bg-transparent`}>Sign In</a>
                             </li>
-                            <li className='flex text-[15px] max-lg:py-2 px-3 hover:text-[#007bff] hover:fill-[#007bff]'>
-                                <a href='/signin' className='px-4 py-2 text-sm rounded font-semibold text-[#333] border-2 border-[#333] bg-transparent'>Sign In</a>
+                            <li className={`${!isAuthenticate ? 'hidden' : ''}`}>
+                                {loggedUser && <UserDropDownComponents name={loggedUser.firstName + " " + loggedUser.firstName} email={loggedUser.email} handleLogout={handleClickLogout} />}
                             </li>
-                            <li className='flex text-[15px] max-lg:py-2 px-3 hover:text-[#007bff] hover:fill-[#007bff]'>
+                            {/* <li className='flex text-[15px] max-lg:py-2 px-3 hover:text-[#007bff] hover:fill-[#007bff]'>
                                 <a onClick={handleClickLogout} className='px-4 py-2 text-sm hover:cursor-pointer rounded font-semibold text-[#333] border-2 border-[#333] bg-transparent'>Sign Out</a>
-                            </li>
+                            </li> */}
                             <li id="toggleOpen" className='lg:hidden'>
                                 <button>
                                     <svg className="w-7 h-7" fill="#333" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -114,6 +142,6 @@ export default function NavbarComponents() {
                     ))}
                 </ul>
             </div>
-        </header>
+        </header >
     )
 }
