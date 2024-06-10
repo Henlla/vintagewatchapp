@@ -83,7 +83,7 @@ export default function SidebarComponents() {
             if (result.isSuccess)
                 setProducts(result.data)
         }
-        getProductData
+        getProductData();
     }, [])
 
     return (
