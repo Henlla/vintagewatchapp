@@ -15,7 +15,6 @@ import {
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import ProductComponents from './ProductComponents'
-import productAPI from '../api/productAPI'
 
 const sortOptions = [
     { name: 'Most Popular', href: '#', current: true },
@@ -75,19 +74,9 @@ function classNames(...classes: string[]) {
 
 export default function SidebarComponents() {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-    const [products, setProducts] = useState<any>();
-
-    useEffect(() => {
-        const getProductData = async () => {
-            var result = await productAPI.getAllProduct()
-            if (result.isSuccess)
-                setProducts(result.data)
-        }
-        getProductData
-    }, [])
 
     return (
-        <div className="bg-white md:h-screen">
+        <div className="bg-white md:h-auto">
             <div>
                 {/* Mobile filter dialog */}
                 <Transition show={mobileFiltersOpen}>
@@ -312,7 +301,7 @@ export default function SidebarComponents() {
 
                             {/* Product grid */}
                             <div className="lg:col-span-3">
-                                <ProductComponents productData={products} />
+                                <ProductComponents/>
                             </div>
                         </div>
                     </section>
