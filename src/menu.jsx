@@ -1,14 +1,11 @@
 import React from "react";
-import Login from "./page/Login";
 
 
-function  menu(){
-return (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/login" element={<Login />}></Route>
-    </Routes>
-  </BrowserRouter>
-);
+function menu() {
+  return (
+    <BrowserRouter>
+      <Routes></Routes>
+    </BrowserRouter>
+  );
 }
 export default menu;

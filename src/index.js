@@ -1,15 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import Product from './components/getProduct';
-import Login from './page/Login';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import Login from "./page/Login";
+import Header from "./page/Header";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <Login/>
-    <Product />
+    <Header/>
   </React.StrictMode>
 );
 
