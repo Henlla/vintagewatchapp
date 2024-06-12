@@ -1,72 +1,118 @@
 import { useEffect, useState } from "react";
 import PaginateComponents from "./PaginateComponents";
 import productAPI from "../api/productAPI";
+import imageUtil from "../util/convertImage";
 
 
 const ProductComponents = () => {
-  const [currentPage, setCurentPage] = useState<any>(1)
-  const [arrayOfCurPage, setArrayOfCurPage] = useState<any>()
+  const [currentPage, setCurentPage] = useState<any>(1);
+  const [arrayOfCurPage, setArrayOfCurPage] = useState<any>();
   const [products, setProducts] = useState<any>();
-  const [productPerPage, setProductPerPage] = useState<any>()
+  const [productPerPage, setProductPerPage] = useState<any>();
+  const [isAuthenticate, setIsAuthenticate] = useState(false);
+  const [tokenString, setTokenString] = useState<any>();
+  const [recordPerPage] = useState(8);
+  const [nPage, setNPage] = useState(1);
 
-  
-  const recordPerPage = 8;
-  const nPage = products && Math.ceil(products.length / recordPerPage)
+  const [base64String, setBase64String] = useState<any>();
+
   const numbers = [...Array(nPage && (nPage + 1)).keys()].slice(1)
+  const token = localStorage.getItem("access_token")
 
-  useEffect(() => {
-    const getProductData = async () => {
-      var result = await productAPI.getAllProduct()
-      if (result.isSuccess)
-        setProducts(result.data)
+  const handleChangeImage = (event: any) => {
+    console.log(event.target.files[0]);
+    var base64String = imageUtil.convertImageToBase64(event.target.files[0]);
+    setBase64String(base64String);
+  }
+
+  const handleSubmit = async () => {
+    var result = productAPI.postTimepiece(base64String);
+    console.log(result)
+  }
+  const getProductData = async () => {
+    let response;
+    let totalPage;
+    if (isAuthenticate) {
+      var data = {
+        token: tokenString
+      }
+      response = await productAPI.getProductExceptUser(data)
+    } else {
+      response = await productAPI.getAllProduct()
     }
-    getProductData()
-  }, [])
+    if (response.isSuccess) {
+      totalPage = response.data && Math.ceil(response.data.length / recordPerPage)
+      setProducts(response.data)
+      setNPage(totalPage)
+    }
+  };
 
-  useEffect(() => {
-    const getProductDataWithPaging = async () => {
+
+  const getProductDataWithPaging = async () => {
+    let response;
+    if (!isAuthenticate) {
       var data = {
         pageNumber: currentPage,
         _pageSize: recordPerPage
       }
-      if (currentPage == "...") {
-        return;
+      response = await productAPI.getAllProductWithPaging(data)
+    } else {
+      var tokenData = {
+        token: tokenString
       }
-      var result = await productAPI.getAllProductWithPaging(data)
-      if (result.isSuccess) {
-        setProductPerPage(result.data)
+      var pageData = {
+        pageNumber: currentPage,
+        _pageSize: recordPerPage
       }
+      response = await productAPI.getAllProductExceptUserWithPaging(tokenData, pageData)
     }
-    getProductDataWithPaging()
-  }, [products, currentPage])
+
+    if (response.isSuccess) {
+      setProductPerPage(response.data)
+    }
+  }
+
+  const updatePaginate = () => {
+    let tempNumberOfPage: (number | string)[] = [...numbers];
+    if (currentPage >= 1 && currentPage <= 3) {
+      tempNumberOfPage = [1, 2, 3, 4, '...', numbers.length]
+    }
+    else if (currentPage === 4) {
+      const slice = numbers.slice(0, 5)
+      tempNumberOfPage = [...slice, '...', numbers.length]
+    }
+    else if (currentPage >= 4 && currentPage < (numbers.length - 2)) {
+      const sliced1 = numbers.slice(currentPage - 2, currentPage);
+      const sliced2 = numbers.slice(currentPage, currentPage + 1)
+      tempNumberOfPage = ([1, '...', ...sliced1, ...sliced2, '...', numbers.length])
+    }
+    else if (currentPage > numbers.length - 3) {
+      const sliced = numbers.slice(numbers.length - 4)
+      tempNumberOfPage = ([1, '...', ...sliced])
+    } else {
+      return;
+    }
+    setArrayOfCurPage(tempNumberOfPage)
+  }
 
 
   useEffect(() => {
-    const updatePaginate = () => {
-      let tempNumberOfPage: (number | string)[] = [...numbers];
-      if (currentPage >= 1 && currentPage <= 3) {
-        tempNumberOfPage = [1, 2, 3, 4, '...', numbers.length]
-      }
-      else if (currentPage === 4) {
-        const slice = numbers.slice(0, 5)
-        tempNumberOfPage = [...slice, '...', numbers.length]
-      }
-      else if (currentPage >= 4 && currentPage < (numbers.length - 2)) {
-        const sliced1 = numbers.slice(currentPage - 2, currentPage);
-        const sliced2 = numbers.slice(currentPage, currentPage + 1)
-        tempNumberOfPage = ([1, '...', ...sliced1, ...sliced2, '...', numbers.length])
-      }
-      else if (currentPage > numbers.length - 3) {
-        const sliced = numbers.slice(numbers.length - 4)
-        tempNumberOfPage = ([1, '...', ...sliced])
-      } else {
-        return;
-      }
-      setArrayOfCurPage(tempNumberOfPage)
-    }
-    updatePaginate()
-  }, [products, currentPage])
+    setTokenString(token)
+  }, [tokenString])
 
+  useEffect(() => {
+    setIsAuthenticate(!!tokenString);
+  }, [tokenString])
+
+  useEffect(() => {
+    getProductData();
+  }, [nPage, isAuthenticate])
+
+
+  useEffect(() => {
+    getProductDataWithPaging();
+    updatePaginate();
+  }, [currentPage, nPage])
 
 
   const prePage = (e: { preventDefault: () => void; }) => {
@@ -89,6 +135,8 @@ const ProductComponents = () => {
 
   return (
     <>
+      <input type="file" onChange={handleChangeImage} />
+      <button onClick={handleSubmit}>Click me</button>
       <div className="font-sans p-4 mx-auto lg:max-w-6xl md:max-w-4xl">
         <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-16">Top Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16">

@@ -9,28 +9,29 @@ interface APIResponse {
 
 class AuthAPI {
   loginByUserName = (params: any) => {
-    const url = "auth/signin";
+    var url = "auth/signin";
     return axiosClient.post(url, params) as Promise<APIResponse>;
   };
 
   logOut = () => {
-    const url = "auth/logout";
+    var url = "auth/logout";
     return axiosClient.post(url) as Promise<APIResponse>;
   };
 
   loginWithGoogle = () => {
-    const url = "auth/signinWithGoogle"
+    var url = "auth/signinWithGoogle"
     return axiosClient.get(url) as Promise<APIResponse>;
   }
 
   signUp = (params: any) => {
-    const url = "auth/signup";
+    var url = "auth/signup";
     return axiosClient.post(url, params) as Promise<APIResponse>;
   };
 
   getUserFromToken = (params: any) => {
-    const url = "auth/getUserFromToken";
-    return axiosClient.post(url, params) as Promise<APIResponse>;
+    var url = "auth/getUserFromToken";
+    var queryString = new URLSearchParams(params);
+    return axiosClient.get(url + "?" + queryString) as Promise<APIResponse>;
   }
 
 }
