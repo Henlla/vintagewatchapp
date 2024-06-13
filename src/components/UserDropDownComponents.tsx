@@ -30,6 +30,5 @@ const UserDropDownComponents = ({ name, email, handleLogout }: dropDownType) => 
 
     </>;
 }
-// updete
 
 export default UserDropDownComponents;
