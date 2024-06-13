@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import PaginateComponents from "./PaginateComponents";
 import productAPI from "../api/productAPI";
-import imageUtil from "../util/convertImage";
 
 
 const ProductComponents = () => {
@@ -14,21 +13,9 @@ const ProductComponents = () => {
   const [recordPerPage] = useState(8);
   const [nPage, setNPage] = useState(1);
 
-  const [base64String, setBase64String] = useState<any>();
-
   const numbers = [...Array(nPage && (nPage + 1)).keys()].slice(1)
   const token = localStorage.getItem("access_token")
 
-  const handleChangeImage = (event: any) => {
-    console.log(event.target.files[0]);
-    var base64String = imageUtil.convertImageToBase64(event.target.files[0]);
-    setBase64String(base64String);
-  }
-
-  const handleSubmit = async () => {
-    var result = productAPI.postTimepiece(base64String);
-    console.log(result)
-  }
   const getProductData = async () => {
     let response;
     let totalPage;
@@ -46,7 +33,6 @@ const ProductComponents = () => {
       setNPage(totalPage)
     }
   };
-
 
   const getProductDataWithPaging = async () => {
     let response;
@@ -95,6 +81,14 @@ const ProductComponents = () => {
     setArrayOfCurPage(tempNumberOfPage)
   }
 
+  const handleTestAuthenticate = async () => {
+    var data = {
+      token: token
+    }
+    var response = await productAPI.postTimepiece(data)
+    console.log(response)
+  }
+
 
   useEffect(() => {
     setTokenString(token)
@@ -135,22 +129,21 @@ const ProductComponents = () => {
 
   return (
     <>
-      <input type="file" onChange={handleChangeImage} />
-      <button onClick={handleSubmit}>Click me</button>
-      <div className="font-sans p-4 mx-auto lg:max-w-6xl md:max-w-4xl">
+      <button onClick={handleTestAuthenticate}>Check authenticate</button>
+      <div className="font-sans p-4= mx-auto lg:max-w-6xl md:max-w-4xl">
         <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-16">Top Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16">
 
           {productPerPage && productPerPage.map((_item: any, index: any) => (
             <div key={index} className="bg-white overflow-hidden cursor-pointer">
               <div className="w-full h-[150px] overflow-hidden mx-auto aspect-w-16 aspect-h-8">
-                <img src={_item.image.imageUrl} alt={_item.image.imageName}
+                <img src={_item.mainImage && _item.mainImage.imageUrl} alt={_item.mainImage && _item.mainImage.imageName}
                   className="h-full w-full object-contain" />
               </div>
 
               <div className="mt-6 text-center">
-                <h3 className="text-lg font-bold text-gray-800">{_item.timepieceName}</h3>
-                <h4 className="text-lg text-blue-600 font-bold mt-3">${_item.price}</h4>
+                <h3 className="text-lg font-bold text-gray-800">{_item.timepiece.timepieceName}</h3>
+                <h4 className="text-lg text-blue-600 font-bold mt-3">${_item.timepiece.price}</h4>
               </div>
 
               <div className="flex justify-center space-x-1 mt-3">

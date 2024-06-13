@@ -8,12 +8,6 @@ interface APIResponse {
 }
 
 class ProductAPI {
-    getAllProductWithPaging = (params: any) => {
-        var url = "timepiece/GetAllProductWithPaging";
-        var queryString = new URLSearchParams(params);
-        return axiosClient.get(url + "?" + queryString) as Promise<APIResponse>;
-    }
-
     getAllProduct = () => {
         var url = "timepiece/GetAllProduct";
         return axiosClient.get(url) as Promise<APIResponse>;
@@ -21,6 +15,12 @@ class ProductAPI {
 
     getProductExceptUser = (params: any) => {
         var url = "timepiece/GetAllProductExeptUser";
+        var queryString = new URLSearchParams(params);
+        return axiosClient.get(url + "?" + queryString) as Promise<APIResponse>;
+    }
+
+    getAllProductWithPaging = (params: any) => {
+        var url = "timepiece/GetAllProductWithPaging";
         var queryString = new URLSearchParams(params);
         return axiosClient.get(url + "?" + queryString) as Promise<APIResponse>;
     }
@@ -33,9 +33,10 @@ class ProductAPI {
 
     }
 
-    postTimepiece = (params: any) => {
-        var url = "timepiece"
-        return axiosClient.post(url, params) as Promise<APIResponse>
+    postTimepiece = (token: any) => {
+        var url = "timepiece/uploadTimepiece"
+        var queryString = new URLSearchParams(token);
+        return axiosClient.post(url + "?" + queryString) as Promise<APIResponse>
     }
 }
 const productAPI = new ProductAPI()
