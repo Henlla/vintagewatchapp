@@ -7,6 +7,8 @@ import ContactPage from "./pages/ContactPage"
 import FooterComponents from "./components/FooterComponents"
 import SignInComponents from "./components/SignInComponents"
 import SignUpComponents from "./components/SignUpComponents"
+import ProfilePage from "./pages/ProfilePage"
+import AuthenticateRoute from "./Privateroute/AuthenticateRoute"
 
 function App() {
   return (
@@ -20,6 +22,12 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/signin" element={<SignInComponents />} />
           <Route path="/signup" element={<SignUpComponents />} />
+          <Route path="/profile" element={
+            <AuthenticateRoute>
+              <ProfilePage />
+            </AuthenticateRoute>
+          }
+          />
         </Routes>
         <FooterComponents />
       </BrowserRouter>
