@@ -12,6 +12,7 @@ const ProductComponents = () => {
   const [tokenString, setTokenString] = useState<any>();
   const [recordPerPage] = useState(8);
   const [nPage, setNPage] = useState(1);
+  const [file, setFile] = useState<any>();
 
   const numbers = [...Array(nPage && (nPage + 1)).keys()].slice(1)
   const token = localStorage.getItem("access_token")
@@ -81,15 +82,6 @@ const ProductComponents = () => {
     setArrayOfCurPage(tempNumberOfPage)
   }
 
-  const handleTestAuthenticate = async () => {
-    var data = {
-      token: token
-    }
-    var response = await productAPI.postTimepiece(data)
-    console.log(response)
-  }
-
-
   useEffect(() => {
     setTokenString(token)
   }, [tokenString])
@@ -129,7 +121,6 @@ const ProductComponents = () => {
 
   return (
     <>
-      <button onClick={handleTestAuthenticate}>Check authenticate</button>
       <div className="font-sans p-4= mx-auto lg:max-w-6xl md:max-w-4xl">
         <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-16">Top Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16">

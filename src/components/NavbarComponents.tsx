@@ -29,6 +29,7 @@ export default function NavbarComponents() {
         logout();
         localStorage.removeItem("access_token");
     };
+   
     useEffect(() => {
         const getUserFromToken = async () => {
             var tokenString = localStorage.getItem("access_token")
@@ -67,7 +68,7 @@ export default function NavbarComponents() {
                                 <a href='/signin' className={`${isAuthenticate ? `hidden` : ``} px-4 py-2 text-sm rounded font-semibold text-[#333] border-2 border-[#333] bg-transparent`}>Sign In</a>
                             </li>
                             <li className={`${!isAuthenticate ? 'hidden' : ''}`}>
-                                {loggedUser && <UserDropDownComponents name={loggedUser.firstName + " " + loggedUser.lastName} email={loggedUser.email} handleLogout={handleClickLogout} />}
+                                {loggedUser && <UserDropDownComponents handleLogout={handleClickLogout} />}
                             </li>
                             <li id="toggleOpen" className='lg:hidden'>
                                 <button>

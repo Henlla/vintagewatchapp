@@ -33,10 +33,9 @@ class ProductAPI {
 
     }
 
-    postTimepiece = (token: any) => {
+    postTimepiece = (data: any, header: any) => {
         var url = "timepiece/uploadTimepiece"
-        var queryString = new URLSearchParams(token);
-        return axiosClient.post(url + "?" + queryString) as Promise<APIResponse>
+        return axiosClient.post(url, data, { headers: header }) as Promise<APIResponse>
     }
 }
 const productAPI = new ProductAPI()
