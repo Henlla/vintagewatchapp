@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import HeaderProductComponents from "../components/HeaderProductComponents";
 
+
 const HomePage = () => {
     const [token, setToken] = useState("")
 
@@ -14,6 +15,7 @@ const HomePage = () => {
         <HeaderProductComponents />
         <HeaderProductComponents />
         <HeaderProductComponents />
+        
     </>;
 }
 
