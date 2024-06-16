@@ -12,7 +12,6 @@ const ProductComponents = () => {
   const [tokenString, setTokenString] = useState<any>();
   const [recordPerPage] = useState(8);
   const [nPage, setNPage] = useState(1);
-  const [file, setFile] = useState<any>();
 
   const numbers = [...Array(nPage && (nPage + 1)).keys()].slice(1)
   const token = localStorage.getItem("access_token")
@@ -61,7 +60,9 @@ const ProductComponents = () => {
 
   const updatePaginate = () => {
     let tempNumberOfPage: (number | string)[] = [...numbers];
-    if (currentPage >= 1 && currentPage <= 3) {
+    if (nPage <= 10) {
+      tempNumberOfPage
+    } else if (currentPage >= 1 && currentPage <= 3) {
       tempNumberOfPage = [1, 2, 3, 4, '...', numbers.length]
     }
     else if (currentPage === 4) {
@@ -164,7 +165,8 @@ const ProductComponents = () => {
           ))}
         </div>
       </div>
-      <PaginateComponents numbersPage={numbers} arrayOfCurPage={arrayOfCurPage} prePage={prePage} nextPage={nextPage} changePage={changePage} currentPage={currentPage} />
+
+      {products && products.length == 0 ? <p className="text-center">No data</p> : <PaginateComponents numbersPage={numbers} arrayOfCurPage={arrayOfCurPage} prePage={prePage} nextPage={nextPage} changePage={changePage} currentPage={currentPage} />}
     </>
   );
 };
