@@ -4,20 +4,16 @@ import {
   WrapperHeader,
   WrapperLabel,
   WrapperxInput,
-} from "./style";
-import InputForm from "../../components/InputForm/InputForm";
-import ButtonComponent from "../components/ButtonComponent";
+} from "./style"
+import CustomButton from "../components/CustomButtonProps";
 import { Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { getBase64 } from "../../until";
+
 
 class ProfilePage extends React.Component {
   render() {
-    const handleOnChangeAvatar = async (fileList) => {
-      const file = fileList[0];
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-      }
+    const handleOnChangeAvatar = async () => {
+      
     };
     const handleOnChangeEmail = () => {};
     const handeUpdate = () => {};
@@ -27,15 +23,15 @@ class ProfilePage extends React.Component {
         <WrapperContentProfile>
           <WrapperxInput>
             <WrapperLabel htmlFor="name">Name</WrapperLabel>
-            <InputForm
+            <input
               style={{ width: "300px" }}
               id="name"
               // value={name}
               onChange={handleOnChangeEmail}
             />
-            <ButtonComponent
+            <CustomButton
               onClick={handeUpdate}
-              size={40}
+              size = {40}
               styleButton={{
                 height: "30px",
                 width: "fit-content",
@@ -48,17 +44,17 @@ class ProfilePage extends React.Component {
                 fontSize: "15px",
                 fontWeight: "700",
               }}
-            ></ButtonComponent>
+            ></CustomButton>
           </WrapperxInput>
           <WrapperxInput>
             <WrapperLabel htmlFor="email">Email</WrapperLabel>
-            <InputForm
+            <input
               style={{ width: "300px" }}
               id="email"
               // value={email}
               onChange={handleOnChangeEmail}
             />
-            <ButtonComponent
+            <CustomButton
               onClick={handeUpdate}
               size={40}
               styleButton={{
@@ -73,17 +69,17 @@ class ProfilePage extends React.Component {
                 fontSize: "15px",
                 fontWeight: "700",
               }}
-            ></ButtonComponent>
+            ></CustomButton>
           </WrapperxInput>
           <WrapperxInput>
             <WrapperLabel htmlFor="phone">Phone</WrapperLabel>
-            <InputForm
+            <input
               style={{ width: "300px" }}
               id="email"
               // value={email}
               onChange={handleOnChangeEmail}
             />
-            <ButtonComponent
+            <CustomButton
               onClick={handeUpdate}
               size={40}
               styleButton={{
@@ -98,14 +94,14 @@ class ProfilePage extends React.Component {
                 fontSize: "15px",
                 fontWeight: "700",
               }}
-            ></ButtonComponent>
+            ></CustomButton>
           </WrapperxInput>
           <WrapperxInput>
             <WrapperLabel htmlFor="avatar">Avatar</WrapperLabel>
             <Upload onChange={handleOnChangeAvatar}>
               <Button icon={<UploadOutlined />}>Select File</Button>
             </Upload>
-            <ButtonComponent
+            <CustomButton
               onClick={handeUpdate}
               size={40}
               styleButton={{
@@ -120,17 +116,17 @@ class ProfilePage extends React.Component {
                 fontSize: "15px",
                 fontWeight: "700",
               }}
-            ></ButtonComponent>
+            ></CustomButton>
           </WrapperxInput>
           <WrapperxInput>
             <WrapperLabel htmlFor="address">address</WrapperLabel>
-            <InputForm
+            <input
               style={{ width: "300px" }}
               id="email"
               // value={email}
               onChange={handleOnChangeEmail}
             />
-            <ButtonComponent
+            <CustomButton
               onClick={handeUpdate}
               size={40}
               styleButton={{
@@ -145,7 +141,7 @@ class ProfilePage extends React.Component {
                 fontSize: "15px",
                 fontWeight: "700",
               }}
-            ></ButtonComponent>
+            ></CustomButton>
           </WrapperxInput>
         </WrapperContentProfile>
       </div>
