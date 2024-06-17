@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
 import PaginateComponents from "./PaginateComponents";
 import productAPI from "../api/productAPI";
+import { CircularProgress } from "@mui/material";
 
 
 const ProductComponents = () => {
   const [currentPage, setCurentPage] = useState<any>(1);
-  const [arrayOfCurPage, setArrayOfCurPage] = useState<any>();
-  const [products, setProducts] = useState<any>();
-  const [productPerPage, setProductPerPage] = useState<any>();
+  const [products, setProducts] = useState<any>([]);
+  const [productPerPage, setProductPerPage] = useState<any>([]);
   const [isAuthenticate, setIsAuthenticate] = useState(false);
-  const [tokenString, setTokenString] = useState<any>();
+  const [tokenString] = useState<any>(localStorage.getItem("access_token"));
   const [recordPerPage] = useState(8);
   const [nPage, setNPage] = useState(1);
-
-  const numbers = [...Array(nPage && (nPage + 1)).keys()].slice(1)
-  const token = localStorage.getItem("access_token")
 
   const getProductData = async () => {
     let response;
@@ -58,34 +55,9 @@ const ProductComponents = () => {
     }
   }
 
-  const updatePaginate = () => {
-    let tempNumberOfPage: (number | string)[] = [...numbers];
-    if (nPage <= 10) {
-      tempNumberOfPage
-    } else if (currentPage >= 1 && currentPage <= 3) {
-      tempNumberOfPage = [1, 2, 3, 4, '...', numbers.length]
-    }
-    else if (currentPage === 4) {
-      const slice = numbers.slice(0, 5)
-      tempNumberOfPage = [...slice, '...', numbers.length]
-    }
-    else if (currentPage >= 4 && currentPage < (numbers.length - 2)) {
-      const sliced1 = numbers.slice(currentPage - 2, currentPage);
-      const sliced2 = numbers.slice(currentPage, currentPage + 1)
-      tempNumberOfPage = ([1, '...', ...sliced1, ...sliced2, '...', numbers.length])
-    }
-    else if (currentPage > numbers.length - 3) {
-      const sliced = numbers.slice(numbers.length - 4)
-      tempNumberOfPage = ([1, '...', ...sliced])
-    } else {
-      return;
-    }
-    setArrayOfCurPage(tempNumberOfPage)
-  }
-
-  useEffect(() => {
-    setTokenString(token)
-  }, [tokenString])
+  // useEffect(() => {
+  //   setTokenString(token)
+  // }, [tokenString])
 
   useEffect(() => {
     setIsAuthenticate(!!tokenString);
@@ -98,26 +70,15 @@ const ProductComponents = () => {
 
   useEffect(() => {
     getProductDataWithPaging();
-    updatePaginate();
   }, [currentPage, nPage])
 
 
-  const prePage = (e: { preventDefault: () => void; }) => {
-    e.preventDefault()
-    setCurentPage(currentPage - 1)
+  if (products.length == 0) {
+    return <div className="flex justify-center"><CircularProgress /></div> ;
   }
 
-
-  const nextPage = (e: { preventDefault: () => void; }) => {
-    e.preventDefault()
-    setCurentPage(currentPage + 1)
-  }
-
-
-  const changePage = (item: any) => {
-    if (item == "...")
-      return;
-    setCurentPage(item)
+  const changePage = (event: any, value: number) => {
+    setCurentPage(value)
   }
 
   return (
@@ -126,7 +87,7 @@ const ProductComponents = () => {
         <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-16">Top Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16">
 
-          {productPerPage && productPerPage.map((_item: any, index: any) => (
+          {productPerPage.map((_item: any, index: any) => (
             <div key={index} className="bg-white overflow-hidden cursor-pointer">
               <div className="w-full h-[150px] overflow-hidden mx-auto aspect-w-16 aspect-h-8">
                 <img src={_item.mainImage && _item.mainImage.imageUrl} alt={_item.mainImage && _item.mainImage.imageName}
@@ -165,8 +126,7 @@ const ProductComponents = () => {
           ))}
         </div>
       </div>
-
-      {products && products.length == 0 ? <p className="text-center">No data</p> : <PaginateComponents numbersPage={numbers} arrayOfCurPage={arrayOfCurPage} prePage={prePage} nextPage={nextPage} changePage={changePage} currentPage={currentPage} />}
+      <PaginateComponents numbersPage={nPage} changePage={changePage} currentPage={currentPage} />
     </>
   );
 };
