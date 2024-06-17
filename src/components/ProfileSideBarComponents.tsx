@@ -1,6 +1,6 @@
 const ProfileSidebarComponents = () => {
     return <>
-        
+        this is prodile page
     </>;
 }
 

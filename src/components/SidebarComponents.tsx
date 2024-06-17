@@ -299,7 +299,6 @@ export default function SidebarComponents() {
                                 ))}
                             </form>
 
-                            {/* Product grid */}
                             <div className="lg:col-span-3">
                                 <ProductComponents/>
                             </div>
