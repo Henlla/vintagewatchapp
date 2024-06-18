@@ -1,6 +1,6 @@
 const CheckoutComponents = () => {
     return <>
-        <div className="font-[sans-serif] bg-white">
+        <div className="font-[sans-serif] md:h-screen bg-white">
             <div className="max-lg:max-w-xl mx-auto w-full">
                 <div className="grid lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2 max-lg:order-1 p-6 !pr-0 max-w-4xl mx-auto w-full">

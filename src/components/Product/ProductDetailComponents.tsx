@@ -1,4 +1,20 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import productAPI from "../../api/productAPI";
+
 const ProductDetailComponents = () => {
+    const { productId } = useParams();
+    const [products, setProducts] = useState(null);
+
+    const getProductDetail = () => {
+        
+    }
+
+    useEffect(() => {
+        getProductDetail();
+    }, [])
+
+
     return <>
         <div className="font-sans">
             <div className="p-6 lg:max-w-7xl max-w-2xl max-lg:mx-auto">

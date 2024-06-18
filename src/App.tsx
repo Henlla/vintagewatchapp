@@ -1,14 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import NavbarComponents from "./components/NavbarComponents"
+import NavbarComponents from "./components/Layouts/NavbarComponents"
 import HomePage from "./pages/HomePage"
 import AboutPage from "./pages/AboutPage"
 import StorePage from "./pages/StorePage"
 import ContactPage from "./pages/ContactPage"
-import FooterComponents from "./components/FooterComponents"
-import SignInComponents from "./components/SignInComponents"
-import SignUpComponents from "./components/SignUpComponents"
+import FooterComponents from "./components/Layouts/FooterComponents"
+import SignInComponents from "./components/Authenticate/SignInComponents"
+import SignUpComponents from "./components/Authenticate/SignUpComponents"
 import ProfilePage from "./pages/ProfilePage"
 import AuthenticateRoute from "./Privateroute/AuthenticateRoute"
+import CheckoutComponents from "./components/Product/CheckoutComponents"
+import ProductDetailComponents from "./components/Product/ProductDetailComponents"
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
             </AuthenticateRoute>
           }
           />
+          <Route path="/checkout" element={<CheckoutComponents />} />
+          <Route path="/product-detail/:productId" element={<ProductDetailComponents />} />
         </Routes>
         <FooterComponents />
       </BrowserRouter>

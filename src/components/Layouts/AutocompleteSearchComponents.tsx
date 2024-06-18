@@ -1,6 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import productAPI from "../api/productAPI";
+import productAPI from "../../api/productAPI";
 
 const AutoCompleteSearchComponents = () => {
   const [tokenString] = useState<any>(localStorage.getItem("access_token"));

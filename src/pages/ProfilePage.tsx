@@ -4,8 +4,8 @@ import {
   WrapperHeader,
   WrapperLabel,
   WrapperxInput,
-} from "./style"
-import CustomButton from "../components/CustomButtonProps";
+} from "../components/CustomStyle/style"
+import CustomButton from "../components/CustomStyle/CustomButtonProps";
 import { Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -18,7 +18,7 @@ class ProfilePage extends React.Component {
     const handleOnChangeEmail = () => {};
     const handeUpdate = () => {};
     return (
-      <div style={{ width: "1270px", margin: "0 auto" }}>
+      <div className="md:h-screen" style={{ width: "1270px", margin: "0 auto" }}>
         <WrapperHeader>Thông tin người dùng</WrapperHeader>
         <WrapperContentProfile>
           <WrapperxInput>
