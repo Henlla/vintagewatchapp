@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import HeaderProductComponents from "../components/HeaderProductComponents";
-
+import FooterComponents from "../components/FooterComponents";
+import NavbarComponents from "../components/NavbarComponents";
+import ScrollToTop from "../components/ScrollToTopComponents";
+import CaroselComponent from "../components/CaroselComponent";
+import HeaderVideo from "../components/HeaderVideo";
 
 const HomePage = () => {
     const [token, setToken] = useState("")
@@ -12,9 +16,15 @@ const HomePage = () => {
         }
     })
     return <>
+    <NavbarComponents/>
+    
+{/* <HeaderVideo/> */}
         <HeaderProductComponents />
         <HeaderProductComponents />
-        <HeaderProductComponents />
+         <CaroselComponent/>
+        <HeaderVideo/>
+        <ScrollToTop/>
+        <FooterComponents/>
         
     </>;
 }

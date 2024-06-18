@@ -1,6 +1,6 @@
 const FooterComponents = () => {
     return <>
-        <footer className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900  py-14 px-16 font-sans tracking-wide relative">
+        <footer className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 py-8 px-9 font-sans tracking-wide relative rounded-t-3xl">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
                     <h2 className="text-white text-lg font-semibold mb-4">Quick Links</h2>

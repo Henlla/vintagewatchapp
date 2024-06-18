@@ -1,1 +1,105 @@
+/* Scroll to top */
+.top-to-btm {
+  position: relative;
+}
+.icon-position {
+  position: fixed;
+  bottom: 40px;
+  right: 25px;
+  z-index: 20;
+}
+.icon-style {
+  background: black;
+  border: 1px solid #e7e00e;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  color: blue;
+  cursor: pointer;
+  animation: movebtn 3s ease-in-out infinite;
+  transition: all 0.5s ease-in-out;
+}
+.icon-style:hover {
+  animation: none;
+  background: white;
+  color: blue;
+  border: 1px solid #e7e00e;
+}
+@keyframes movebtn {
+  0% {
+    transform: translateY(0px);
+  }
+  25% {
+    transform: translateY(20px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  75% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+/* Scroll to top */
+/* css HeaderVideo */
+.experience {
+  background-image: url(/image-video/bussiness_img_1.jpg);
+  background-size: cover;
+  padding: 100px 0px;
+  color: white;
+  width: 100%;
+  background-attachment: fixed;
+}
+.experience_title {
+  text-align: center;
+  padding: 20px;
+}
+.experience_title p:first-of-type {
+  font-size: 14px;
+  color: #e62b4a;
+  font-weight: 300;
+}
+.experience_title h2 {
+  font-size: 50px;
+  font-weight: 400;
+  padding: 10px;
+}
+.experience_title p:last-of-type {
+  font-size: 16px;
+  color: #888888;
+  font-weight: 700;
+  margin-top: 20px;
+}
+.experience_content {
+  width: 75%;
+  margin: 30px auto 0;
+}
+.experience_content video {
+  width: 100%;
+  object-fit: cover;
+  border: none;
+  box-shadow: 0 2px 10px 1px rgb(0 0 0 / 50%);
+  outline: none;
+}
+/* css HeaderVideo */
+/* css Caroselcomponent */
+.carousel_list .slick-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.image-container {
+  width: 255px;  /* Set your desired width */
+  height: 165px; /* Set your desired height */
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* css Caroselcomponent */
