@@ -24,10 +24,7 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/signin" element={<SignInComponents />} />
           <Route path="/signup" element={<SignUpComponents />} />
-          <Route path="/fogotpw" element={<FogotPassWord />} />
-          <Route path="/verifycode" element={<VerificationComponents />} />
-          <Route path="/video" element={<HeaderVideo />} />
-<Route path="/Carosel" element={<CaroselComponent />} />
+    
         </Routes>
      
       </BrowserRouter>

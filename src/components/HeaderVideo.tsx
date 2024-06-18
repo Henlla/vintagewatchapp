@@ -6,7 +6,7 @@ const HeaderVideo = () => {
        <section className="experience ">
       <div className="experience_title">
         <p>HOW DO WE WORKS</p>
-        <h2>DIGITAL EXPERIENCE</h2>
+        
         <p>
           We are committed to providing our customers with exceptional service
           while offering our <br />

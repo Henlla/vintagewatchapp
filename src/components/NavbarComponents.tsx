@@ -57,14 +57,14 @@ export default function NavbarComponents() {
                     src="https://readymadeui.com/readymadeui.svg" alt="logo" className='w-[160px]' />
                 </a>
 
-                <div className='flex flex-wrap w-full items-center'>
+                <div className='flex flex-wrap w-full items-center  '>
                     <input type='text' placeholder='Search something...'
                         className='xl:w-96 max-lg:w-full lg:ml-10 max-md:mt-4 max-lg:ml-4 bg-gray-100 focus:bg-transparent px-6 rounded h-11 outline-[#333] text-sm transition-all' />
                     <div className="ml-auto max-lg:mt-4">
 
                         <ul className='flex items-center'>
                            
-                            <li className={`flex ${isAuthenticate ? 'hidden' : ''} text-[15px] max-lg:py-2 px-3 hover:text-[#007bff] hover:fill-[#007bff]`}>
+                            <li className={`flex ${isAuthenticate ? 'hidden' : ''} animate__bounce animate__animated text-[15px] max-lg:py-2 px-3 hover:text-[#007bff] hover:fill-[#007bff]`}>
                                 <a href='/signin' className={`${isAuthenticate ? `hidden` : ``} px-4 py-2 text-sm rounded font-semibold text-[#333] border-2 border-[#333] bg-transparent`}>Sign In</a>
                             </li>
                             <li className={`${!isAuthenticate ? 'hidden' : ''}`}>

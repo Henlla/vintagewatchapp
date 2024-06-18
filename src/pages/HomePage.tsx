@@ -5,6 +5,7 @@ import NavbarComponents from "../components/NavbarComponents";
 import ScrollToTop from "../components/ScrollToTopComponents";
 import CaroselComponent from "../components/CaroselComponent";
 import HeaderVideo from "../components/HeaderVideo";
+import BannerComponent from "../components/BannerComponent";
 
 const HomePage = () => {
     const [token, setToken] = useState("")
@@ -18,7 +19,7 @@ const HomePage = () => {
     return <>
     <NavbarComponents/>
     
-{/* <HeaderVideo/> */}
+<BannerComponent/>
         <HeaderProductComponents />
         <HeaderProductComponents />
          <CaroselComponent/>
