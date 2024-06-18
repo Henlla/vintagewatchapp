@@ -26,7 +26,7 @@ const AutoCompleteSearchComponents = () => {
   }, [])
 
   const onChangeRedirect = (value: any) => {
-    window.location.href ="product?id=" + value
+    window.location.href ="/product-detail/" + value
   }
 
 
