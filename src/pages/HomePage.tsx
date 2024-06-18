@@ -1,15 +1,9 @@
-import { useEffect, useState } from "react";
-import HeaderProductComponents from "../components/HeaderProductComponents";
+import {useState } from "react";
+import HeaderProductComponents from "../components/Layouts/HeaderProductComponents";
 
 const HomePage = () => {
-    const [token, setToken] = useState("")
+    const [token, setToken] = useState(localStorage.getItem("access_token"))
 
-    useEffect(() => {
-        var tokenAccess = localStorage.getItem("access_token")
-        if (tokenAccess) {
-            setToken(tokenAccess)
-        }
-    })
     return <>
         <HeaderProductComponents />
         <HeaderProductComponents />

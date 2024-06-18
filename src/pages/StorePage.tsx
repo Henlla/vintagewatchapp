@@ -1,4 +1,4 @@
-import SidebarComponents from "../components/SidebarComponents"
+import SidebarComponents from "../components/Layouts/SidebarComponents"
 
 const StorePage = () => {
     return <>

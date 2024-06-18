@@ -1,5 +1,5 @@
 import React from "react";
-import authApi from "../api/authAPI";
+import authApi from "../../api/authAPI";
 function SignUpComponents() {
     const [state, setState] = React.useState({
         username: "",
