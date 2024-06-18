@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import authApi from "../../api/authAPI";
+import { Alert, Snackbar } from "@mui/material";
 function SignUpComponents() {
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [isFail, setIsFail] = useState(false);
+    const [message, setMessage] = useState("");
+
     const [state, setState] = React.useState({
-        username: "",
         firstName: "",
         lastName: "",
         email: "",
         password: "",
+        confirmPassword: ""
     });
+
+    const handleClose = () => {
+        if (isSuccess)
+            setIsSuccess(false)
+        else
+            setIsFail(false)
+    }
+
     const handleChange = (e: { target: { name: any; value: any; }; }) => {
         const { name, value } = e.target;
         setState((prevState) => ({
@@ -23,17 +36,36 @@ function SignUpComponents() {
             lastName: state.lastName,
             email: state.email,
             password: state.password,
+            confirmPassword: state.confirmPassword
         };
         try {
             var response = await authApi.signUp(data);
-            console.log(response)
+            if (response.isSuccess) {
+                setIsSuccess(true)
+                setMessage(response.message)
+            } else {
+                setIsFail(true)
+                setMessage(response.message)
+            }
         } catch (error) {
         }
     };
 
     return (
-
         <section className="bg-gray-50 md:h-screen pt-12 dark:bg-gray-900">
+            <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                open={isFail || isSuccess}
+                autoHideDuration={3000}
+                onClose={handleClose}
+            >
+                <Alert
+                    severity={isFail ? "error" : "success"}
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {message}
+                </Alert>
+            </Snackbar>
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
                 <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -60,8 +92,8 @@ function SignUpComponents() {
                                 <input onChange={handleChange} type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             </div>
                             <div>
-                                <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-                                <input onChange={handleChange} type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
+                                <input onChange={handleChange} type="password" name="confirmPassword" id="confirmPassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             </div>
                             {/* <div className="flex items-start">
                                 <div className="flex items-center h-5">
@@ -80,47 +112,6 @@ function SignUpComponents() {
                 </div>
             </div>
         </section>
-        // <div className="form-container sign-up-container">
-        //     <form onSubmit={handleOnSubmit}>
-        //         <h1>Create Account</h1>
-        //         <input
-        //             type="text"
-        //             name="username"
-        //             value={state.username}
-        //             onChange={handleChange}
-        //             placeholder="Username"
-        //         />
-        //         <input
-        //             type="text"
-        //             name="firstName"
-        //             value={state.firstName}
-        //             onChange={handleChange}
-        //             placeholder="First Name"
-        //         />
-        //         <input
-        //             type="text"
-        //             name="lastName"
-        //             value={state.lastName}
-        //             onChange={handleChange}
-        //             placeholder="Last Name"
-        //         />
-        //         <input
-        //             type="email"
-        //             name="email"
-        //             value={state.email}
-        //             onChange={handleChange}
-        //             placeholder="Email"
-        //         />
-        //         <input
-        //             type="password"
-        //             name="password"
-        //             value={state.password}
-        //             onChange={handleChange}
-        //             placeholder="Password"
-        //         />
-        //         <button>Sign Up</button>
-        //     </form>
-        // </div>
     );
 }
 

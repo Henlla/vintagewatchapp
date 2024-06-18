@@ -1,13 +1,43 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import productAPI from "../../api/productAPI";
+import { NumericFormat } from "react-number-format";
+
+type product = {
+    mainImage: any,
+    images: any,
+    timepiece: any
+}
+
+type mainImage = {
+    imageUrl: any,
+}
+
 
 const ProductDetailComponents = () => {
     const { productId } = useParams();
-    const [products, setProducts] = useState(null);
+    const [product, setProduct] = useState<product>();
+    const [images, setImages] = useState([]);
+    const [mainImage, setMainImage] = useState<mainImage>();
 
-    const getProductDetail = () => {
-        
+    const getProductDetail = async () => {
+        var data = {
+            id: productId
+        }
+        var response = await productAPI.getProductById(data)
+        if (response.isSuccess) {
+            setImages(response.data.images)
+            setMainImage(response.data.mainImage)
+            setProduct(response.data)
+        }
+    }
+
+    const handleClick = (event: any) => {
+        event.preventDefault();
+        var data = {
+            imageUrl: event.target.src
+        }
+        setMainImage(data)
     }
 
     useEffect(() => {
@@ -17,25 +47,24 @@ const ProductDetailComponents = () => {
 
     return <>
         <div className="font-sans">
-            <div className="p-6 lg:max-w-7xl max-w-2xl max-lg:mx-auto">
+            <div className="p-6 lg:max-w-7xl max-w-2xl md:mx-auto max-lg:mx-auto">
                 <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-10">
                     <div className="w-full lg:sticky top-0 text-center">
                         <div className="lg:h-[600px]">
-                            <img src="https://readymadeui.com/images/product6.webp" alt="Product" className="lg:w-11/12 w-full h-full rounded-xl object-cover object-top" />
+                            <img src={mainImage ? mainImage.imageUrl : "#"} alt={product?.timepiece.timepieceName} className="lg:w-11/12 w-full h-full rounded-xl object-cover object-top" />
                         </div>
                         <div className="flex flex-wrap gap-x-8 gap-y-6 justify-center mx-auto mt-4">
-                            <img src="https://readymadeui.com/images/product6.webp" alt="Product1" className="w-20 cursor-pointer rounded-xl outline" />
-                            <img src="https://readymadeui.com/images/product8.webp" alt="Product2" className="w-20 cursor-pointer rounded-xl" />
-                            <img src="https://readymadeui.com/images/product5.webp" alt="Product3" className="w-20 cursor-pointer rounded-xl" />
-                            <img src="https://readymadeui.com/images/product7.webp" alt="Product4" className="w-20 cursor-pointer rounded-xl" />
+                            {images && images.map((_item: any, index: any) => (
+                                <img onClick={handleClick} key={index} src={_item.imageUrl} alt={_item.timepiece.timepieceName} className="w-20 cursor-pointer rounded-xl outline" />
+                            ))}
                         </div>
                     </div>
 
                     <div>
                         <div className="flex flex-wrap items-start gap-4">
                             <div>
-                                <h2 className="text-2xl font-extrabold text-gray-800">Adjective Attire | T-shirt</h2>
-                                <p className="text-sm text-gray-400 mt-2">Well-Versed Commerce</p>
+                                <h2 className="text-2xl font-extrabold text-gray-800">{product?.timepiece.timepieceName}</h2>
+                                <p className="text-sm text-gray-400 mt-2">{product?.timepiece.description}</p>
                             </div>
                             <div className="ml-auto flex flex-wrap gap-4">
                                 <button type="button" className="px-2.5 py-1.5 bg-pink-100 text-xs text-pink-600 rounded-md flex items-center">
@@ -60,8 +89,9 @@ const ProductDetailComponents = () => {
 
                         <div className="flex flex-wrap gap-4 items-start">
                             <div>
-                                <p className="text-gray-800 text-3xl font-bold">$30</p>
-                                {/* <p className="text-gray-400 text-xl mt-1"><strike>$42</strike> <span className="text-sm ml-1">Tax included</span></p> */}
+                                <p className="text-gray-800 text-3xl font-bold">
+                                    <NumericFormat value={product?.timepiece.price} renderText={(value) => (value + " vnd")} thousandSeparator="," displayType="text" />
+                                </p>
                             </div>
 
                             <div className="flex flex-wrap gap-4">
@@ -97,19 +127,6 @@ const ProductDetailComponents = () => {
                         </div>
 
                         <hr className="my-8" />
-
-                        <div>
-                            <h3 className="text-lg font-bold text-gray-800">Choose a Color</h3>
-                            <div className="flex flex-wrap gap-4 mt-4">
-                                <button type="button" className="w-12 h-12 bg-black border-2 border-white hover:border-gray-800 rounded-full shrink-0"></button>
-                                <button type="button" className="w-12 h-12 bg-gray-400 border-2 border-white hover:border-gray-800 rounded-full shrink-0"></button>
-                                <button type="button" className="w-12 h-12 bg-orange-400 border-2 border-white hover:border-gray-800 rounded-full shrink-0"></button>
-                                <button type="button" className="w-12 h-12 bg-red-400 border-2 border-white hover:border-gray-800 rounded-full shrink-0"></button>
-                            </div>
-                        </div>
-
-                        <hr className="my-8" />
-
                         <div className="flex flex-wrap gap-4">
                             <button type="button" className="min-w-[200px] px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white text-sm font-semibold rounded">Buy now</button>
                             <button type="button" className="min-w-[200px] px-4 py-2.5 border border-gray-800 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-semibold rounded">Add to cart</button>
@@ -124,6 +141,8 @@ const ProductDetailComponents = () => {
                             Description</li>
                         <li className="text-gray-400 font-bold text-sm hover:bg-gray-100 py-3 px-8 cursor-pointer transition-all">Reviews</li>
                     </ul>
+
+
 
                     <div className="mt-8">
                         <h3 className="text-lg font-bold text-gray-800">Product Description</h3>

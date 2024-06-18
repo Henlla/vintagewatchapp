@@ -3,6 +3,7 @@ import PaginateComponents from "./PaginateComponents";
 import productAPI from "../../api/productAPI";
 import { CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
+import { NumericFormat } from "react-number-format";
 
 
 const ProductComponents = () => {
@@ -88,7 +89,7 @@ const ProductComponents = () => {
         <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-16">Top Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16">
           {productPerPage.map((_item: any, index: any) => (
-            <Link to={`/product-detail/${_item.timepiece.timepieceId}`}>
+            <Link key={_item.timepiece.timepieceId} to={`/product-detail/${_item.timepiece.timepieceId}`}>
               <div key={index} className="bg-white overflow-hidden cursor-pointer">
                 <div className="w-full h-[150px] overflow-hidden mx-auto aspect-w-16 aspect-h-8">
                   <img src={_item.mainImage && _item.mainImage.imageUrl} alt={_item.mainImage && _item.mainImage.imageName}
@@ -97,7 +98,9 @@ const ProductComponents = () => {
 
                 <div className="mt-6 text-center">
                   <h3 className="text-lg font-bold text-gray-800">{_item.timepiece.timepieceName}</h3>
-                  <h4 className="text-lg text-blue-600 font-bold mt-3">${_item.timepiece.price}</h4>
+                  <h4 className="text-lg text-blue-600 font-bold mt-3">
+                    <NumericFormat value={_item.timepiece.price} thousandSeparator="," displayType="text" renderText={(value)=>(value + " vnd")} />
+                  </h4>
                 </div>
 
                 <div className="flex justify-center space-x-1 mt-3">

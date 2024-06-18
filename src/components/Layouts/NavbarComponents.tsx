@@ -55,7 +55,7 @@ export default function NavbarComponents() {
 
         <header className='flex border-b py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50'>
             <div className='flex flex-wrap items-center gap-5 w-full'>
-                <a href="javascript:void(0)"><img src="https://readymadeui.com/readymadeui.svg" alt="logo" className='w-36' />
+                <a href="#"><img src="https://readymadeui.com/readymadeui.svg" alt="logo" className='w-36' />
                 </a>
 
                 <div id="collapseMenu"
@@ -74,7 +74,7 @@ export default function NavbarComponents() {
                     <ul
                         className='lg:flex lg:ml-14 lg:gap-x-5 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50'>
                         <li className='mb-6 hidden max-lg:block'>
-                            <a href="javascript:void(0)"><img src="https://readymadeui.com/readymadeui.svg" alt="logo" className='w-36' />
+                            <a href="#"><img src="https://readymadeui.com/readymadeui.svg" alt="logo" className='w-36' />
                             </a>
                         </li>
                         {navigation.map((item: any) => (
@@ -88,9 +88,9 @@ export default function NavbarComponents() {
 
                 <button id="toggleOpen" className='lg:hidden ml-auto'>
                     <svg className="w-7 h-7" fill="#000" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
+                        <path fillRule="evenodd"
                             d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                            clip-rule="evenodd"></path>
+                            clipRule="evenodd"></path>
                     </svg>
                 </button>
 
@@ -100,7 +100,7 @@ export default function NavbarComponents() {
                         <a href='/signin' className={`${isAuthenticate ? `hidden` : ``} px-4 py-2 text-sm rounded font-semibold text-[#333] border-2 border-[#333] bg-transparent`}>Sign In</a>
                     </li>
                     <div className={`${!isAuthenticate ? 'hidden' : ''}`}>
-                        {loggedUser && <UserDropDownComponents handleLogout={handleClickLogout} />}
+                        {loggedUser && <UserDropDownComponents handleLogout={handleClickLogout} loggedUser={loggedUser} />}
                     </div>
                 </div>
             </div>
