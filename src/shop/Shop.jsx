@@ -2,12 +2,28 @@ import React, { useState } from "react";
 import PageHeader from "../components/PageHeader";
 
 const showResult = "Showing 01-12 of 139 Results";
-import Data from "../products.json"
+import Data from "../products.json";
 import ProductCards from "./ProductCards";
+import Pagination from "./Pagination";
 const Shop = () => {
   const [GridList, setGridList] = useState(true);
   const [products, seproducts] = useState(Data);
-  console.log(products)
+
+  // paginate
+  const [currentPage, setCurrentPage] = useState(1);
+  const productPerPage = 9;
+
+  const indexOfLastProduct = currentPage * productPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  // function change page
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div>
@@ -22,9 +38,8 @@ const Shop = () => {
                 <div className="shop-title d-flex flex-warm justify-content-between">
                   <p>{showResult}</p>
                   <div
-                    className={`product-view-more ${
-                      GridList ? "gridActive" : "listActive"
-                    }`}
+                    className={`product-view-more ${GridList ? "gridActive" : "listActive"
+                      }`}
                   >
                     <a className="grid" onClick={() => setGridList(!GridList)}>
                       <i className="icofont-ghost"></i>
@@ -37,8 +52,15 @@ const Shop = () => {
 
                 {/*Product cards*/}
                 <div>
-                    <ProductCards GridList={GridList} products={products}/>
+                  <ProductCards GridList={GridList} products={currentProducts} />
                 </div>
+
+                <Pagination
+                  productPerPage={productPerPage}
+                  totalProducts={products.length}
+                  paginate={paginate}
+                  activePage={currentPage}
+                />
               </article>
             </div>
             <div className="col-lg-4 col-12">Right side</div>
