@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import productData from "D:/Front-end/pay/advanced-reactjs-ecommerce-website-starter-files/src/products.json";
+import productData from "../products.json";
 import { Link } from "react-router-dom";
 import SelectedCategory from "../components/SelectedCategory";
 
@@ -25,7 +25,7 @@ const bannerList = [
 ];
 const Banner = () => {
   const [searchInput, setSearchInput] = useState("");
-  const [filteredProduct, setFilteredProduct] = useState([]);
+  const [filteredProduct, setFilteredProduct] = useState(productData);
   //console.log(productData);
   // search functionality
   const handleSearch = e => {
