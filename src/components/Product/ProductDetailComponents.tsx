@@ -21,10 +21,7 @@ const ProductDetailComponents = () => {
     const [mainImage, setMainImage] = useState<mainImage>();
 
     const getProductDetail = async () => {
-        var data = {
-            id: productId
-        }
-        var response = await productAPI.getProductById(data)
+        var response = await productAPI.getProductById(productId)
         if (response.isSuccess) {
             setImages(response.data.images)
             setMainImage(response.data.mainImage)

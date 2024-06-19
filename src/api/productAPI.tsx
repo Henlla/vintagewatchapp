@@ -36,7 +36,7 @@ class ProductAPI {
     getProductById = (params: any) => {
         var url = "/timepiece/GetProductById";
         var queryString = new URLSearchParams(params);
-        return axiosClient.get(url + "?" + queryString) as Promise<APIResponse>;
+        return axiosClient.get(url + `/${params}`) as Promise<APIResponse>;
     }
 
     postTimepiece = (data: any, header: any) => {

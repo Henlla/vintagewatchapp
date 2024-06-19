@@ -8,7 +8,7 @@ import FooterComponents from "./components/Layouts/FooterComponents"
 import SignInComponents from "./components/Authenticate/SignInComponents"
 import SignUpComponents from "./components/Authenticate/SignUpComponents"
 import ProfilePage from "./pages/ProfilePage"
-import AuthenticateRoute from "./Privateroute/AuthenticateRoute"
+import AuthenticateRoute from "./PrivateRoute/AuthenticateRoute"
 import CheckoutComponents from "./components/Product/CheckoutComponents"
 import ProductDetailComponents from "./components/Product/ProductDetailComponents"
 
