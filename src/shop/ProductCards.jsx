@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
-import { Rating } from "@mui/material";
 import React from "react";
-import { NumericFormat } from "react-number-format";
 import { Link } from "react-router-dom";
+import Ratting from "../components/Ratting";
 
 const ProductCards = ({ GridList, products }) => {
   return (
     <div
-      className={`shop-product-wrap row justify-content-center ${GridList ? "grid" : "list"
-        }`}
+      className={`shop-product-wrap row justify-content-center ${
+        GridList ? "grid" : "list"
+      }`}
     >
       {products.map((product, i) => (
         <div key={i} className="col-lg-4 col-md-6 col-12">
@@ -16,15 +16,15 @@ const ProductCards = ({ GridList, products }) => {
             {/*product image*/}
             <div className="product-thumb">
               <div className="pro-thumb">
-                <img src={product.mainImage?.imageUrl} alt="" />
+                <img src={product.img} alt="" />
               </div>
               {/*product action links*/}
               <div className="product-action-link">
-                <Link to={`/shop/${product.timepiece.timepieceId}`}>
+                <Link to={`/shop/${product.id}`}>
                   <i className="icofont-eye"></i>
                 </Link>
                 <a href="#">
-                  <i className="icofont-heart"></i>
+                    <i className="icofont-heart"></i>
                 </a>
                 <Link to="/card-page">
                   <i className="icofont-cart-alt"></i>
@@ -33,32 +33,30 @@ const ProductCards = ({ GridList, products }) => {
             </div>
             {/* product content*/}
             <div className="product-content">
-              <h5>
-                <Link to={`/shop/${product.timepiece.timepieceId}`}>{product.timepiece.timepieceName}</Link>
-              </h5>
-              <p className="productRating">
-                <Rating />
-              </p>
-              <h6>
-                <NumericFormat value={product.timepiece.price} thousandSeparator="," suffix=" vnd" />
-              </h6>
+                <h5>
+                    <Link to={`/shop/${product.id}`}>{product.name}</Link>
+                </h5>
+                <p className="productRatting">
+                  <Ratting/>
+                </p>
+                <h6>${product.price}</h6>
             </div>
           </div>
 
-          {/* list style */}
+          {/*list style*/}
           <div className="product-list-item">
             {/*product image*/}
             <div className="product-thumb">
               <div className="pro-thumb">
-                <img src={product.mainImage?.imageUrl} alt="" />
+                <img src={product.img} alt="" />
               </div>
               {/*product action links*/}
               <div className="product-action-link">
-                <Link to={`/shop/${product.timepiece.timepiceId}`}>
+                <Link to={`/shop/${product.id}`}>
                   <i className="icofont-eye"></i>
                 </Link>
                 <a href="#">
-                  <i className="icofont-heart"></i>
+                    <i className="icofont-heart"></i>
                 </a>
                 <Link to="/card-page">
                   <i className="icofont-cart-alt"></i>
@@ -67,15 +65,13 @@ const ProductCards = ({ GridList, products }) => {
             </div>
             {/* product content*/}
             <div className="product-content">
-              <h5>
-                <Link to={`shop/${product.timepiece.timepiceId}`}>{product.timepiece.timepieceName}</Link>
-              </h5>
-              <p className="productRating">
-                <Rating />
-              </p>
-              <h6>
-                <NumericFormat value={product.timepiece.price} thousandSeparator="," type="text" suffix=" vnd" />
-              </h6>
+                <h5>
+                    <Link to={`/shop/${product.id}`}>{product.name}</Link>
+                </h5>
+                <p className="productRatting">
+                  <Ratting/>
+                </p>
+                <h6>${product.price}</h6>
             </div>
           </div>
         </div>
