@@ -67,8 +67,8 @@ const ItemList = [
         link: '/about',
     },
     {
-        text: 'Policy',
-        link: '#',
+        text: 'Contact',
+        link: '/contact',
     },
     {
         text: 'FAQs',
@@ -182,7 +182,7 @@ const Footer = () => {
                                         {
                                             ItemList.map((val,i) => (
                                                 <li key={i}>
-                                                   <a href="#">{val.text}</a>
+                                                   <a href={val.link}>{val.text}</a>
                                                 </li>
                                             ))
                                         }

@@ -1,44 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 
 const showResult = "Showing 01-12 of 139 Results";
-import Data from "D:/Front-end/pay/advanced-reactjs-ecommerce-website-starter-files/src/products.json";
+import Data from "../products.json";
 import ProductCards from "./ProductCards";
-import Pagination from "./Pagination";
+import Pagination from "./Paginations";
+import productAPI from "../api/product/productAPI";
 import Search from "./Search";
 import ShopCategory from "./ShopCategory";
-
+import categoryApi from "../api/category/categoryAPI";
 const Shop = () => {
   const [GridList, setGridList] = useState(true);
-  const [products, setproducts] = useState(Data);
-  //console.log(products);
+  const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState([]);
 
-  // pagination
+  // paginate
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 12;
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const productPerPage = 9;
+
+  const indexOfLastProduct = currentPage * productPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productPerPage;
   const currentProducts = products.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
 
-  // function to chang the current page
-  const paginate = (PageNumber) => {
-    setCurrentPage(PageNumber);
-  };
-
-  //filter products based on category
-  const[selectedCategory, setSelectedCategory] = useState("All");
-  const menuItems = [...new Set(Data.map((val)=>val.category))];
-  const filterItem = (curcat)=>{
-    const newItem = Data.filter((newVal)=>{
-      return newVal.category === curcat;
-    })
-    setSelectedCategory(curcat);
-    setproducts(newItem);
+  const getProducts = async () => {
+    var response = await productAPI.getProduct();
+    if (response.isSuccess) {
+      setProducts(response.data)
+    }
   }
+
+  const getCategory = async () => {
+    var response = await categoryApi.getCategory();
+    if (response.isSuccess) {
+      setCategory(response.data);
+    }
+  }
+
+  useEffect(() => {
+    getCategory()
+    getProducts()
+  }, [])
+
+  const menuItems = [...new Set(category.map((val) => val.categoryName))];
+  const filterItem = (curcat) => {
+    const newItem = products.filter((item)=>{
+      return item.category?.some((cate) => cate.category.categoryName === curcat)
+    })
+    console.log(newItem)
+    setSelectedCategory(curcat);
+    setProducts(newItem);
+  }
+
+  // function change page
+  const paginate = (event, pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div>
@@ -53,9 +74,8 @@ const Shop = () => {
                 <div className="shop-title d-flex flex-warm justify-content-between">
                   <p>{showResult}</p>
                   <div
-                    className={`product-view-more ${
-                      GridList ? "gridActive" : "listActive"
-                    }`}
+                    className={`product-view-more ${GridList ? "gridActive" : "listActive"
+                      }`}
                   >
                     <a className="grid" onClick={() => setGridList(!GridList)}>
                       <i className="icofont-ghost"></i>
@@ -72,7 +92,7 @@ const Shop = () => {
                 </div>
 
                 <Pagination
-                  productsPerPage={productsPerPage}
+                  productPerPage={productPerPage}
                   totalProducts={products.length}
                   paginate={paginate}
                   activePage={currentPage}
@@ -81,13 +101,12 @@ const Shop = () => {
             </div>
             <div className="col-lg-4 col-12">
               <aside>
-                <Search products={products} GridList={GridList}/>
+                <Search products={products} GridList={GridList} />
                 <ShopCategory
-                filterItem={filterItem}
-                setItem={setproducts}
-                menuItems={menuItems}
-                setProducts={setproducts}
-                selectedCategory={selectedCategory}/>
+                  filterItem={filterItem}
+                  menuItems={menuItems}
+                  setProducts={setProducts}
+                  selectedCategory={selectedCategory} />
               </aside>
             </div>
           </div>

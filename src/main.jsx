@@ -17,7 +17,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./home/Home.jsx";
 import Blog from "./blog/Blog.jsx";
 import Shop from "./shop/Shop.jsx";
+import Login from "./components/Login.jsx"
+import Signup from "./components/Signup.jsx"
+import { AuthProvider } from "./utilis/AuthProvider.jsx";
 import SingleProduct from "./shop/SingleProduct.jsx";
+import CartPage from "./shop/CartPage.jsx";
+import Contact from "./home/Contact.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -31,16 +37,34 @@ const router = createBrowserRouter([
       },
       {
         path: "/shop",
-        element: <Shop/>
+        element: <Shop />,
       },
       {
-        path: "shop/:id",
-        element: <SingleProduct/>
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/sign-up",
+        element: <Signup />
+      },
+      {
+        path: "/shop/:productId",
+        element: <SingleProduct />
+      },
+      {
+        path: "/cart-page",
+        element: <CartPage />
+      },
+      {
+        path: "/contact",
+        element: <Contact />
       }
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <AuthProvider>
+    <RouterProvider router={router} />
+  </AuthProvider>
 );
