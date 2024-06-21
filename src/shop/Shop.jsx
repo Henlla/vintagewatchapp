@@ -1,44 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 
 const showResult = "Showing 01-12 of 139 Results";
-import Data from "D:/Front-end/pay/advanced-reactjs-ecommerce-website-starter-files/src/products.json";
+import Data from "../products.json";
 import ProductCards from "./ProductCards";
-import Pagination from "./Pagination";
-import Search from "./Search";
-import ShopCategory from "./ShopCategory";
-
+import Pagination from "./Paginations";
+import productAPI from "../api/product/productAPI";
 const Shop = () => {
   const [GridList, setGridList] = useState(true);
-  const [products, setproducts] = useState(Data);
-  //console.log(products);
+  const [products, setProducts] = useState([]);
 
-  // pagination
+  // paginate
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 12;
+  const productPerPage = 9;
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const indexOfLastProduct = currentPage * productPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productPerPage;
   const currentProducts = products.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
 
-  // function to chang the current page
-  const paginate = (PageNumber) => {
-    setCurrentPage(PageNumber);
-  };
-
-  //filter products based on category
-  const[selectedCategory, setSelectedCategory] = useState("All");
-  const menuItems = [...new Set(Data.map((val)=>val.category))];
-  const filterItem = (curcat)=>{
-    const newItem = Data.filter((newVal)=>{
-      return newVal.category === curcat;
-    })
-    setSelectedCategory(curcat);
-    setproducts(newItem);
+  const getProducts = async () => {
+    var response = await productAPI.getProduct();
+    if (response.isSuccess) {
+      setProducts(response.data)
+    }
   }
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+  // function change page
+  const paginate = (event,pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div>
@@ -53,9 +50,8 @@ const Shop = () => {
                 <div className="shop-title d-flex flex-warm justify-content-between">
                   <p>{showResult}</p>
                   <div
-                    className={`product-view-more ${
-                      GridList ? "gridActive" : "listActive"
-                    }`}
+                    className={`product-view-more ${GridList ? "gridActive" : "listActive"
+                      }`}
                   >
                     <a className="grid" onClick={() => setGridList(!GridList)}>
                       <i className="icofont-ghost"></i>
@@ -72,24 +68,14 @@ const Shop = () => {
                 </div>
 
                 <Pagination
-                  productsPerPage={productsPerPage}
+                  productPerPage={productPerPage}
                   totalProducts={products.length}
                   paginate={paginate}
                   activePage={currentPage}
                 />
               </article>
             </div>
-            <div className="col-lg-4 col-12">
-              <aside>
-                <Search products={products} GridList={GridList}/>
-                <ShopCategory
-                filterItem={filterItem}
-                setItem={setproducts}
-                menuItems={menuItems}
-                setProducts={setproducts}
-                selectedCategory={selectedCategory}/>
-              </aside>
-            </div>
+            <div className="col-lg-4 col-12">Right side</div>
           </div>
         </div>
       </div>

@@ -1,11 +1,17 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import logo from "D:/Front-end/pay/advanced-reactjs-ecommerce-website-starter-files/src/assets/images/logo/logo.png";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/images/logo/logo.png";
+import { AuthContext } from "../utilis/AuthProvider";
+import authAPI from "../api/auth/authAPI";
+import UserDropDown from "./UserDropodown";
 
 const NavItems = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [socialToggle, setSocialToggle] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate()
+
 
   window.addEventListener("scroll", () => {
     if (window.scrollY > 200) {
@@ -15,18 +21,24 @@ const NavItems = () => {
     }
   });
 
+  const avatar = JSON.parse(localStorage.getItem("avatar"));
+  const from = location.state?.from.pasthname || "/";
+
+  const logoutHandle = async () => {
+    await authAPI.logout()
+    logout()
+    navigate(from, { replace: true })
+  }
+
   return (
     <header
-      className={`header-section style-4 ${
-        headerFixed ? "header-fixed fadeInUp" : ""
-      }`}
+      className={`header-section style-4 ${headerFixed ? "header-fixed fadeInUp" : ""
+        }`}
     >
       <div className={`header-top d-md-none ${socialToggle ? "open" : ""}`}>
         <div className="container">
           <div className="header-top-area">
-            <Link to="/signup" className="lab-btn me-3">
-              <span>Create Account</span>
-            </Link>
+            <Link to="/signup" className="lab-btn me-3"> <span>Create Account</span> </Link>
             <Link to="/login">Log in</Link>
           </div>
         </div>
@@ -66,12 +78,18 @@ const NavItems = () => {
               </div>
 
               {/* sign in, login*/}
-              <Link to="/sign-up" className="lab-btn me-3 d-none d-md-block">
-                Create Account
-              </Link>
-              <Link to="/login" className="d-none d-md-block">
-                Log in
-              </Link>
+              {user != null ?
+                <UserDropDown user={user} avatar={avatar} logoutHandle={logoutHandle} />
+                :
+                <>
+                  <Link to="/sign-up" className="lab-btn me-3 d-none d-md-block">
+                    Create Account
+                  </Link>
+                  <Link to="/login" className="d-none d-md-block">
+                    Log in
+                  </Link>
+                </>
+              }
 
               {/*menu toggler*/}
               <div
@@ -83,9 +101,9 @@ const NavItems = () => {
                 <span></span>
               </div>
               {/* social toggler*/}
-              <div className="ellepsis-bar d-md-none" 
-              onClick={() => setSocialToggle(!socialToggle)}>
-              <i className="icofont-info-square"></i>
+              <div className="ellepsis-bar d-md-none"
+                onClick={() => setSocialToggle(!socialToggle)}>
+                <i className="icofont-info-square"></i>
               </div>
             </div>
           </div>
