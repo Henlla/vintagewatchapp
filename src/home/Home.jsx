@@ -7,7 +7,6 @@ import Register from "./Register";
 const Home = () => {
   return (
     <div>
-        
       <Banner />
       <HomeCategory />
       <CategoryShowCase/>

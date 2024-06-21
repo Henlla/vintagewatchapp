@@ -19,6 +19,10 @@ import Blog from "./blog/Blog.jsx";
 import Shop from "./shop/Shop.jsx";
 import Login from "./components/Login.jsx"
 import Signup from "./components/Signup.jsx"
+import { AuthProvider } from "./utilis/AuthProvider.jsx";
+import ProductDetail from "./shop/SingleProduct.jsx";
+import SingleProduct from "./shop/SingleProduct.jsx";
+import CartPage from "./shop/CartPage.jsx";
 
 
 const router = createBrowserRouter([
@@ -40,13 +44,23 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path:"/sign-up",
-        element:<Signup/>
+        path: "/sign-up",
+        element: <Signup />
+      },
+      {
+        path: "/shop/:productId",
+        element: <SingleProduct />
+      },
+      {
+        path: "/cart-page",
+        element: <CartPage />
       }
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <AuthProvider>
+    <RouterProvider router={router} />
+  </AuthProvider>
 );

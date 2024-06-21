@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 
 const showResult = "Showing 01-12 of 139 Results";
 import Data from "../products.json";
 import ProductCards from "./ProductCards";
-import Pagination from "./Pagination";
+import Pagination from "./Paginations";
+import productAPI from "../api/product/productAPI";
 const Shop = () => {
   const [GridList, setGridList] = useState(true);
-  const [products, seproducts] = useState(Data);
+  const [products, setProducts] = useState([]);
 
   // paginate
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,8 +21,19 @@ const Shop = () => {
     indexOfLastProduct
   );
 
+  const getProducts = async () => {
+    var response = await productAPI.getProduct();
+    if (response.isSuccess) {
+      setProducts(response.data)
+    }
+  }
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
   // function change page
-  const paginate = (pageNumber) => {
+  const paginate = (event,pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
