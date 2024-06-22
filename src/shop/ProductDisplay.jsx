@@ -7,7 +7,6 @@ import CustomeRating from "../components/CustomRating";
 
 const ProductDisplay = (props) => {
     const { category, images, mainImage, timepiece } = props.item
-
     const [ratingCount, setRatingCount] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [coupon, setCoupon] = useState("");
@@ -22,8 +21,6 @@ const ProductDisplay = (props) => {
             setColor(data.value)
         }
     };
-
-
     const handleDecrease = () => {
         if (quantity > 1)
             setQuantity(quantity - 1)
@@ -127,6 +124,7 @@ const ProductDisplay = (props) => {
                     <TextField size="small" value={coupon} type="text" label="Enter Discount Code"
                         onChange={(e) => setCoupon(e.target.value)} />
                 </div>
+
                 <button type="submit" className="lab-btn">
                     <span>Add to Cart</span>
                 </button>

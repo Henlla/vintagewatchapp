@@ -34,7 +34,6 @@ const Signup = () => {
     }
     var response = await authAPI.register(data);
     if (response.isSuccess) {
-
     }
   };
   return (

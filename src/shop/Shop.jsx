@@ -33,6 +33,7 @@ const Shop = () => {
     if (response.isSuccess) {
       setProducts(response.data)
       setData(response.data);
+
     }
   }
 

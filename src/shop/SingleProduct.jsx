@@ -19,7 +19,6 @@ const SingleProduct = () => {
     useEffect(() => {
         getProduct()
     }, [])
-
     const getProduct = async () => {
         var response = await productAPI.getOneProduct(productId);
         if (response.isSuccess) {
@@ -40,8 +39,6 @@ const SingleProduct = () => {
         }
         setTradeInForm(!tradeInForm)
     }
-
-
 
     return (<>
         <div>
