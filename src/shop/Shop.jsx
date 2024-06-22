@@ -13,6 +13,7 @@ const Shop = () => {
   const [GridList, setGridList] = useState(true);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
+  const [data, setData] = useState([]);
 
   // paginate
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,6 +32,8 @@ const Shop = () => {
     var response = await productAPI.getProduct();
     if (response.isSuccess) {
       setProducts(response.data)
+      setData(response.data);
+
     }
   }
 
@@ -48,10 +51,14 @@ const Shop = () => {
 
   const menuItems = [...new Set(category.map((val) => val.categoryName))];
   const filterItem = (curcat) => {
-    const newItem = products.filter((item)=>{
-      return item.category?.some((cate) => cate.category.categoryName === curcat)
-    })
-    console.log(newItem)
+    let newItem = [];
+    if (curcat === "All") {
+      newItem = [...data];
+    } else {
+      newItem = data.filter((item) => {
+        return item.category?.some((cate) => cate.category.categoryName === curcat)
+      })
+    }
     setSelectedCategory(curcat);
     setProducts(newItem);
   }
@@ -105,7 +112,6 @@ const Shop = () => {
                 <ShopCategory
                   filterItem={filterItem}
                   menuItems={menuItems}
-                  setProducts={setProducts}
                   selectedCategory={selectedCategory} />
               </aside>
             </div>

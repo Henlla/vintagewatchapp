@@ -6,11 +6,19 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import ProductDisplay from "./ProductDisplay";
 import Review from "./Review";
+import MakeOffer from "./MakeOffer";
+import { Box, Button, TextField } from "@mui/material";
+import TradeIn from "./TradeIn";
 
 const SingleProduct = () => {
     const [products, setProducts] = useState([]);
+    const [offerForm, setOfferForm] = useState(false);
+    const [tradeInForm, setTradeInForm] = useState(true);
     const { productId } = useParams();
 
+    useEffect(() => {
+        getProduct()
+    }, [])
     const getProduct = async () => {
         var response = await productAPI.getOneProduct(productId);
         if (response.isSuccess) {
@@ -18,9 +26,19 @@ const SingleProduct = () => {
         }
     }
 
-    useEffect(() => {
-        getProduct()
-    }, [])
+    const handleClickOffer = () => {
+        if (tradeInForm) {
+            setTradeInForm(!tradeInForm)
+        }
+        setOfferForm(!offerForm)
+    }
+
+    const handleClickTradeIn = () => {
+        if (offerForm) {
+            setOfferForm(!offerForm)
+        }
+        setTradeInForm(!tradeInForm)
+    }
 
     return (<>
         <div>
@@ -59,12 +77,6 @@ const SingleProduct = () => {
                                                             ))
                                                         }
                                                     </Swiper>
-                                                    {/* <div className="pro-single-prev">
-                                                        <i className="icofont-rounded-right"></i>
-                                                    </div>
-                                                    <div className="pro-single-next">
-                                                        <i className="icofont-rounded-left"></i>
-                                                    </div> */}
                                                 </div>
                                             </div>
                                         </div>
@@ -83,8 +95,35 @@ const SingleProduct = () => {
                             </article>
                         </div>
                         <div className="col-lg-4 col-12">
-                            <aside className="ps-lg-4">
-                                right side
+                            <aside>
+                                <Box
+                                    sx={{ mb: 1 }}
+                                >
+                                    <Button
+                                        id="makeOffer"
+                                        name="makeOffer"
+                                        onClick={handleClickOffer}
+                                        // variant="contained"
+                                        variant="outlined"
+                                        fullWidth>
+                                        Make A Deal
+                                    </Button>
+                                </Box>
+                                <MakeOffer isClick={offerForm} />
+                                <Box
+                                    sx={{ mb: 1 }}
+                                >
+                                    <Button
+                                        id="tradeIn"
+                                        name="tradeIn"
+                                        onClick={handleClickTradeIn}
+                                        // variant="contained"
+                                        variant="outlined"
+                                        fullWidth>
+                                        Trade in
+                                    </Button>
+                                </Box>
+                                <TradeIn isClick={tradeInForm} />
                             </aside>
                         </div>
                     </div>

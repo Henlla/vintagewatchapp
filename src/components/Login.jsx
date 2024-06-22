@@ -1,4 +1,4 @@
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import GoogleButton from "react-google-button";
 import { useForm } from "react-hook-form";
@@ -49,6 +49,8 @@ const Login = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="account-form">
               <div className="form-group">
                 <TextField
+                  error={errors.email?.message != null}
+                  helperText={errors.email?.message != null && errors.email?.message}
                   size="normal"
                   label="Email *"
                   name="email"
@@ -56,10 +58,13 @@ const Login = () => {
                   fullWidth
                   {...register("email", { required: "This is required." })}
                 />
-                <label className="d-flex text-danger ps-1">{errors.email?.message}</label>
               </div>
               <div className="form-group">
-                <FormControl fullWidth size="normal" variant="outlined">
+                <FormControl
+                  error={errors.password?.message != null}
+                  fullWidth
+                  size="normal"
+                  variant="outlined">
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <OutlinedInput
                     id="password"
@@ -80,15 +85,13 @@ const Login = () => {
                     }
                     label="Password"
                   />
+                  {errors.password?.message && (
+                    <FormHelperText>{errors.password?.message}</FormHelperText>
+                  )}
                 </FormControl>
-                <label className="d-flex text-danger ps-1">{errors.password?.message}</label>
               </div>
               <div className="form-group">
                 <div className="d-flex justify-content-end flex-wrap pt-sm-2">
-                  {/* <div className="checkgroup">
-                    <input onChange={onRemember} type="checkbox" name="remember" id="remember" />
-                    <label htmlFor="remember">Remember me</label>
-                  </div> */}
                   <Link to="/forgot-password">Forget Password?</Link>
                 </div>
               </div>
@@ -107,8 +110,8 @@ const Login = () => {
               <span className="or">
                 <span>or</span>
               </span>
-              <h5 className="subtitle">{socialTitle}</h5>
-              <ul className="lab-ui social-icons justify-content-center">
+              <h5 className="ps-4 subtitle">{socialTitle}</h5>
+              <ul className="d-flex justify-content-center">
                 <GoogleButton onClick={handleLoginGoogle} />
               </ul>
             </div>
