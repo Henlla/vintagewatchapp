@@ -1,10 +1,13 @@
 import { Box, FormControl, InputLabel, MenuItem, Rating, Select, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { Link } from "react-router-dom";
+import productAPI from "../api/product/productAPI";
+import CustomeRating from "../components/CustomRating";
 
 const ProductDisplay = (props) => {
     const { category, images, mainImage, timepiece } = props.item
+    const [ratingCount, setRatingCount] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [coupon, setCoupon] = useState("");
     const [size, setSize] = useState("");
@@ -18,7 +21,6 @@ const ProductDisplay = (props) => {
             setColor(data.value)
         }
     };
-
     const handleDecrease = () => {
         if (quantity > 1)
             setQuantity(quantity - 1)
@@ -62,11 +64,11 @@ const ProductDisplay = (props) => {
         <div>
             <h4>{timepiece?.timepieceName}</h4>
             <p className="d-flex rating">
-                <Rating size="normal" />
-                <span>2000 review</span>
+                <CustomeRating ratingCount={setRatingCount} item={timepiece} />
+                <span className="ms-2">{ratingCount} review</span>
             </p>
             <h4>
-                <NumericFormat className="border border-0 p-0" type="text" value={timepiece?.price}
+                <NumericFormat readOnly className="border border-0 p-0" type="text" value={timepiece?.price}
                     thousandSeparator="," suffix=" vnd" />
             </h4>
             <h6>{timepiece?.user.firstName + " " + timepiece?.user.lastName}</h6>

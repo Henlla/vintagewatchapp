@@ -1,12 +1,11 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import authAPI from "../api/auth/authAPI";
 
 const title = "Register Now";
-const socialTitle = "Login with Google";
 const btnText = "Let's go";
 
 const Signup = () => {
@@ -23,7 +22,6 @@ const Signup = () => {
 
 
   const handleMouseDownPassword = (event) => {
-
     event.preventDefault();
   };
 
@@ -36,10 +34,8 @@ const Signup = () => {
     }
     var response = await authAPI.register(data);
     if (response.isSuccess) {
-      
     }
   };
-  const handleLoginGoogle = () => { };
   return (
     <div>
       <div className="login-section padding-tb section-bg">
@@ -50,6 +46,8 @@ const Signup = () => {
               <div className="d-flex">
                 <div className="form-group pe-2">
                   <TextField
+                    error={errors.first_name?.message != null}
+                    helperText={errors.first_name?.message != null ? errors.first_name?.message : ""}
                     type="text"
                     size="large"
                     name="first_name"
@@ -58,10 +56,11 @@ const Signup = () => {
                     fullWidth
                     {...register("first_name", { required: "This is required" })}
                   />
-                  <label className="d-flex ps-2 text-danger">{errors.first_name?.message}</label>
                 </div>
                 <div className="form-group">
                   <TextField
+                    error={errors.last_name?.message != null}
+                    helperText={errors.last_name?.message != null && errors.last_name?.message}
                     type="text"
                     size="large"
                     name="last_name"
@@ -72,11 +71,12 @@ const Signup = () => {
                       required: "This is required"
                     })}
                   />
-                  <label className="d-flex ps-2 text-danger">{errors.last_name?.message}</label>
                 </div>
               </div>
               <div className="form-group">
                 <TextField
+                  error={errors.email?.message != null}
+                  helperText={errors.email?.message != null && errors.email?.message}
                   type="email"
                   size="large"
                   name="email"
@@ -91,16 +91,19 @@ const Signup = () => {
                     }
                   })}
                 />
-                <label className="d-flex ps-2 text-danger">{errors.email?.message}</label>
               </div>
               <div className="form-group">
-                <FormControl fullWidth size="large" variant="outlined">
+                <FormControl
+                  error={errors.password?.message != null}
+                  fullWidth
+                  size="large"
+                  variant="outlined">
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <OutlinedInput
                     id="password"
                     name="password"
-                    {...register("password", { required: "This is required" })}
                     type={showPassword ? 'text' : 'password'}
+                    {...register("password", { required: "This is required" })}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -115,11 +118,17 @@ const Signup = () => {
                     }
                     label="Password"
                   />
+                  {errors.password?.message && (
+                    <FormHelperText>{errors.password.message}</FormHelperText>
+                  )}
                 </FormControl>
-                <label className="d-flex ps-2 text-danger">{errors.password?.message}</label>
               </div>
               <div className="form">
-                <FormControl fullWidth size="large" variant="outlined">
+                <FormControl
+                  error={errors.confirm_password?.message != null}
+                  fullWidth
+                  size="large"
+                  variant="outlined">
                   <InputLabel htmlFor="confirm_password">Confirm password</InputLabel>
                   <OutlinedInput
                     id="confirm_password"
@@ -147,8 +156,10 @@ const Signup = () => {
                     }
                     label="Confirm password"
                   />
+                  {errors.confirm_password?.message && (
+                    <FormHelperText>{errors.confirm_password?.message}</FormHelperText>
+                  )}
                 </FormControl>
-                <label className="d-flex ps-2 text-danger">{errors.confirm_password?.message}</label>
               </div>
               <div className="form-group">
                 <button type="submit" className="d-block lab-btn">
