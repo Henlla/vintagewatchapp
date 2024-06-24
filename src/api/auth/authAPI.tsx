@@ -11,6 +11,7 @@ class AuthAPI {
         var url = "auth/signin";
         return axiosClient.post(url, params) as Promise<APIResponse>;
     }
+
     register = (params) => {
         var url = "auth/signup"
         return axiosClient.post(url, params) as Promise<APIResponse>;

@@ -1,10 +1,28 @@
 /* eslint-disable react/prop-types */
-import { Rating } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { Link } from "react-router-dom";
+import CustomRating from "../components/CustomRating"
+import { useAuth } from "../utilis/AuthProvider";
 
 const ProductCards = ({ GridList, products }) => {
+  const { addToCard } = useAuth();
+  const [ratingCount, setRatingCount] = useState(0);
+
+  const addCart = (product) => {
+    const item = {
+      id: product.timepiece?.timepieceId,
+      image: product.mainImage?.imageUrl,
+      name: product.timepiece?.timepieceName,
+      price: product.timepiece?.price,
+      quantity: 1,
+      size: 36,
+      color: "Yellow",
+      coupon: ""
+    }
+    addToCard(item)
+  }
+
   return (
     <div
       className={`shop-product-wrap row justify-content-center ${GridList ? "grid" : "list"
@@ -20,27 +38,30 @@ const ProductCards = ({ GridList, products }) => {
               </div>
               {/*product action links*/}
               <div className="product-action-link">
-                <Link to={`/shop/${product.timepiece.timepieceId}`}>
+                <Link to={`/shop/${product.timepiece?.timepieceId}`}>
                   <i className="icofont-eye"></i>
                 </Link>
-                <a href="#">
+                {/* <a href="#">
                   <i className="icofont-heart"></i>
                 </a>
-                <Link to="/shop/card-page">
+                <Link onClick={() => addCart(product)}>
                   <i className="icofont-cart-alt"></i>
-                </Link>
+                </Link> */}
               </div>
             </div>
             {/* product content*/}
             <div className="product-content">
               <h5>
-                <Link to={`/shop/${product.timepiece.timepieceId}`}>{product.timepiece.timepieceName}</Link>
+                <Link to={`/shop/${product.timepiece?.timepieceId}`}>{product.timepiece?.timepieceName}</Link>
               </h5>
               <p className="productRating">
-                <Rating />
+
+                {/* <Rating /> */}
+                <CustomRating ratingCount={setRatingCount} item={product.timepiece} />
+                
               </p>
               <h6>
-                <NumericFormat className="text-center border border-0" value={product.timepiece.price} thousandSeparator="," suffix=" vnd" />
+                <NumericFormat className="text-center border border-0" value={product.timepiece?.price} thousandSeparator="," suffix=" vnd" />
               </h6>
             </div>
           </div>
@@ -54,13 +75,13 @@ const ProductCards = ({ GridList, products }) => {
               </div>
               {/*product action links*/}
               <div className="product-action-link">
-                <Link to={`/shop/${product.timepiece.timepieceId}`}>
+                <Link to={`/shop/${product.timepiece?.timepieceId}`}>
                   <i className="icofont-eye"></i>
                 </Link>
                 <a href="#">
                   <i className="icofont-heart"></i>
                 </a>
-                <Link to={`/shop/cart-page`}>
+                <Link onClick={() => addCart(product)}>
                   <i className="icofont-cart-alt"></i>
                 </Link>
               </div>
@@ -68,13 +89,18 @@ const ProductCards = ({ GridList, products }) => {
             {/* product content*/}
             <div className="product-content">
               <h5>
-                <Link to={`shop/${product.timepiece.timepieceId}`}>{product.timepiece.timepieceName}</Link>
+                <Link to={`shop/${product.timepiece?.timepieceId}`}>{product.timepiece?.timepieceName}</Link>
               </h5>
               <p className="productRating">
-                <Rating />
+                <CustomRating ratingCount={setRatingCount} item={product.timepiece} />
               </p>
               <h6>
-                <NumericFormat value={product.timepiece.price} thousandSeparator="," type="text" suffix=" vnd" />
+                <NumericFormat
+                  className="border border-0"
+                  value={product.timepiece?.price}
+                  thousandSeparator=","
+                  type="text"
+                  suffix=" vnd" />
               </h6>
             </div>
           </div>

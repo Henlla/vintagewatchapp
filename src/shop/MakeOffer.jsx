@@ -11,7 +11,6 @@ const MakeOffer = (props) => {
         const fullName = params.fullName;
         const phoneNumber = params.phoneNumber;
         const description = params.desc;
-        console.log(email, fullName, phoneNumber, description);
     }
 
     return (
