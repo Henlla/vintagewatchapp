@@ -2,10 +2,8 @@ import { Rating } from "@mui/material";
 import { useEffect, useState } from "react";
 import productAPI from "../api/product/productAPI";
 
-const CustomeRating = (props) => {
-
+const CustomRating = (props) => {
     const [avgRating, setAvgRating] = useState(0);
-
     useEffect(() => {
         props.item && getRating()
     }, [props.item])
@@ -29,4 +27,4 @@ const CustomeRating = (props) => {
     );
 }
 
-export default CustomeRating;
+export default CustomRating;

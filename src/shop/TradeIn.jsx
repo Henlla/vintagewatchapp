@@ -1,13 +1,12 @@
-import { CloudUpload } from "@mui/icons-material";
-import { Box, Button, Collapse, Grid, TextField, styled } from "@mui/material";
+import { Box, Collapse, Grid, TextField, styled } from "@mui/material";
 import plusImage from "../assets/images/bg-img/plus.png"
 import { useForm } from "react-hook-form";
 import { useRef, useState } from "react";
 import productAPI from "../api/product/productAPI";
-import axios from "axios";
 
 const TradeIn = (props) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
+
     const filesInputs = [useRef(null), useRef(null), useRef(null)];
     const [images, setImages] = useState([
         plusImage,
@@ -46,6 +45,12 @@ const TradeIn = (props) => {
     }
 
     const onSubmit = async (params) => {
+        const fullName = params.fullName;
+        const email = params.email;
+        const phoneNumber = params.phoneNumber;
+        const address = params.address;
+        const description = params.desc;
+
         const formData = new FormData();
         files.forEach((file) => {
             if (file) {
@@ -53,7 +58,7 @@ const TradeIn = (props) => {
             }
         })
         // call api to upload image here
-
+        
     }
 
     return (
@@ -162,7 +167,6 @@ const TradeIn = (props) => {
 
                             ))
                         }
-
                     </Grid>
                     <Grid container justifyContent={"flex-end"} className="mt-2 py-1">
                         <button type="submit" className="text-white lab-btn ms-2">

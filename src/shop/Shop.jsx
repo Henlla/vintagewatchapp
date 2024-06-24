@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 
 const showResult = "Showing 01-12 of 139 Results";
-import Data from "../products.json";
 import ProductCards from "./ProductCards";
 import Pagination from "./Paginations";
 import productAPI from "../api/product/productAPI";
@@ -56,7 +55,8 @@ const Shop = () => {
       newItem = [...data];
     } else {
       newItem = data.filter((item) => {
-        return item.category?.some((cate) => cate.category.categoryName === curcat)
+        console.log(item)
+        return item.category?.some((cate) => cate.category?.categoryName === curcat)
       })
     }
     setSelectedCategory(curcat);

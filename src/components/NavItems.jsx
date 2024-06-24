@@ -1,15 +1,19 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo/logo.png";
-import { AuthContext } from "../utilis/AuthProvider";
+import { useAuth } from "../utilis/AuthProvider";
 import authAPI from "../api/auth/authAPI";
 import UserDropDown from "./UserDropodown";
+import CartBadge from "../shop/CartBadge";
 
 const NavItems = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [socialToggle, setSocialToggle] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useAuth();
+  const { isAuthenticate, checkAuthenticate } = useAuth();
+  const location = useLocation();
+
   const navigate = useNavigate()
 
 
@@ -21,8 +25,17 @@ const NavItems = () => {
     }
   });
 
+  useEffect(() => {
+    var params = new URLSearchParams(location.search);
+    var authenticated = params.get("isAuthenticate");
+    checkAuthenticate(authenticated)
+    navigate("/")
+  }, [])
+
   const avatar = JSON.parse(localStorage.getItem("avatar"));
   const from = location.state?.from.pasthname || "/";
+
+
 
   const logoutHandle = async () => {
     await authAPI.logout()
@@ -78,7 +91,8 @@ const NavItems = () => {
               </div>
 
               {/* sign in, login*/}
-              {user != null ?
+              {/* <a href="/cart-page"><CartBadge /></a> */}
+              {isAuthenticate ?
                 <UserDropDown user={user} avatar={avatar} logoutHandle={logoutHandle} />
                 :
                 <>

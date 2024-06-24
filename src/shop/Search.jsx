@@ -3,7 +3,6 @@ import { NumericFormat } from 'react-number-format';
 import { Link } from 'react-router-dom';
 
 const Search = ({ products, GridList }) => {
-    // console.log(products)
     const [searchTerm, setSearchTerm] = useState("");
     const filteredProducts = products.filter((product) => product.timepiece?.timepieceName.toLowerCase().includes(searchTerm.toLowerCase()));
 

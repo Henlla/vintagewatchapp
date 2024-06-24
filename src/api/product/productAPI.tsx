@@ -23,7 +23,7 @@ class ProductAPI {
     }
     uploadImage = (params) => {
         var url = "timepiece/uploadTimepiece";
-        return axiosClient.post(url, params,{headers:{"Content-Type":"multipart/form-data"}}) as Promise<APIResponse>;
+        return axiosClient.post(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
     }
 }
 
