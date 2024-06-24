@@ -17,13 +17,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./home/Home.jsx";
 import Blog from "./blog/Blog.jsx";
 import Shop from "./shop/Shop.jsx";
-import Login from "./components/Login.jsx"
-import Signup from "./components/Signup.jsx"
+import Login from "./components/Login.jsx";
+import Signup from "./components/Signup.jsx";
 import { AuthProvider } from "./utilis/AuthProvider.jsx";
 import SingleProduct from "./shop/SingleProduct.jsx";
 import CartPage from "./shop/CartPage.jsx";
 import Contact from "./home/Contact.jsx";
-
+import Dashboard from "./components/DashBoard/index.jsx";
+import ManageAccount from "./components/DashBoard/Admin/ManageAccount.jsx";
 
 const router = createBrowserRouter([
   {
@@ -45,20 +46,53 @@ const router = createBrowserRouter([
       },
       {
         path: "/sign-up",
-        element: <Signup />
+        element: <Signup />,
       },
       {
         path: "/shop/:productId",
-        element: <SingleProduct />
+        element: <SingleProduct />,
       },
       {
         path: "/cart-page",
-        element: <CartPage />
+        element: <CartPage />,
       },
       {
         path: "/contact",
-        element: <Contact />
-      }
+        element: <Contact />,
+      },
+    ],
+  },
+  {
+    path: "/Dashboard",
+    children: [
+      {
+        // admin
+        path: "admin",
+        element: <Dashboard role={"ADMIN"} />,
+        children: [
+          {
+            path: "account",
+            element: <ManageAccount />,
+          },
+          // {
+          //   path: "product",
+          //   element: <ManageProduct />,
+          // },
+          // {
+          //   path: "category",
+          //   element: <ManageCategory />,
+          // },
+        ],
+      },
+      // admin
+      //////////////////////////////
+      // Assessor
+      {
+        path: "assessor",
+        element: <Dashboard role={"ASSESSOR"} />,
+        children: [{}],
+        // Assessor
+      },
     ],
   },
 ]);
