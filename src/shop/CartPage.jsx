@@ -49,7 +49,6 @@ const CartPage = () => {
 
     // changeColor
     const handleChange = (e) => {
-        console.log(e.target.value)
     }
 
     // cart subtotal

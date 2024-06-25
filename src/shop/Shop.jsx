@@ -55,7 +55,6 @@ const Shop = () => {
       newItem = [...data];
     } else {
       newItem = data.filter((item) => {
-        console.log(item)
         return item.category?.some((cate) => cate.category?.categoryName === curcat)
       })
     }
