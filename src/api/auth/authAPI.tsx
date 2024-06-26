@@ -13,13 +13,18 @@ class AuthAPI {
     }
 
     register = (params) => {
-        var url = "auth/signup"
+        var url = "auth/signup";
         return axiosClient.post(url, params) as Promise<APIResponse>;
     }
 
     logout = () => {
-        var url = "auth/logout"
+        var url = "auth/logout";
         return axiosClient.post(url) as Promise<APIResponse>
+    }
+
+    checkAuthenticate = () => {
+        var url = "auth/checkAuthenticate";
+        return axiosClient.get(url) as Promise<APIResponse>;
     }
 }
 

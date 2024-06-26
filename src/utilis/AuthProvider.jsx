@@ -7,9 +7,9 @@ export const useAuth = () => useContext(AuthContext)
 const AuthProvider = ({ children }) => {
     const existsCart = JSON.parse(localStorage.getItem("cart")) || [];
     // const [cartCount, setCartCount] = useState(existsCart.length)
-    const [isAuthenticate, setAuthenticate] = useState(localStorage.getItem("isAuthenticate") || false);
+    const [isAuthenticate, setAuthenticate] = useState(false);
     // const location = useLocation();
-    // const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
 
     // useEffect(() => {
     //     const storedUser = localStorage.getItem("user")
@@ -39,33 +39,19 @@ const AuthProvider = ({ children }) => {
     //     setItemInCart()
     // }
 
-    useEffect(() => {
-        checkAuthenticate();
-    }, [])
-
-    const checkAuthenticate = (value) => {
-        if (value) {
-            setAuthenticate(value || false)
-            localStorage.setItem("isAuthenticate", value || false)
-        }
-    }
-
-    const saveLoggedUserData = (isLogged, avatar) => {
-        localStorage.setItem("avatar", JSON.stringify(avatar));
-        localStorage.setItem("isAuthenticate", isLogged);
+    const saveLoggedUserData = (data, isLogged) => {
+        setUser(data)
         setAuthenticate(isLogged);
     };
 
     const logout = () => {
-        // setUser(null);
+        setUser(null);
         setAuthenticate(false)
         // localStorage.removeItem("cart");
-        localStorage.removeItem("isAuthenticate");
-        localStorage.removeItem("avatar");
     };
 
     return (
-        <AuthContext.Provider value={{ saveLoggedUserData, logout, checkAuthenticate, isAuthenticate }}>
+        <AuthContext.Provider value={{ user, saveLoggedUserData, logout, isAuthenticate }}>
             {children}
         </AuthContext.Provider>
     );

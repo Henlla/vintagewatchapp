@@ -7,11 +7,7 @@ interface APIResponse {
 }
 
 class CategoryAPI {
-    getCategory = () => {
-        var url = "categories";
-        return axiosClient.get(url) as Promise<APIResponse>;
 
-    }
 }
 
 const categoryApi = new CategoryAPI()
