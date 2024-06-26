@@ -13,7 +13,7 @@ const socialTitle = "Login with Google";
 const btnText = "Login Now";
 
 const Login = () => {
-  const { saveLoggedUserData, isAuthenticate } = useAuth();
+  const { saveLoggedUserData } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
@@ -32,7 +32,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     var response = await authAPI.login(data)
     if (response.isSuccess) {
-      saveLoggedUserData(true, response.data.avatar)
+      saveLoggedUserData(response.data, response.isSuccess)
       navigate(from, { replace: true });
     }
   };

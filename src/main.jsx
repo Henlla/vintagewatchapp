@@ -23,6 +23,7 @@ import { AuthProvider } from "./utilis/AuthProvider.jsx";
 import SingleProduct from "./shop/SingleProduct.jsx";
 import CartPage from "./shop/CartPage.jsx";
 import Contact from "./home/Contact.jsx";
+import Evaluation from "./shop/Evaluation.jsx";
 
 
 const router = createBrowserRouter([
@@ -30,7 +31,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      { path: "/", element: <Home /> },
+      {
+        path: "/",
+        element: <Home />
+      },
       {
         path: "/blog",
         element: <Blog />,
@@ -58,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />
+      },
+      {
+        path: "/evaluation",
+        element: <Evaluation />
       }
     ],
   },

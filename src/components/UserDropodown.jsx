@@ -20,7 +20,7 @@ const UserDropDown = (props) => {
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClick}
                 >
-                    <Avatar src={props && props.avatar} />
+                    <Avatar src={props.user.avatar} />
                 </Button>
                 <Menu
                     id="basic-menu"
@@ -33,7 +33,7 @@ const UserDropDown = (props) => {
                 >
                     <MenuItem to="/profile" onClick={handleClose}>Profile</MenuItem>
                     <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem onClick={props && props.logoutHandle}>Logout</MenuItem>
+                    <MenuItem onClick={props.logoutHandle}>Logout</MenuItem>
                 </Menu>
             </Stack>
         </>

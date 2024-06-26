@@ -7,7 +7,6 @@ import Pagination from "./Paginations";
 import productAPI from "../api/product/productAPI";
 import Search from "./Search";
 import ShopCategory from "./ShopCategory";
-import categoryApi from "../api/category/categoryAPI";
 const Shop = () => {
   const [GridList, setGridList] = useState(true);
   const [products, setProducts] = useState([]);
@@ -37,7 +36,7 @@ const Shop = () => {
   }
 
   const getCategory = async () => {
-    var response = await categoryApi.getCategory();
+    var response = await productAPI.getCategory();
     if (response.isSuccess) {
       setCategory(response.data);
     }

@@ -6,7 +6,6 @@ const axiosClient = axios.create({
     baseURL: import.meta.env.VITE_REACT_APP_CLIENT_ID,
     headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin" : '*'
     },
     paramsSerializer: (params) => queryString.stringify(params),
 });
@@ -24,7 +23,7 @@ axiosClient.interceptors.response.use(
     },
     (error) => {
         if (error.response) {
-            return Promise.resolve(error.response.data)
+            return Promise.resolve(error.response)
         } else if (error.request) {
             return Promise.reject({ message: "Network Error. Check connection" })
         } else {

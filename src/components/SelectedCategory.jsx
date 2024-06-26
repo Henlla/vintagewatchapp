@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import categoryApi from '../api/category/categoryAPI'
+import productAPI from '../api/product/productAPI'
 
 const SelectedCategory = (props) => {
   const [categories, setCatgories] = useState([])
 
   const getCategory = async () => {
-    var response = await categoryApi.getCategory();
+    var response = await productAPI.getCategory();
     if (response.isSuccess) {
       setCatgories(response.data);
     }
