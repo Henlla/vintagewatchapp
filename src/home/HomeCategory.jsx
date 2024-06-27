@@ -10,37 +10,37 @@ const categoryList = [
     imgUrl: "src/assets/images/category/01.jpg",
     imgAlt: "category rajibraj91 rajibraj",
     iconName: "icofont-brand-windows",
-    title: "DSLR Camera",
+    title: "Rolex",
   },
   {
     imgUrl: "src/assets/images/category/02.jpg",
     imgAlt: "category rajibraj91 rajibraj",
     iconName: "icofont-brand-windows",
-    title: "Shoes",
+    title: "Omega",
   },
   {
     imgUrl: "src/assets/images/category/03.jpg",
     imgAlt: "category rajibraj91 rajibraj",
     iconName: "icofont-brand-windows",
-    title: "Photography",
+    title: "Patek Philippe",
   },
   {
     imgUrl: "src/assets/images/category/04.jpg",
     imgAlt: "category rajibraj91 rajibraj",
     iconName: "icofont-brand-windows",
-    title: "Formal Dress",
+    title: "IWC",
   },
   {
     imgUrl: "src/assets/images/category/05.jpg",
     imgAlt: "category rajibraj91 rajibraj",
     iconName: "icofont-brand-windows",
-    title: "Colorful Bags",
+    title: "Cartier",
   },
   {
     imgUrl: "src/assets/images/category/06.jpg",
     imgAlt: "category rajibraj91 rajibraj",
     iconName: "icofont-brand-windows",
-    title: "Home Decor",
+    title: "Vintage",
   },
 ];
 
