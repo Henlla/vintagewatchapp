@@ -1,18 +1,19 @@
 import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import GoogleButton from "react-google-button";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import authAPI from "../api/auth/authAPI";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { AuthContext, AuthProvider } from "../utilis/AuthProvider";
+import { useAuth } from "../utilis/AuthProvider";
+import axios from "axios";
 
 const title = "Login";
 const socialTitle = "Login with Google";
 const btnText = "Login Now";
 
 const Login = () => {
-  const { login } = useContext(AuthContext)
+  const { saveLoggedUserData } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
@@ -31,14 +32,10 @@ const Login = () => {
   const onSubmit = async (data) => {
     var response = await authAPI.login(data)
     if (response.isSuccess) {
-      login(response.data)
+      saveLoggedUserData(response.data, response.isSuccess)
       navigate(from, { replace: true });
-    } else {
-      console.log(response.message)
     }
   };
-
-  const handleLoginGoogle = () => { };
 
   return (
     <div>
@@ -112,7 +109,9 @@ const Login = () => {
               </span>
               <h5 className="ps-4 subtitle">{socialTitle}</h5>
               <ul className="d-flex justify-content-center">
-                <GoogleButton onClick={handleLoginGoogle} />
+                <Link to={"http://localhost:5009/auth/signinWithGoogle"}>
+                  <GoogleButton />
+                </Link>
               </ul>
             </div>
           </div>

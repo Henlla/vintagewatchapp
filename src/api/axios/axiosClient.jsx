@@ -23,7 +23,7 @@ axiosClient.interceptors.response.use(
     },
     (error) => {
         if (error.response) {
-            return Promise.resolve(error.response.data)
+            return Promise.resolve(error.response)
         } else if (error.request) {
             return Promise.reject({ message: "Network Error. Check connection" })
         } else {

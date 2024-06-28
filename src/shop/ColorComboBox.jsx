@@ -2,7 +2,6 @@ import { FormControl, MenuItem, Select } from "@mui/material";
 
 const ColorComboBox = (props) => {
     const item = props.item
-    console.log(item)
     return (
         <FormControl className="select-product" fullWidth size="small">
             <Select

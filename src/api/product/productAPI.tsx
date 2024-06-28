@@ -21,10 +21,26 @@ class ProductAPI {
         var url = "rating";
         return axiosClient.get(url + `/${params}`) as Promise<APIResponse>;
     }
-    uploadImage = (params) => {
-        var url = "timepiece/uploadTimepiece";
-        return axiosClient.post(url, params,{headers:{"Content-Type":"multipart/form-data"}}) as Promise<APIResponse>;
+
+
+    getCategory = () => {
+        var url = "categories";
+        return axiosClient.get(url) as Promise<APIResponse>;
+
     }
+
+    
+    getBrand = () => {
+        var url = "brand"
+        return axiosClient.get(url) as Promise<APIResponse>;
+    }
+
+    requestEvaluation = (params) => {
+        var url = "timepiece/requestEvaluation"
+        return axiosClient.post(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>
+    }
+
+
 }
 
 const productAPI = new ProductAPI();

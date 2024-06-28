@@ -23,6 +23,7 @@ import { AuthProvider } from "./utilis/AuthProvider.jsx";
 import SingleProduct from "./shop/SingleProduct.jsx";
 import CartPage from "./shop/CartPage.jsx";
 import Contact from "./home/Contact.jsx";
+import Evaluation from "./shop/Evaluation.jsx";
 import Dashboard from "./components/DashBoard/index.jsx";
 import ManageAccount from "./components/DashBoard/Admin/ManageAccount.jsx";
 import Profile from "./components/Profile.jsx";
@@ -32,7 +33,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      { path: "/", element: <Home /> },
+      {
+        path: "/",
+        element: <Home />
+      },
       {
         path: "/blog",
         element: <Blog />,
@@ -63,8 +67,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/contact",
-        element: <Contact />,
+        element: <Contact />
       },
+      {
+        path: "/evaluation",
+        element: <Evaluation />
+      }
     ],
   },
   {

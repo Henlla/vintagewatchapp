@@ -1,17 +1,18 @@
-import { Box, FormControl, InputLabel, MenuItem, Rating, Select, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { Link } from "react-router-dom";
-import productAPI from "../api/product/productAPI";
 import CustomeRating from "../components/CustomRating";
+import { useAuth } from "../utilis/AuthProvider";
 
 const ProductDisplay = (props) => {
-    const { category, images, mainImage, timepiece } = props.item
+    const { addItemToCart } = useAuth();
+    const { category, images, mainImage, timepiece } = props.item;
     const [ratingCount, setRatingCount] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [coupon, setCoupon] = useState("");
-    const [size, setSize] = useState("");
-    const [color, setColor] = useState("");
+    const [size, setSize] = useState(36);
+    const [color, setColor] = useState("Yellow");
 
     const handleChange = (event) => {
         var data = event.target
@@ -27,11 +28,12 @@ const ProductDisplay = (props) => {
     }
 
     const handleIncrease = () => {
+        if (quantity >= 5)
+            return;
         setQuantity(quantity + 1)
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const addCart = () => {
         const product = {
             id: timepiece?.timepieceId,
             image: mainImage?.imageUrl,
@@ -42,21 +44,12 @@ const ProductDisplay = (props) => {
             color: color,
             coupon: coupon
         }
-        const existsCart = JSON.parse(localStorage.getItem("cart")) || [];
-        const existsProductIndex = existsCart.findIndex((item) => item.id === timepiece?.timepieceId);
-        const existsProductSize = existsCart.findIndex((item) => item.size === size);
-        const existsProductColor = existsCart.findIndex((item) => item.color === color);
+        addItemToCart(product);
 
-        if (existsProductIndex !== -1 && existsProductSize !== -1 && existsProductColor !== -1) {
-            existsCart[existsProductIndex].quantity += quantity;
-        } else {
-            existsCart.push(product);
-        }
-        localStorage.setItem("cart", JSON.stringify(existsCart));
         // reset form
-        setQuantity(1)
-        setSize("");
-        setColor("");
+        setQuantity(1);
+        setSize(36);
+        setColor("Yellow");
         setCoupon("")
     }
 
@@ -73,8 +66,8 @@ const ProductDisplay = (props) => {
             </h4>
             <h6>{timepiece?.user.firstName + " " + timepiece?.user.lastName}</h6>
             <p>{timepiece?.description}</p>
-            <form onSubmit={handleSubmit}>
-                <FormControl className="select-product" fullWidth size="small">
+            {/* <form> */}
+                {/* <FormControl className="select-product" fullWidth size="small">
                     <InputLabel id="size-label">Select Size</InputLabel>
                     <Select
                         labelId="size-label"
@@ -84,7 +77,6 @@ const ProductDisplay = (props) => {
                         label="Select Size"
                         onChange={handleChange}
                     >
-                        <MenuItem value={""}>Select Size</MenuItem>
                         <MenuItem value={36}>36mm</MenuItem>
                         <MenuItem value={38}>38mm</MenuItem>
                         <MenuItem value={42}>42mm</MenuItem>
@@ -102,7 +94,6 @@ const ProductDisplay = (props) => {
                         value={color}
                         onChange={handleChange}
                     >
-                        <MenuItem value={""}>Select Color</MenuItem>
                         <MenuItem value={"Yellow"}>Yellow</MenuItem>
                         <MenuItem value={"Red"}>Red</MenuItem>
                         <MenuItem value={"White"}>White</MenuItem>
@@ -112,8 +103,12 @@ const ProductDisplay = (props) => {
                 </FormControl>
                 <div className="cart-plus-minus">
                     <div className="dec qtybutton" onClick={handleDecrease}>-</div>
-                    <input className="cart-plus-minus-box"
-                        type="text" name="qtybutton" id="qtybutton"
+                    <input
+                        readOnly
+                        className="cart-plus-minus-box"
+                        type="text"
+                        name="qtybutton"
+                        id="qtybutton"
                         value={quantity}
                         onChange={(e) => { setQuantity(parseInt(e.target.value, 10)) }}
                     />
@@ -125,14 +120,14 @@ const ProductDisplay = (props) => {
                         onChange={(e) => setCoupon(e.target.value)} />
                 </div>
 
-                <button type="submit" className="lab-btn">
+                <a onClick={() => addCart()} className="lab-btn">
                     <span>Add to Cart</span>
-                </button>
+                </a> */}
 
                 <Link to={"/cart-page"} className="lab-btn bg-primary">
                     <span>Check out</span>
                 </Link>
-            </form>
+            {/* </form> */}
         </div>
     );
 }

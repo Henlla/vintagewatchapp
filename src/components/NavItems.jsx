@@ -1,15 +1,18 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo/logo.png";
-import { AuthContext } from "../utilis/AuthProvider";
+import { useAuth } from "../utilis/AuthProvider";
 import authAPI from "../api/auth/authAPI";
 import UserDropDown from "./UserDropodown";
+
 
 const NavItems = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [socialToggle, setSocialToggle] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout, isAuthenticate, saveLoggedUserData } = useAuth();
+  const location = useLocation();
+
   const navigate = useNavigate()
 
 
@@ -21,8 +24,23 @@ const NavItems = () => {
     }
   });
 
-  const avatar = JSON.parse(localStorage.getItem("avatar"));
+
+  useEffect(() => {
+    authenticate()
+  }, []);
+
+
+  const authenticate = async () => {
+    var response = await authAPI.checkAuthenticate();
+    if (response.isSuccess) {
+      saveLoggedUserData(response.data, response.isSuccess)
+    } else {
+      saveLoggedUserData(response.data, response.isSuccess)
+    }
+  }
+
   const from = location.state?.from.pasthname || "/";
+
 
   const logoutHandle = async () => {
     await authAPI.logout()
@@ -63,7 +81,10 @@ const NavItems = () => {
                     <Link to="/ ">Home</Link>
                   </li>
                   <li>
-                    <Link to="/shop ">Shop</Link>
+                    <Link to="/shop ">Buy</Link>
+                  </li>
+                  <li>
+                    <Link to="/evaluation ">Sell</Link>
                   </li>
                   <li>
                     <Link to="/blog ">Blog</Link>
@@ -78,8 +99,9 @@ const NavItems = () => {
               </div>
 
               {/* sign in, login*/}
-              {user != null ?
-                <UserDropDown user={user} avatar={avatar} logoutHandle={logoutHandle} />
+              {/* <a href="/cart-page"><CartBadge /></a> */}
+              {isAuthenticate ?
+                <UserDropDown user={user} logoutHandle={logoutHandle} />
                 :
                 <>
                   <Link to="/sign-up" className="lab-btn me-3 d-none d-md-block">
