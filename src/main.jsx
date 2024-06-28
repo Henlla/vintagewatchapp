@@ -25,6 +25,7 @@ import CartPage from "./shop/CartPage.jsx";
 import Contact from "./home/Contact.jsx";
 import Dashboard from "./components/DashBoard/index.jsx";
 import ManageAccount from "./components/DashBoard/Admin/ManageAccount.jsx";
+import Profile from "./components/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/sign-up",
         element: <Signup />,
+      },
+      {
+        path: "/Profile",
+        element: <Profile />,
       },
       {
         path: "/shop/:productId",
