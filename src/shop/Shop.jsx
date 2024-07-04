@@ -2,17 +2,16 @@ import React, { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 
 const showResult = "Showing 01-12 of 139 Results";
-import Data from "../products.json";
 import ProductCards from "./ProductCards";
 import Pagination from "./Paginations";
 import productAPI from "../api/product/productAPI";
 import Search from "./Search";
 import ShopCategory from "./ShopCategory";
-import categoryApi from "../api/category/categoryAPI";
 const Shop = () => {
   const [GridList, setGridList] = useState(true);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
+  const [data, setData] = useState([]);
 
   // paginate
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,11 +30,13 @@ const Shop = () => {
     var response = await productAPI.getProduct();
     if (response.isSuccess) {
       setProducts(response.data)
+      setData(response.data);
+
     }
   }
 
   const getCategory = async () => {
-    var response = await categoryApi.getCategory();
+    var response = await productAPI.getCategory();
     if (response.isSuccess) {
       setCategory(response.data);
     }
@@ -48,10 +49,14 @@ const Shop = () => {
 
   const menuItems = [...new Set(category.map((val) => val.categoryName))];
   const filterItem = (curcat) => {
-    const newItem = products.filter((item)=>{
-      return item.category?.some((cate) => cate.category.categoryName === curcat)
-    })
-    console.log(newItem)
+    let newItem = [];
+    if (curcat === "All") {
+      newItem = [...data];
+    } else {
+      newItem = data.filter((item) => {
+        return item.category?.some((cate) => cate.category?.categoryName === curcat)
+      })
+    }
     setSelectedCategory(curcat);
     setProducts(newItem);
   }
@@ -105,7 +110,6 @@ const Shop = () => {
                 <ShopCategory
                   filterItem={filterItem}
                   menuItems={menuItems}
-                  setProducts={setProducts}
                   selectedCategory={selectedCategory} />
               </aside>
             </div>

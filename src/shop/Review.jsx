@@ -52,7 +52,7 @@ const Review = (props) => {
                                 <div className="post-content">
                                     <div className="entry-meta">
                                         <div className="posted-on">
-                                            <a href="#">{review.user.firstName}</a>
+                                            <a>{review.user.firstName + " " + review.user.lastName}</a>
                                             <p>{review.ratingDate}</p>
                                         </div>
                                     </div>

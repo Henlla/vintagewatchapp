@@ -1,18 +1,19 @@
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import { useContext, useState } from "react";
+import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { useState } from "react";
 import GoogleButton from "react-google-button";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import authAPI from "../api/auth/authAPI";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { AuthContext, AuthProvider } from "../utilis/AuthProvider";
+import { useAuth } from "../utilis/AuthProvider";
+import axios from "axios";
 
 const title = "Login";
 const socialTitle = "Login with Google";
 const btnText = "Login Now";
 
 const Login = () => {
-  const { login } = useContext(AuthContext)
+  const { saveLoggedUserData } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
@@ -31,14 +32,15 @@ const Login = () => {
   const onSubmit = async (data) => {
     var response = await authAPI.login(data)
     if (response.isSuccess) {
-      login(response.data)
-      navigate(from, { replace: true });
-    } else {
-      console.log(response.message)
+      saveLoggedUserData(response.data, response.isSuccess)
+      var role = response.data.role.roleName;
+      if (role == "ADMIN" || role == "APPRAISER") {
+        navigate("/Dashboard", { replace: true })
+      } else {
+        navigate(from, { replace: true });
+      }
     }
   };
-
-  const handleLoginGoogle = () => { };
 
   return (
     <div>
@@ -49,6 +51,8 @@ const Login = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="account-form">
               <div className="form-group">
                 <TextField
+                  error={errors.email?.message != null}
+                  helperText={errors.email?.message != null && errors.email?.message}
                   size="normal"
                   label="Email *"
                   name="email"
@@ -56,10 +60,13 @@ const Login = () => {
                   fullWidth
                   {...register("email", { required: "This is required." })}
                 />
-                <label className="d-flex text-danger ps-1">{errors.email?.message}</label>
               </div>
               <div className="form-group">
-                <FormControl fullWidth size="normal" variant="outlined">
+                <FormControl
+                  error={errors.password?.message != null}
+                  fullWidth
+                  size="normal"
+                  variant="outlined">
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <OutlinedInput
                     id="password"
@@ -80,15 +87,13 @@ const Login = () => {
                     }
                     label="Password"
                   />
+                  {errors.password?.message && (
+                    <FormHelperText>{errors.password?.message}</FormHelperText>
+                  )}
                 </FormControl>
-                <label className="d-flex text-danger ps-1">{errors.password?.message}</label>
               </div>
               <div className="form-group">
                 <div className="d-flex justify-content-end flex-wrap pt-sm-2">
-                  {/* <div className="checkgroup">
-                    <input onChange={onRemember} type="checkbox" name="remember" id="remember" />
-                    <label htmlFor="remember">Remember me</label>
-                  </div> */}
                   <Link to="/forgot-password">Forget Password?</Link>
                 </div>
               </div>
@@ -107,9 +112,11 @@ const Login = () => {
               <span className="or">
                 <span>or</span>
               </span>
-              <h5 className="subtitle">{socialTitle}</h5>
-              <ul className="lab-ui social-icons justify-content-center">
-                <GoogleButton onClick={handleLoginGoogle} />
+              <h5 className="ps-4 subtitle">{socialTitle}</h5>
+              <ul className="d-flex justify-content-center">
+                <Link to={"http://localhost:5009/auth/signinWithGoogle"}>
+                  <GoogleButton />
+                </Link>
               </ul>
             </div>
           </div>

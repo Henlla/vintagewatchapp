@@ -17,47 +17,82 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./home/Home.jsx";
 import Blog from "./blog/Blog.jsx";
 import Shop from "./shop/Shop.jsx";
-import Login from "./components/Login.jsx"
-import Signup from "./components/Signup.jsx"
+import Login from "./components/Login.jsx";
+import Signup from "./components/Signup.jsx";
 import { AuthProvider } from "./utilis/AuthProvider.jsx";
 import SingleProduct from "./shop/SingleProduct.jsx";
 import CartPage from "./shop/CartPage.jsx";
 import Contact from "./home/Contact.jsx";
-
+import Evaluation from "./shop/Evaluation.jsx";
+import Dashboard from "./components/DashBoard/index.jsx";
+import ManageAccount from "./components/DashBoard/Admin/ManageAccount.jsx";
+import ManageEvaluate from "./components/DashBoard/Appraiser/ManageEvaluate.jsx";
+import ProtectedRoute from "./utilis/ProtectedRoute.jsx";
+import UnAuthorize from "./home/UnAuthorize.jsx";
+import ManageCategory from "./components/DashBoard/Admin/ManageCategory.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { path: "/", element: <Home /> },
+      {
+        path: "/",
+        element: <ProtectedRoute role={["USERS", null]}><Home /></ProtectedRoute>
+      },
       {
         path: "/blog",
-        element: <Blog />,
+        element: <ProtectedRoute role={["USERS", null]}><Blog /></ProtectedRoute>
       },
       {
         path: "/shop",
-        element: <Shop />,
+        element: <ProtectedRoute role={["USERS", null]}><Shop /></ProtectedRoute>
       },
       {
         path: "/login",
-        element: <Login />,
+        element: <ProtectedRoute role={["USERS", null]}><Login /></ProtectedRoute>
       },
       {
         path: "/sign-up",
-        element: <Signup />
+        element: <ProtectedRoute role={["USERS", null]}><Signup /></ProtectedRoute>
       },
       {
         path: "/shop/:productId",
-        element: <SingleProduct />
+        element: <ProtectedRoute role={["USERS", null]}><SingleProduct /></ProtectedRoute>
       },
       {
-        path: "/cart-page",
-        element: <CartPage />
+        path: "/check-out/:productId",
+        element: <ProtectedRoute role={["USERS"]}><CartPage /></ProtectedRoute>
       },
       {
         path: "/contact",
-        element: <Contact />
+        element: <ProtectedRoute role={["USERS", null]}><Contact /></ProtectedRoute>
+      },
+      {
+        path: "/evaluation",
+        element: <ProtectedRoute role={["USERS"]}><Evaluation /></ProtectedRoute>
+      },
+      {
+        path: "/unauthorize",
+        element: <UnAuthorize />
+      }
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <ProtectedRoute role={["ADMIN", "APPRAISER"]}><Dashboard /></ProtectedRoute>,
+    children: [
+      {
+        path: "account_manage",
+        element: <ProtectedRoute role={["ADMIN"]}><ManageAccount /></ProtectedRoute>,
+      },
+      {
+        path: "evaluate_manage",
+        element: <ProtectedRoute role={["APPRAISER"]}><ManageEvaluate /></ProtectedRoute>,
+      },
+      {
+        path: "category_manage",
+        element: <ProtectedRoute role={["ADMIN"]}><ManageCategory /></ProtectedRoute>
       }
     ],
   },
