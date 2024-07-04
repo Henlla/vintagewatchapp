@@ -164,27 +164,20 @@ const Evaluation = () => {
             setSnackBarType("success")
             setOpenSnackBar(true)
             await delay(2000)
-            navigate("/shop")
-            // reset({
-            //     TimepieceName: "",
-            //     Movement: "TimepieceName",
-            //     CaseMaterial: "TimepieceName",
-            //     CaseDiameter: "TimepieceName",
-            //     CaseThickness: "TimepieceName",
-            //     Crystal: "TimepieceName",
-            //     WaterResistance: "TimepieceName",
-            //     StrapMaterial: "TimepieceName",
-            //     StrapWidth: "TimepieceName",
-            //     Style: "TimepieceName",
-            //     Description: "TimepieceName"
-            // });
+            navigate("/shop", { replace: true })
         } else if (response.status === 401) {
             setSnackBarMessage("Please login first")
             setSnackBarType("warning")
             setOpenSnackBar(true)
             await delay(2000)
-            navigate("/login")
+            navigate("/login", { replace: true })
 
+        } else {
+            setLoading(false)
+            setSnackBarMessage("Send request fail")
+            setSnackBarType("error")
+            setOpenSnackBar(true)
+            await delay(2000)
         }
     }
 
@@ -307,7 +300,7 @@ const Evaluation = () => {
                         }
                         <Grid textAlign={"center"} item xs={12}>
                             <LoadingButton
-                             type="submit"
+                                type="submit"
                                 size="small"
                                 endIcon={<SendIcon />}
                                 loading={loading}

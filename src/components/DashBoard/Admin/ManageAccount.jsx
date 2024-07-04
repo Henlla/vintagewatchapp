@@ -1,231 +1,115 @@
-import { Button, Form, Input, Modal, Table } from "antd";
-import { useForm } from "antd/es/form/Form";
-import React, { useEffect, useState } from "react";
-import { message } from "antd";
+import * as React from 'react';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import { Box, TextField } from '@mui/material';
+import { useState } from 'react';
 
-export const ManageAccount = () => {
-  const [accounts, setAccounts] = useState([]);
-  const [form] = useForm();
+const columns = [
+  { id: 'email', label: 'Name', minWidth: 170 },
+  { id: 'password', label: 'ISO\u00a0Code', minWidth: 100 },
 
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "username",
-      filterMode: "tree",
-      filterSearch: true,
-      onFilter: (value, record) => record.name.includes(value),
-      width: "30%",
-    },
-    {
-      title: "Mail",
-      dataIndex: "email",
+];
 
-      onFilter: (value, record) => record.mail.startsWith(value),
-      filterSearch: true,
-      width: "20%",
-    },
+function createData(name, code, population, size) {
+  const density = population / size;
+  return { name, code, population, size, density };
+}
 
-    {
-      title: "Phone",
-      dataIndex: "phone",
+const rows = [
+  createData('India', 'IN', 1324171354, 3287263),
+  createData('China', 'CN', 1403500365, 9596961),
+  createData('Italy', 'IT', 60483973, 301340),
+  createData('United States', 'US', 327167434, 9833520),
+  createData('Canada', 'CA', 37602103, 9984670),
+  createData('Australia', 'AU', 25475400, 7692024),
+  createData('Germany', 'DE', 83019200, 357578),
+  createData('Ireland', 'IE', 4857000, 70273),
+  createData('Mexico', 'MX', 126577691, 1972550),
+  createData('Japan', 'JP', 126317000, 377973),
+  createData('France', 'FR', 67022000, 640679),
+  createData('United Kingdom', 'GB', 67545757, 242495),
+  createData('Russia', 'RU', 146793744, 17098246),
+  createData('Nigeria', 'NG', 200962417, 923768),
+  createData('Brazil', 'BR', 210147125, 8515767),
+];
 
-      onFilter: (value, record) => record.phone.startsWith(value),
-      filterSearch: true,
-      width: "20%",
-    },
+export default function ManageAccount() {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [accountData, setAccountData] = useState([]);
 
-    {
-      title: "Adress",
-      dataIndex: "address",
+  const getAccountData = () => {
 
-      onFilter: (value, record) => record.address.startsWith(value),
-      filterSearch: true,
-      width: "20%",
-    },
+  }
 
-    {
-      title: "Role",
-      dataIndex: "role",
-
-      onFilter: (value, record) => record.address.startsWith(value),
-      filterSearch: true,
-      width: "10%",
-    },
-
-    {
-      title: "Status",
-      dataIndex: "status",
-
-      onFilter: (value, record) => record.status.startsWith(value),
-      filterSearch: true,
-      width: "20%",
-    },
-    // {
-    //   title: "Actions",
-    //   render: (value, record) => (
-    //     <Button type="dashed" onClick={() => handleDelete(record.id)}>
-    //       Xóa
-    //     </Button>
-    //   ),
-    // },
-  ];
-
-  const onChange = () => {};
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  const handleOk = () => {
-    // setIsModalOpen(false);
-    form.submit();
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
-
-  const fetchAccounts = async () => {
-    try {
-      const response = await api.get("/authentication/accounts");
-      const filteredAccounts = response.data.filter(
-        (product) => !product.deleted
-      );
-      setAccounts(filteredAccounts);
-    } catch (error) {
-      console.error("Error fetching account:", error);
-      message.error("Failed to fetch account");
-    }
-  };
-
-  useEffect(() => {
-    fetchAccounts();
-  }, []);
-
-  const onSubmit = async (values) => {
-    console.log(values);
-    const response = await api.post("/authentication/register-staff", values);
-    console.log(response);
-    toast.success("Successfully create new Account!");
-    form.resetFields();
-    handleCancel();
-    fetchAccounts();
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await api.delete(`/authentication/delete-account/${id}`);
-      message.success("account deleted successfully");
-      const response = await api.get(`/authentication/account`);
-      if (response.data.deleted) {
-        // Nếu sản phẩm đã được đánh dấu là đã xóa thì không hiển thị nó trên màn hình
-        return;
-      }
-      fetchAccounts();
-    } catch (error) {
-      console.error("Error deleting account:", error);
-      message.error("Failed to delete acount");
-    }
-  };
-
-  /////////////////////////////
   return (
-    <div>
-      <Button onClick={showModal} type="primary" className="">
-        Add
-      </Button>
-      {/* <button onClick={handleDeleteClick}>Delete</button> */}
-      <Table
-        className="p-2"
-        columns={columns}
-        dataSource={accounts}
-        onChange={onChange}
-      />
-      <Modal
-        title="Thêm tài khoản"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Form
-          onFinish={onSubmit}
-          labelCol={{
-            span: 24,
-          }}
-          form={form}
-        >
-          <Form.Item
-            label="Name"
-            name={"username"}
-            rules={[
-              {
-                required: true,
-                message: "Please input your name!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            name={"password"}
-            rules={[
-              {
-                required: true,
-                message: "Please input password!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Email"
-            name={"email"}
-            rules={[
-              {
-                required: true,
-                message: "Please input email!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Phone"
-            name={"phone"}
-            rules={[
-              {
-                required: true,
-                message: "Please input your phone number!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Adress"
-            name={"address"}
-            rules={[
-              {
-                required: true,
-                message: "Please input your adress!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+    <>
+      <Box>
+        <TextField label="Search..." size='small' className='mb-2' />
+      </Box>
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <TableContainer sx={{ maxHeight: 370 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === 'number'
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </>
   );
-};
-export default ManageAccount;
+}

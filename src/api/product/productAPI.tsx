@@ -29,15 +29,29 @@ class ProductAPI {
 
     }
 
-    
-    getBrand = () => {
-        var url = "brand"
+    getAllTimepieceNotEvaluate = () => {
+        var url = "timepiece/GetAllTimepieceNotEvaluate";
         return axiosClient.get(url) as Promise<APIResponse>;
+    }
+
+    getBrand = () => {
+        var url = "brand";
+        return axiosClient.get(url) as Promise<APIResponse>;
+    }
+
+    getProductEvaluation = (params) => {
+        var url = "timepiece/GetEvaluationTimepiece";
+        return axiosClient.get(url, params) as Promise<APIResponse>;
     }
 
     requestEvaluation = (params) => {
         var url = "timepiece/requestEvaluation"
-        return axiosClient.post(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>
+        return axiosClient.post(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
+    }
+
+    createEvaluation = (params) => {
+        var url = "evaluation/";
+        return axiosClient.post(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
     }
 
 

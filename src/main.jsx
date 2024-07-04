@@ -26,6 +26,10 @@ import Contact from "./home/Contact.jsx";
 import Evaluation from "./shop/Evaluation.jsx";
 import Dashboard from "./components/DashBoard/index.jsx";
 import ManageAccount from "./components/DashBoard/Admin/ManageAccount.jsx";
+import ManageEvaluate from "./components/DashBoard/Appraiser/ManageEvaluate.jsx";
+import ProtectedRoute from "./utilis/ProtectedRoute.jsx";
+import UnAuthorize from "./home/UnAuthorize.jsx";
+import ManageCategory from "./components/DashBoard/Admin/ManageCategory.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,73 +38,62 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />
+        element: <ProtectedRoute role={["USERS", null]}><Home /></ProtectedRoute>
       },
       {
         path: "/blog",
-        element: <Blog />,
+        element: <ProtectedRoute role={["USERS", null]}><Blog /></ProtectedRoute>
       },
       {
         path: "/shop",
-        element: <Shop />,
+        element: <ProtectedRoute role={["USERS", null]}><Shop /></ProtectedRoute>
       },
       {
         path: "/login",
-        element: <Login />,
+        element: <ProtectedRoute role={["USERS", null]}><Login /></ProtectedRoute>
       },
       {
         path: "/sign-up",
-        element: <Signup />,
+        element: <ProtectedRoute role={["USERS", null]}><Signup /></ProtectedRoute>
       },
       {
         path: "/shop/:productId",
-        element: <SingleProduct />,
+        element: <ProtectedRoute role={["USERS", null]}><SingleProduct /></ProtectedRoute>
       },
       {
-        path: "/cart-page",
-        element: <CartPage />,
+        path: "/check-out/:productId",
+        element: <ProtectedRoute role={["USERS"]}><CartPage /></ProtectedRoute>
       },
       {
         path: "/contact",
-        element: <Contact />
+        element: <ProtectedRoute role={["USERS", null]}><Contact /></ProtectedRoute>
       },
       {
         path: "/evaluation",
-        element: <Evaluation />
+        element: <ProtectedRoute role={["USERS"]}><Evaluation /></ProtectedRoute>
+      },
+      {
+        path: "/unauthorize",
+        element: <UnAuthorize />
       }
     ],
   },
   {
-    path: "/Dashboard",
+    path: "/dashboard",
+    element: <ProtectedRoute role={["ADMIN", "APPRAISER"]}><Dashboard /></ProtectedRoute>,
     children: [
       {
-        // admin
-        path: "admin",
-        element: <Dashboard role={"ADMIN"} />,
-        children: [
-          {
-            path: "account",
-            element: <ManageAccount />,
-          },
-          // {
-          //   path: "product",
-          //   element: <ManageProduct />,
-          // },
-          // {
-          //   path: "category",
-          //   element: <ManageCategory />,
-          // },
-        ],
+        path: "account_manage",
+        element: <ProtectedRoute role={["ADMIN"]}><ManageAccount /></ProtectedRoute>,
       },
-      // admin
-      //////////////////////////////
-      // Assessor
       {
-        path: "assessor",
-        element: <Dashboard role={"ASSESSOR"} />,
-        children: [{}],
-        // Assessor
+        path: "evaluate_manage",
+        element: <ProtectedRoute role={["APPRAISER"]}><ManageEvaluate /></ProtectedRoute>,
       },
+      {
+        path: "category_manage",
+        element: <ProtectedRoute role={["ADMIN"]}><ManageCategory /></ProtectedRoute>
+      }
     ],
   },
 ]);

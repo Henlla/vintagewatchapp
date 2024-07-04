@@ -124,7 +124,7 @@ const ProductDisplay = (props) => {
                     <span>Add to Cart</span>
                 </a> */}
 
-                <Link to={"/cart-page"} className="lab-btn bg-primary">
+                <Link to={`/check-out/${timepiece?.timepieceId}`} className="lab-btn bg-primary">
                     <span>Check out</span>
                 </Link>
             {/* </form> */}

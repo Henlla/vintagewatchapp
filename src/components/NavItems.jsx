@@ -25,20 +25,6 @@ const NavItems = () => {
   });
 
 
-  useEffect(() => {
-    authenticate()
-  }, []);
-
-
-  const authenticate = async () => {
-    var response = await authAPI.checkAuthenticate();
-    if (response.isSuccess) {
-      saveLoggedUserData(response.data, response.isSuccess)
-    } else {
-      saveLoggedUserData(response.data, response.isSuccess)
-    }
-  }
-
   const from = location.state?.from.pasthname || "/";
 
 

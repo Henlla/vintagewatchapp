@@ -26,6 +26,11 @@ class AuthAPI {
         var url = "auth/checkAuthenticate";
         return axiosClient.get(url) as Promise<APIResponse>;
     }
+
+    getAllAccount = () => {
+        var url = "auth/GetAllAccount";
+        return axiosClient.get(url) as Promise<APIResponse>;
+    }
 }
 
 const authAPI = new AuthAPI();

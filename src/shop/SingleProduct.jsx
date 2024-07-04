@@ -18,12 +18,20 @@ const SingleProduct = () => {
 
     useEffect(() => {
         getProduct()
-    }, [])
+        // getEvaluationInfo();
+    }, []);
+
+
     const getProduct = async () => {
         var response = await productAPI.getOneProduct(productId);
         if (response.isSuccess) {
             setProducts(response.data)
         }
+    }
+
+    const getEvaluationInfo = async () => {
+        var response = await productAPI.getProductEvaluation(productId);
+        console.log(response);
     }
 
     const handleClickOffer = () => {
@@ -191,6 +199,73 @@ const SingleProduct = () => {
                                         </Grid>
                                     </Grid>
                                 </Box>
+                                {/* <Box
+                                    className={"border border-2 rounded-3 p-2"}
+                                    sx={{
+                                        mb: 1
+                                    }}
+                                >
+                                    <InputLabel className="text-center fw-bold fs-5">Evaluation</InputLabel>
+                                    <Grid
+                                        container
+                                        spacing={2}>
+                                        <Grid item xs={6}>
+                                            Movement
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {products.timepiece?.movement}
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            Case Material
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {products.timepiece?.caseMaterial}
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            Case Diameter
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {products.timepiece?.caseDiameter}
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            Case Thickness
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {products.timepiece?.caseThickness}
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            Crystal
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {products.timepiece?.crystal}
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            Water Resistance
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {products.timepiece?.waterResistance}
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            Strap Material
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {products.timepiece?.strapMaterial}
+                                        </Grid>
+
+                                        <Grid item xs={6}>
+                                            Strap Size
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {products.timepiece?.strapWidth}
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            Style
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {products.timepiece?.style}
+                                        </Grid>
+                                    </Grid>
+                                </Box> */}
                             </aside>
                         </div>
                     </div>

@@ -33,7 +33,12 @@ const Login = () => {
     var response = await authAPI.login(data)
     if (response.isSuccess) {
       saveLoggedUserData(response.data, response.isSuccess)
-      navigate(from, { replace: true });
+      var role = response.data.role.roleName;
+      if (role == "ADMIN" || role == "APPRAISER") {
+        navigate("/Dashboard", { replace: true })
+      } else {
+        navigate(from, { replace: true });
+      }
     }
   };
 

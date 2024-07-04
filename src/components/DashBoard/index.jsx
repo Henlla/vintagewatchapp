@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -9,71 +9,126 @@ import {
   ReadOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../../utilis/AuthProvider";
+import authAPI from "../../api/auth/authAPI";
 
 const { Header, Sider, Content } = Layout;
-const Dashboard = ({ role }) => {
+
+const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+  const { token: { colorBgContainer, borderRadiusLG }, } = theme.useToken();
+  const { user, logout } = useAuth();
+  const [currentSideBar, setCurrentSideBar] = useState("0")
+  const navigate = useNavigate();
+
+  const role = user?.role.roleName;
+
+  const logoutHandle = async () => {
+    await authAPI.logout()
+    logout()
+    navigate("/login", { replace: true })
+  }
+
+
+  const menuItem = [
+    {
+      key: "0",
+      icon: <ProductOutlined onClick={() => setCurrentSideBar("0")} />,
+      label: <Link to="/dashboard">DASHBOARD</Link>,
+      role: ["ADMIN", "APPRAISER"]
+    },
+    {
+      key: "1",
+      icon: <ProductOutlined onClick={() => setCurrentSideBar("1")} />,
+      label: <Link to="account_manage">Manage Account</Link>,
+      role: ["ADMIN"]
+    },
+    {
+      key: "2",
+      icon: <ProductOutlined onClick={() => setCurrentSideBar("2")} />,
+      label: <Link to="product_manage">Manage Product</Link>,
+      role: ["ADMIN"]
+    },
+    {
+      key: "3",
+      icon: <ProductOutlined onClick={() => setCurrentSideBar("3")} />,
+      label: <Link to="category_manage">Manage Category</Link>,
+      role: ["ADMIN"]
+    },
+    {
+      key: "4",
+      icon: <ProductOutlined onClick={() => setCurrentSideBar("4")} />,
+      label: <Link to="evaluate_manage">Manage Request</Link>,
+      role: ["APPRAISER"]
+    },
+    {
+      key: "5",
+      icon: <ProductOutlined onClick={() => setCurrentSideBar("5")} />,
+      label: <Link onClick={logoutHandle}>Logout</Link>,
+      role: ["ADMIN", "APPRAISER"]
+    }
+  ]
+
 
   const renderItem = () => {
-    if (role === "ASSESSOR") {
-      return [
-        {
-          key: "1",
-          icon: <ProductOutlined />,
-          label: <Link to={"product"}>Manage Product</Link>,
-        },
-        {
-          key: "2",
-          icon: <ProductOutlined />,
-          label: <Link to={"category"}>Manage Category</Link>,
-        },
+    var data = menuItem.filter((item) => item.role.some((item) => item == role));
+    return data
+    // if (role === "ASSESSOR") {
+    //   return [
+    //     {
+    //       key: "1",
+    //       icon: <ProductOutlined />,
+    //       label: <Link to={"product"}>Manage Product</Link>,
+    //     },
+    //     {
+    //       key: "2",
+    //       icon: <ProductOutlined />,
+    //       label: <Link to={"category"}>Manage Category</Link>,
+    //     },
 
-        {
-          key: "4",
-          icon: <FileTextOutlined />,
-          label: <Link to={"request"}>Manage Request</Link>,
-        },
-        {
-          key: "5",
-          icon: <ReadOutlined />,
-          label: <Link to={"blog"}>Manage Blog</Link>,
-        },
-        {
-          key: "6",
-          icon: <LogoutOutlined />,
-          label: <Link to={"/login"}>Logout</Link>,
-        },
-      ];
-    } else {
-      return [
-        {
-          key: "1",
-          icon: <UserOutlined />,
-          label: <Link to={"account"}>Manage Account</Link>,
-        },
+    //     {
+    //       key: "4",
+    //       icon: <FileTextOutlined />,
+    //       label: <Link to={"request"}>Manage Request</Link>,
+    //     },
+    //     {
+    //       key: "5",
+    //       icon: <ReadOutlined />,
+    //       label: <Link to={"blog"}>Manage Blog</Link>,
+    //     },
+    //     {
+    //       key: "6",
+    //       icon: <LogoutOutlined />,
+    //       label: <Link to={"/login"}>Logout</Link>,
+    //     },
+    //   ];
+    // } else {
+    //   return [
+    //     {
+    //       key: "1",
+    //       icon: <UserOutlined />,
+    //       label: <Link to={"account"}>Manage Account</Link>,
+    //     },
 
-        {
-          key: "2",
-          icon: <UserOutlined />,
-          label: <Link to={"product"}>Manage Product</Link>,
-        },
+    //     {
+    //       key: "2",
+    //       icon: <UserOutlined />,
+    //       label: <Link to={"product"}>Manage Product</Link>,
+    //     },
 
-        {
-          key: "3",
-          icon: <UserOutlined />,
-          label: <Link to={"category"}>Manage Category</Link>,
-        },
-        {
-          key: "4",
-          icon: <LogoutOutlined />,
-          label: <Link to={"/login"}>Logout</Link>,
-        },
-      ];
-    }
+    //     {
+    //       key: "3",
+    //       icon: <UserOutlined />,
+    //       label: <Link to={"category"}>Manage Category</Link>,
+    //     },
+    //     {
+    //       key: "4",
+    //       icon: <LogoutOutlined />,
+    //       label: <Link to={"/login"}>Logout</Link>,
+    //     },
+    //   ];
+    // }
   };
 
   return (
@@ -87,7 +142,7 @@ const Dashboard = ({ role }) => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={currentSideBar}
           items={renderItem()}
         />
       </Sider>

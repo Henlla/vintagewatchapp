@@ -1,4 +1,5 @@
 import { useState, createContext, useEffect, useContext } from "react"
+import authAPI from "../api/auth/authAPI";
 
 const AuthContext = createContext();
 
@@ -38,6 +39,19 @@ const AuthProvider = ({ children }) => {
     //     localStorage.setItem("cart", JSON.stringify(existsCart));
     //     setItemInCart()
     // }
+
+    useEffect(() => {
+        authenticate()
+    }, []);
+
+
+    const authenticate = async () => {
+        var response = await authAPI.checkAuthenticate();
+        if (response.isSuccess) {
+            saveLoggedUserData(response.data, response.isSuccess)
+        }
+    }
+
 
     const saveLoggedUserData = (data, isLogged) => {
         setUser(data)
