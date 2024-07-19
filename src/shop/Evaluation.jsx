@@ -1,4 +1,4 @@
-import { Alert, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
+import {FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
 import PageHeader from "../components/PageHeader";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
@@ -7,6 +7,8 @@ import productAPI from "../api/product/productAPI";
 import { useNavigate } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import SendIcon from "@mui/icons-material/Send"
+import categoryApi from "../api/category/categoryAPI";
+import AlertSnackBar from "../components/AlertSnackBar";
 
 const delay = ms => new Promise(
     resolve => setTimeout(resolve, ms)
@@ -40,13 +42,14 @@ const Evaluation = () => {
     const [loading, setLoading] = useState(false);
 
     const [files, setFiles] = useState([null, null, null]);
-    const [openSnackBar, setOpenSnackBar] = useState(false);
 
 
     const [mainImage, setMainImage] = useState(plusImage);
     const mainImageInput = useRef(null);
     const [mainFile, setMainFile] = useState(null);
+    // snack bar
     const [snackBarType, setSnackBarType] = useState("success");
+    const [openSnackBar, setOpenSnackBar] = useState(false);
     const [snackBarMessage, setSnackBarMessage] = useState("");
 
     const [brands, setBrand] = useState([]);
@@ -69,12 +72,11 @@ const Evaluation = () => {
     }
 
     const getAllCategory = async () => {
-        var response = await productAPI.getCategory();
+        var response = await categoryApi.getCategory();
         if (response.isSuccess)
             setCategories(response.data);
 
     }
-
 
     const handleBrandChange = (e) => {
         setSelectedBrand(e.target.value)
@@ -119,9 +121,6 @@ const Evaluation = () => {
             setMainFile(file);
         }
     }
-
-
-
 
     const onSubmit = async (data) => {
         if (files.some((item) => item == null) || mainFile == null) {
@@ -183,6 +182,7 @@ const Evaluation = () => {
 
     return (
         <div>
+            <AlertSnackBar snackBarType={snackBarType} snackBarMessage={snackBarMessage} openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} />
             <PageHeader title={"Evaluation"} curPage={"Evaluation"} />
             <form
                 onSubmit={handleSubmit(onSubmit)}>
@@ -309,24 +309,10 @@ const Evaluation = () => {
                             >
                                 <span>Send request</span>
                             </LoadingButton>
-                            {/* <Button type="submit" variant="contained">Send request</Button> */}
                         </Grid>
                     </Grid>
                 </Grid>
             </form>
-            <Snackbar
-                open={openSnackBar}
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                autoHideDuration={3000}
-                onClose={handleSnackBarClose}>
-                <Alert
-                    severity={snackBarType}
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {snackBarMessage}
-                </Alert>
-            </Snackbar>
         </div>
     );
 }

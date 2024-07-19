@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { Alert, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Snackbar, TextField } from "@mui/material";
 import { useState } from "react";
 import GoogleButton from "react-google-button";
 import { useForm } from "react-hook-form";
@@ -6,16 +6,23 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import authAPI from "../api/auth/authAPI";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAuth } from "../utilis/AuthProvider";
-import axios from "axios";
+import AlertSnackBar from "../components/AlertSnackBar";
 
 const title = "Login";
 const socialTitle = "Login with Google";
 const btnText = "Login Now";
 
+const delay = ms => new Promise(
+  resolve => setTimeout(resolve, ms)
+);
+
 const Login = () => {
   const { saveLoggedUserData } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [snackBarType, setSnackBarType] = useState("success");
+  const [snackBarMessage, setSnackBarMessage] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -27,6 +34,13 @@ const Login = () => {
     event.preventDefault();
   };
 
+  const handleSnackBarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackBar(false);
+  };
+
   const from = location.state?.from.pasthname || "/";
 
   const onSubmit = async (data) => {
@@ -35,15 +49,24 @@ const Login = () => {
       saveLoggedUserData(response.data, response.isSuccess)
       var role = response.data.role.roleName;
       if (role == "ADMIN" || role == "APPRAISER") {
-        navigate("/Dashboard", { replace: true })
+        setSnackBarMessage("Login success");
+        setSnackBarType("success");
+        setOpenSnackBar(true);
+        await delay(2000);
+        navigate("/dashboard", { replace: true });
       } else {
         navigate(from, { replace: true });
       }
+    } else {
+      setSnackBarMessage("Invalid username or password");
+      setSnackBarType("error");
+      setOpenSnackBar(true);
     }
   };
 
   return (
     <div>
+      <AlertSnackBar setSnackBarMessage={snackBarMessage} setSnackBarType={snackBarType} handleSnackBarClose={handleSnackBarClose} openSnackBar={openSnackBar} />
       <div className="login-section padding-tb section-bg">
         <div className="container">
           <div className="account-wrapper">
@@ -106,18 +129,16 @@ const Login = () => {
 
             {/* account bottom */}
             <div className="account-bottom">
-              <span className="d-block cate pt-10">
+              <span className="d-block cate">
                 Don't have an account ? <Link to={"/sign-up"}>Sign up</Link>
               </span>
               <span className="or">
                 <span>or</span>
               </span>
-              <h5 className="ps-4 subtitle">{socialTitle}</h5>
-              <ul className="d-flex justify-content-center">
-                <Link to={"http://localhost:5009/auth/signinWithGoogle"}>
-                  <GoogleButton />
-                </Link>
-              </ul>
+              <h5 className="subtitle">{socialTitle}</h5>
+              <Link to={"http://localhost:5009/auth/signinWithGoogle"}>
+                <GoogleButton />
+              </Link>
             </div>
           </div>
         </div>
