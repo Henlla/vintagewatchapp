@@ -21,7 +21,6 @@ import Login from "./components/Login.jsx";
 import Signup from "./components/Signup.jsx";
 import { AuthProvider } from "./utilis/AuthProvider.jsx";
 import SingleProduct from "./shop/SingleProduct.jsx";
-import CartPage from "./shop/CartPage.jsx";
 import Contact from "./home/Contact.jsx";
 import Evaluation from "./shop/Evaluation.jsx";
 import Dashboard from "./components/DashBoard/index.jsx";
@@ -30,6 +29,8 @@ import ManageEvaluate from "./components/DashBoard/Appraiser/ManageEvaluate.jsx"
 import ProtectedRoute from "./utilis/ProtectedRoute.jsx";
 import UnAuthorize from "./home/UnAuthorize.jsx";
 import ManageCategory from "./components/DashBoard/Admin/ManageCategory.jsx";
+import CheckoutPage from "./shop/CheckoutPage.jsx";
+import ProfilePage from "./components/ProfilePage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -62,7 +63,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/check-out/:productId",
-        element: <ProtectedRoute role={["USERS"]}><CartPage /></ProtectedRoute>
+        element: <ProtectedRoute role={["USERS"]}><CheckoutPage /></ProtectedRoute>
       },
       {
         path: "/contact",
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: "/unauthorize",
         element: <UnAuthorize />
+      },
+      {
+        path: "/profile",
+        element: <ProtectedRoute role={["USERS"]}><ProfilePage /></ProtectedRoute>
       }
     ],
   },

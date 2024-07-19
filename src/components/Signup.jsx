@@ -1,9 +1,10 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Snackbar, TextField } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import authAPI from "../api/auth/authAPI";
+import AlertSnackBar from "./AlertSnackBar";
 
 const title = "Register Now";
 const btnText = "Let's go";
@@ -13,6 +14,11 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [snackBarType, setSnackBarType] = useState("success");
+  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const navigate = useNavigate();
+
   const handleClickShowPassword = (value) => {
     if (value === "password")
       setShowPassword((show) => !show);
@@ -20,6 +26,12 @@ const Signup = () => {
       setShowConfirmPassword((show) => !show);
   }
 
+  const handleSnackBarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackBar(false);
+  };
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -30,14 +42,27 @@ const Signup = () => {
       "firstName": value.first_name,
       "lastName": value.last_name,
       "email": value.email,
-      "password": value.password
+      "password": value.password,
+      "phoneNumber": value.phone_number,
+      "address": value.address
     }
     var response = await authAPI.register(data);
     if (response.isSuccess) {
+      setSnackBarMessage("Register success");
+      setSnackBarType("success");
+      setOpenSnackBar(true);
+      navigate("/login", { replace: true });
+    }
+    else {
+      setSnackBarMessage("Register fail");
+      setSnackBarType("success");
+      setOpenSnackBar(true);
     }
   };
+
   return (
     <div>
+      <AlertSnackBar snackBarMessage={snackBarMessage} snackBarType={snackBarType} handleSnackBarClose={handleSnackBarClose} openSnackBar={openSnackBar} />
       <div className="login-section padding-tb section-bg">
         <div className="container">
           <div className="account-wrapper">
@@ -93,6 +118,21 @@ const Signup = () => {
                 />
               </div>
               <div className="form-group">
+                <TextField
+                  error={errors.phone_number?.message != null}
+                  helperText={errors.phone_number?.message != null && errors.phone_number?.message}
+                  type="text"
+                  size="large"
+                  name="phone_number"
+                  id="phone_number"
+                  label="Phone number *"
+                  fullWidth
+                  {...register("phone_number", {
+                    required: "This is required"
+                  })}
+                />
+              </div>
+              <div className="form-group">
                 <FormControl
                   error={errors.password?.message != null}
                   fullWidth
@@ -123,7 +163,7 @@ const Signup = () => {
                   )}
                 </FormControl>
               </div>
-              <div className="form">
+              <div className="form-group">
                 <FormControl
                   error={errors.confirm_password?.message != null}
                   fullWidth
@@ -160,6 +200,23 @@ const Signup = () => {
                     <FormHelperText>{errors.confirm_password?.message}</FormHelperText>
                   )}
                 </FormControl>
+              </div>
+              <div className="form-group">
+                <TextField
+                  error={errors.address?.message != null}
+                  helperText={errors.address?.message != null && errors.address?.message}
+                  multiline
+                  rows={3}
+                  type="text"
+                  size="large"
+                  name="address"
+                  id="address"
+                  label="Address *"
+                  fullWidth
+                  {...register("address", {
+                    required: "This is required"
+                  })}
+                />
               </div>
               <div className="form-group">
                 <button type="submit" className="d-block lab-btn">

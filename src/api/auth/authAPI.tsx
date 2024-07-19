@@ -28,8 +28,23 @@ class AuthAPI {
     }
 
     getAllAccount = () => {
-        var url = "auth/GetAllAccount";
+        var url = "auth/getAllUser";
         return axiosClient.get(url) as Promise<APIResponse>;
+    }
+
+    updateUserInformation = (params) => {
+        var url = "auth/UpdateUserInformation"
+        return axiosClient.put(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
+    }
+
+    deleteUser = (params) => {
+        var url = "auth"
+        return axiosClient.delete(url + `/${params}`) as Promise<APIResponse>;
+    }
+
+    updateUserImage = (params) => {
+        var url = "auth/UpdateUserImage";
+        return axiosClient.put(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
     }
 }
 

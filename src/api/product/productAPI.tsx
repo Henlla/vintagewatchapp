@@ -22,13 +22,6 @@ class ProductAPI {
         return axiosClient.get(url + `/${params}`) as Promise<APIResponse>;
     }
 
-
-    getCategory = () => {
-        var url = "categories";
-        return axiosClient.get(url) as Promise<APIResponse>;
-
-    }
-
     getAllTimepieceNotEvaluate = () => {
         var url = "timepiece/GetAllTimepieceNotEvaluate";
         return axiosClient.get(url) as Promise<APIResponse>;
@@ -54,7 +47,25 @@ class ProductAPI {
         return axiosClient.post(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
     }
 
+    postRating = (params) => {
+        var url = "rating";
+        return axiosClient.post(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
+    }
 
+    checkoutProduct = (params) => {
+        var url = "timepiece/checkout";
+        return axiosClient.post(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
+    }
+
+    updateTimepiecePrice = (params) => {
+        var url = "timepiece/UpdateTimepiecePrice";
+        return axiosClient.put(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
+    }
+
+    orderOfUser = () => {
+        var url = "order";
+        return axiosClient.get(url) as Promise<APIResponse>;
+    }
 }
 
 const productAPI = new ProductAPI();

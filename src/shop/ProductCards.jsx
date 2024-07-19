@@ -6,22 +6,7 @@ import CustomRating from "../components/CustomRating"
 import { useAuth } from "../utilis/AuthProvider";
 
 const ProductCards = ({ GridList, products }) => {
-  const { addToCard } = useAuth();
   const [ratingCount, setRatingCount] = useState(0);
-
-  const addCart = (product) => {
-    const item = {
-      id: product.timepiece?.timepieceId,
-      image: product.mainImage?.imageUrl,
-      name: product.timepiece?.timepieceName,
-      price: product.timepiece?.price,
-      quantity: 1,
-      size: 36,
-      color: "Yellow",
-      coupon: ""
-    }
-    addToCard(item)
-  }
 
   return (
     <div
@@ -58,10 +43,10 @@ const ProductCards = ({ GridList, products }) => {
 
                 {/* <Rating /> */}
                 <CustomRating ratingCount={setRatingCount} item={product.timepiece} />
-                
+
               </p>
               <h6>
-                <NumericFormat className="text-center border border-0" value={product.timepiece?.price} thousandSeparator="," suffix=" vnd" />
+                <NumericFormat displayType="text" value={product.timepiece?.price} thousandSeparator="," suffix=" vnd" />
               </h6>
             </div>
           </div>
@@ -78,12 +63,12 @@ const ProductCards = ({ GridList, products }) => {
                 <Link to={`/shop/${product.timepiece?.timepieceId}`}>
                   <i className="icofont-eye"></i>
                 </Link>
-                <a href="#">
+                {/* <a href="#">
                   <i className="icofont-heart"></i>
                 </a>
                 <Link onClick={() => addCart(product)}>
                   <i className="icofont-cart-alt"></i>
-                </Link>
+                </Link> */}
               </div>
             </div>
             {/* product content*/}
@@ -96,7 +81,7 @@ const ProductCards = ({ GridList, products }) => {
               </p>
               <h6>
                 <NumericFormat
-                  className="border border-0"
+                  displayType="text"
                   value={product.timepiece?.price}
                   thousandSeparator=","
                   type="text"

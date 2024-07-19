@@ -9,6 +9,7 @@ import Review from "./Review";
 import MakeOffer from "./MakeOffer";
 import { Box, Button, Grid, InputLabel, TextField } from "@mui/material";
 import TradeIn from "./TradeIn";
+import { NumericFormat } from "react-number-format";
 
 const SingleProduct = () => {
     const [products, setProducts] = useState([]);
@@ -18,7 +19,6 @@ const SingleProduct = () => {
 
     useEffect(() => {
         getProduct()
-        // getEvaluationInfo();
     }, []);
 
 
@@ -29,9 +29,8 @@ const SingleProduct = () => {
         }
     }
 
-    const getEvaluationInfo = async () => {
-        var response = await productAPI.getProductEvaluation(productId);
-        console.log(response);
+    const onRefresh = () => {
+        getProduct();
     }
 
     const handleClickOffer = () => {
@@ -98,20 +97,19 @@ const SingleProduct = () => {
                                     </div>
                                 </div>
                                 <div className="review">
-                                    <Review item={products} id={productId} />
+                                    <Review item={products} onRefresh={onRefresh} id={productId} />
                                 </div>
                             </article>
                         </div>
                         <div className="col-lg-4 col-12">
                             <aside>
-                                <Box
+                                {/* <Box
                                     sx={{ mb: 1 }}
                                 >
                                     <Button
                                         id="makeOffer"
                                         name="makeOffer"
                                         onClick={handleClickOffer}
-                                        // variant="contained"
                                         variant="outlined"
                                         fullWidth>
                                         Make A Deal
@@ -125,13 +123,12 @@ const SingleProduct = () => {
                                         id="tradeIn"
                                         name="tradeIn"
                                         onClick={handleClickTradeIn}
-                                        // variant="contained"
                                         variant="outlined"
                                         fullWidth>
                                         Trade in
                                     </Button>
                                 </Box>
-                                <TradeIn isClick={tradeInForm} />
+                                <TradeIn isClick={tradeInForm} /> */}
                                 <Box
                                     className={"border border-2 rounded-3 p-2"}
                                     sx={{
@@ -199,7 +196,7 @@ const SingleProduct = () => {
                                         </Grid>
                                     </Grid>
                                 </Box>
-                                {/* <Box
+                                <Box
                                     className={"border border-2 rounded-3 p-2"}
                                     sx={{
                                         mb: 1
@@ -213,59 +210,50 @@ const SingleProduct = () => {
                                             Movement
                                         </Grid>
                                         <Grid item xs={6}>
-                                            {products.timepiece?.movement}
+                                            {products.evaluation?.movementStatus}
                                         </Grid>
                                         <Grid item xs={6}>
                                             Case Material
                                         </Grid>
                                         <Grid item xs={6}>
-                                            {products.timepiece?.caseMaterial}
+                                            {products.evaluation?.caseMaterialStatus}
                                         </Grid>
                                         <Grid item xs={6}>
                                             Case Diameter
                                         </Grid>
                                         <Grid item xs={6}>
-                                            {products.timepiece?.caseDiameter}
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            Case Thickness
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            {products.timepiece?.caseThickness}
+                                            {products.evaluation?.caseDiameterStatus}
                                         </Grid>
                                         <Grid item xs={6}>
                                             Crystal
                                         </Grid>
                                         <Grid item xs={6}>
-                                            {products.timepiece?.crystal}
+                                            {products.evaluation?.crystalTypeStatus}
                                         </Grid>
                                         <Grid item xs={6}>
                                             Water Resistance
                                         </Grid>
                                         <Grid item xs={6}>
-                                            {products.timepiece?.waterResistance}
+                                            {products.evaluation?.waterResistanceStatus}
                                         </Grid>
                                         <Grid item xs={6}>
                                             Strap Material
                                         </Grid>
                                         <Grid item xs={6}>
-                                            {products.timepiece?.strapMaterial}
-                                        </Grid>
-
-                                        <Grid item xs={6}>
-                                            Strap Size
+                                            {products.evaluation?.handsStatus}
                                         </Grid>
                                         <Grid item xs={6}>
-                                            {products.timepiece?.strapWidth}
+                                            Value Estimate
                                         </Grid>
                                         <Grid item xs={6}>
-                                            Style
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            {products.timepiece?.style}
+                                            <NumericFormat
+                                                suffix=" vnd"
+                                                displayType="text"
+                                                value={products.evaluation?.valueExtimatedStatus}
+                                                thousandSeparator="," />
                                         </Grid>
                                     </Grid>
-                                </Box> */}
+                                </Box>
                             </aside>
                         </div>
                     </div>

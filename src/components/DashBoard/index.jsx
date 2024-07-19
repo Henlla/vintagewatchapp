@@ -2,18 +2,24 @@ import React, { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UserOutlined,
-  LogoutOutlined,
   ProductOutlined,
-  FileTextOutlined,
-  ReadOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../utilis/AuthProvider";
 import authAPI from "../../api/auth/authAPI";
+import { Box, Grid, Typography } from "@mui/material";
+import { NumericFormat } from "react-number-format";
+import { BarChart, PieChart } from "@mui/x-charts";
 
 const { Header, Sider, Content } = Layout;
+
+const boxStyle = {
+  border: "solid 2px",
+  borderRadius: 4,
+  width: 250,
+  height: 150,
+}
 
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -41,7 +47,7 @@ const Dashboard = () => {
     {
       key: "1",
       icon: <ProductOutlined onClick={() => setCurrentSideBar("1")} />,
-      label: <Link to="account_manage">Manage Account</Link>,
+      label: <Link to="account_manage">Manage User</Link>,
       role: ["ADMIN"]
     },
     {
@@ -74,61 +80,6 @@ const Dashboard = () => {
   const renderItem = () => {
     var data = menuItem.filter((item) => item.role.some((item) => item == role));
     return data
-    // if (role === "ASSESSOR") {
-    //   return [
-    //     {
-    //       key: "1",
-    //       icon: <ProductOutlined />,
-    //       label: <Link to={"product"}>Manage Product</Link>,
-    //     },
-    //     {
-    //       key: "2",
-    //       icon: <ProductOutlined />,
-    //       label: <Link to={"category"}>Manage Category</Link>,
-    //     },
-
-    //     {
-    //       key: "4",
-    //       icon: <FileTextOutlined />,
-    //       label: <Link to={"request"}>Manage Request</Link>,
-    //     },
-    //     {
-    //       key: "5",
-    //       icon: <ReadOutlined />,
-    //       label: <Link to={"blog"}>Manage Blog</Link>,
-    //     },
-    //     {
-    //       key: "6",
-    //       icon: <LogoutOutlined />,
-    //       label: <Link to={"/login"}>Logout</Link>,
-    //     },
-    //   ];
-    // } else {
-    //   return [
-    //     {
-    //       key: "1",
-    //       icon: <UserOutlined />,
-    //       label: <Link to={"account"}>Manage Account</Link>,
-    //     },
-
-    //     {
-    //       key: "2",
-    //       icon: <UserOutlined />,
-    //       label: <Link to={"product"}>Manage Product</Link>,
-    //     },
-
-    //     {
-    //       key: "3",
-    //       icon: <UserOutlined />,
-    //       label: <Link to={"category"}>Manage Category</Link>,
-    //     },
-    //     {
-    //       key: "4",
-    //       icon: <LogoutOutlined />,
-    //       label: <Link to={"/login"}>Logout</Link>,
-    //     },
-    //   ];
-    // }
   };
 
   return (
@@ -175,6 +126,41 @@ const Dashboard = () => {
           }}
         >
           <Outlet />
+          {/* inner dashboard */}
+          {/* <Grid container spacing={2}>
+            <Grid item md={3}>
+              <Box style={{ "backgroundColor": "#64DFDF" }} sx={boxStyle}>
+                <Typography variant="h5" padding={2}>Total Order</Typography>
+                <Typography display={"flex"} padding={2} alignItems={"end"} justifyContent={"flex-end"} variant="h6">
+                  <NumericFormat value={20000000} thousandSeparator="," displayType="text" />
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item md={3}>
+              <Box style={{ "backgroundColor": "#06D001" }} sx={boxStyle}>
+                <Typography variant="h5" padding={2}>Total Order</Typography>
+                <Typography display={"flex"} padding={2} alignItems={"end"} justifyContent={"flex-end"} variant="h6">
+                  <NumericFormat value={20000000} thousandSeparator="," displayType="text" />
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item md={3}>
+              <Box style={{ "backgroundColor": "#A6F6FF" }} sx={boxStyle}>
+                <Typography variant="h5" padding={2}>Total Order</Typography>
+                <Typography display={"flex"} padding={2} alignItems={"end"} justifyContent={"flex-end"} variant="h6">
+                  <NumericFormat value={20000000} thousandSeparator="," displayType="text" />
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item md={3}>
+              <Box style={{ "backgroundColor": "#FF3EA5" }} sx={boxStyle}>
+                <Typography variant="h5" padding={2}>Total Order</Typography>
+                <Typography display={"flex"} padding={2} alignItems={"end"} justifyContent={"flex-end"} variant="h6">
+                  <NumericFormat value={20000000} thousandSeparator="," displayType="text" />
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid> */}
         </Content>
       </Layout>
     </Layout>

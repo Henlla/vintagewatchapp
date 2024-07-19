@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/mater
 import { useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { Link } from "react-router-dom";
-import CustomeRating from "../components/CustomRating";
+import CustomRating from "../components/CustomRating";
 import { useAuth } from "../utilis/AuthProvider";
 
 const ProductDisplay = (props) => {
@@ -57,7 +57,7 @@ const ProductDisplay = (props) => {
         <div>
             <h4>{timepiece?.timepieceName}</h4>
             <p className="d-flex rating">
-                <CustomeRating ratingCount={setRatingCount} item={timepiece} />
+                <CustomRating ratingCount={setRatingCount} item={timepiece} />
                 <span className="ms-2">{ratingCount} review</span>
             </p>
             <h4>

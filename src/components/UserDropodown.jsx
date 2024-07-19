@@ -1,5 +1,6 @@
 import { Avatar, Button, Menu, MenuItem, Stack } from "@mui/material";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const UserDropDown = (props) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -31,11 +32,11 @@ const UserDropDown = (props) => {
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <MenuItem to="/profile" onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={handleClose}><Link to="/profile">Profile</Link></MenuItem>
+                    {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
                     <MenuItem onClick={props.logoutHandle}>Logout</MenuItem>
                 </Menu>
-            </Stack>
+            </Stack >
         </>
     );
 }

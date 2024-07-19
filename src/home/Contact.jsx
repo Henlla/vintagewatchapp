@@ -1,4 +1,4 @@
-import { Box, TextField, TextareaAutosize } from "@mui/material";
+import { Box, Button, Grid, TextField, TextareaAutosize } from "@mui/material";
 import PageHeader from "../components/PageHeader";
 
 const Contact = () => {
@@ -32,22 +32,29 @@ const Contact = () => {
                             <div className="col-lg-6">
                                 <div className="contact-form">
                                     <h2>Message Us</h2>
-                                    <TextField fullWidth label="Full name" size="small" />
-                                    <div className="d-flex mt-3">
-                                        <TextField className="pe-2" label="Email" size="small" />
-                                        <TextField label="Phone number" size="small" />
-                                    </div>
-                                    <TextField
-                                        className="mt-3"
-                                        id="outlined-multiline-static"
-                                        label="Message"
-                                        multiline
-                                        rows={4}
-                                        fullWidth
-                                    />
-                                    <div className="d-flex justify-content-end">
-                                        <button className="mt-2 text-white lab-btn">Submit</button>
-                                    </div>
+                                    <Grid container spacing={2}>
+                                        <Grid item md={12}>
+                                            <TextField fullWidth label="Full name" size="small" />
+                                        </Grid>
+                                        <Grid item md={6}>
+                                            <TextField fullWidth label="Email" size="small" />
+                                        </Grid>
+                                        <Grid item md={6}>
+                                            <TextField fullWidth label="Phone number" size="small" />
+                                        </Grid>
+                                        <Grid item md={12}>
+                                            <TextField
+                                                id="outlined-multiline-static"
+                                                label="Message"
+                                                multiline
+                                                rows={4}
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                    <Box className={"mt-2"}>
+                                        <Button variant="contained">Submit</Button>
+                                    </Box>
                                 </div>
                             </div>
                         </div>
