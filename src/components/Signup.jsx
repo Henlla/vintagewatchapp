@@ -9,6 +9,8 @@ import AlertSnackBar from "./AlertSnackBar";
 const title = "Register Now";
 const btnText = "Let's go";
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 const Signup = () => {
   const { register, watch, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
@@ -51,6 +53,7 @@ const Signup = () => {
       setSnackBarMessage("Register success");
       setSnackBarType("success");
       setOpenSnackBar(true);
+      await delay(2000)
       navigate("/login", { replace: true });
     }
     else {
@@ -79,7 +82,7 @@ const Signup = () => {
                     id="first_name"
                     label="First Name *"
                     fullWidth
-                    {...register("first_name", { required: "This is required" })}
+                    {...register("first_name", { required: "Please enter first name" })}
                   />
                 </div>
                 <div className="form-group">
@@ -93,7 +96,7 @@ const Signup = () => {
                     label="Last Name *"
                     fullWidth
                     {...register("last_name", {
-                      required: "This is required"
+                      required: "Please enter last name"
                     })}
                   />
                 </div>
@@ -109,7 +112,7 @@ const Signup = () => {
                   label="Email *"
                   fullWidth
                   {...register("email", {
-                    required: "This is required",
+                    required: "Please enter email",
                     pattern: {
                       value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
                       message: "Invalid email format (xxx@xxx.xxx)"
@@ -128,7 +131,7 @@ const Signup = () => {
                   label="Phone number *"
                   fullWidth
                   {...register("phone_number", {
-                    required: "This is required"
+                    required: "Please enter phone number"
                   })}
                 />
               </div>
@@ -143,7 +146,7 @@ const Signup = () => {
                     id="password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
-                    {...register("password", { required: "This is required" })}
+                    {...register("password", { required: "Please enter password" })}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -174,7 +177,7 @@ const Signup = () => {
                     id="confirm_password"
                     name="confirm_password"
                     {...register("confirm_password", {
-                      required: "This is required",
+                      required: "Please enter confirm password",
                       validate: (val) => {
                         if (watch("password") !== val) {
                           return "Confirm password not match"
@@ -214,7 +217,7 @@ const Signup = () => {
                   label="Address *"
                   fullWidth
                   {...register("address", {
-                    required: "This is required"
+                    required: "Please enter address"
                   })}
                 />
               </div>

@@ -1,4 +1,4 @@
-import { Alert, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Snackbar, TextField } from "@mui/material";
+import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Snackbar, TextField } from "@mui/material";
 import { useState } from "react";
 import GoogleButton from "react-google-button";
 import { useForm } from "react-hook-form";
@@ -44,7 +44,7 @@ const Login = () => {
   const from = location.state?.from.pasthname || "/";
 
   const onSubmit = async (data) => {
-    var response = await authAPI.login(data)
+    var response = await authAPI.login(data);
     if (response.isSuccess) {
       saveLoggedUserData(response.data, response.isSuccess)
       var role = response.data.role.roleName;
@@ -55,6 +55,10 @@ const Login = () => {
         await delay(2000);
         navigate("/dashboard", { replace: true });
       } else {
+        setSnackBarMessage("Login success");
+        setSnackBarType("success");
+        setOpenSnackBar(true);
+        await delay(2000);
         navigate(from, { replace: true });
       }
     } else {
@@ -66,7 +70,7 @@ const Login = () => {
 
   return (
     <div>
-      <AlertSnackBar setSnackBarMessage={snackBarMessage} setSnackBarType={snackBarType} handleSnackBarClose={handleSnackBarClose} openSnackBar={openSnackBar} />
+      <AlertSnackBar snackBarMessage={snackBarMessage} snackBarType={snackBarType} handleSnackBarClose={handleSnackBarClose} openSnackBar={openSnackBar} />
       <div className="login-section padding-tb section-bg">
         <div className="container">
           <div className="account-wrapper">
@@ -74,14 +78,19 @@ const Login = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="account-form">
               <div className="form-group">
                 <TextField
+                  {...register("email", {
+                    required: "Please enter email.", pattern: {
+                      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                      message: "Invalid email format (xxx@xxx.xxx)"
+                    }
+                  })}
                   error={errors.email?.message != null}
-                  helperText={errors.email?.message != null && errors.email?.message}
+                  helperText={errors.email?.message}
                   size="normal"
                   label="Email *"
                   name="email"
                   id="email"
                   fullWidth
-                  {...register("email", { required: "This is required." })}
                 />
               </div>
               <div className="form-group">
@@ -92,9 +101,9 @@ const Login = () => {
                   variant="outlined">
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <OutlinedInput
+                    {...register("password", { required: "Please enter password." })}
                     id="password"
                     name="password"
-                    {...register("password", { required: "This is required" })}
                     type={showPassword ? 'text' : 'password'}
                     endAdornment={
                       <InputAdornment position="end">
@@ -115,11 +124,11 @@ const Login = () => {
                   )}
                 </FormControl>
               </div>
-              <div className="form-group">
+              {/* <div className="form-group">
                 <div className="d-flex justify-content-end flex-wrap pt-sm-2">
                   <Link to="/forgot-password">Forget Password?</Link>
                 </div>
-              </div>
+              </div> */}
               <div className="form-group">
                 <button type="submit" className="d-block lab-btn">
                   <span>{btnText}</span>

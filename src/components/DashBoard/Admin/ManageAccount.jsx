@@ -56,7 +56,7 @@ export default function ManageAccount() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [userData, setUserData] = useState([]);
-  const [filterValue, setFilterValue] = useState([]);
+  const [filterValue, setFilterValue] = useState("");
   // modal
   const [open, setOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -80,7 +80,6 @@ export default function ManageAccount() {
   const getAllUserData = async () => {
     var response = await authAPI.getAllAccount();
     setUserData(response.data);
-    setFilterValue(response.data);
   }
 
   const handleChangePage = (event, newPage) => {
@@ -99,11 +98,11 @@ export default function ManageAccount() {
     let canEdit = false;
     account = [
       { key: "userId", label: "User Id", data: userId, canEdit: canEdit, hidden: true },
-      { key: "firstName", label: "First Name", data: firstName, canEdit: canEdit, hidden: false, dataGrid: 6 },
-      { key: "lastName", label: "Last Name", data: lastName, canEdit: canEdit, hidden: false, dataGrid: 6 },
+      { key: "firstName", label: "First Name", data: firstName, canEdit: canEdit, hidden: false, dataGrid: 6, validate: { required: "Please enter first name" } },
+      { key: "lastName", label: "Last Name", data: lastName, canEdit: canEdit, hidden: false, dataGrid: 6, validate: { required: "Please enter last name" } },
       { key: "email", label: "Email", data: email, canEdit: canEdit, hidden: false, dataGrid: 12 },
-      { key: "phoneNumber", label: "Phone Number", data: phoneNumber, canEdit: canEdit, hidden: false, dataGrid: 12 },
-      { key: "address", label: "Address", data: address, canEdit: canEdit, hidden: false, dataGrid: 12 },
+      { key: "phoneNumber", label: "Phone Number", data: phoneNumber, canEdit: canEdit, hidden: false, dataGrid: 12, validate: { required: "Please enter phone number" } },
+      { key: "address", label: "Address", data: address, canEdit: canEdit, hidden: false, dataGrid: 12, validate: { required: "Please enter address" } },
     ]
     switch (buttonName) {
       case "view":
@@ -127,6 +126,9 @@ export default function ManageAccount() {
         setModalTitle("Edit user")
         account.forEach((item) => {
           item["canEdit"] = canEdit
+          if (item["key"] == "email") {
+            item["hidden"] = true
+          }
         });
         setModalData(account);
         account.forEach(item => {
@@ -162,10 +164,9 @@ export default function ManageAccount() {
     setOpenSnackBar(false);
   };
 
-  const filterData = (e) => {
-    var keyword = e.target.value;
-    var data = userData.filter(u => u.email.includes(keyword));
-    setFilterValue(data);
+  const filterData = () => {
+    var data = userData.filter(u => u.email.includes(filterValue));
+    return data;
   }
 
   const onSubmit = async (data) => {
@@ -205,7 +206,7 @@ export default function ManageAccount() {
         getAllUserData();
         break;
       default:
-        console.log("Manage Account: Button not register_208");
+        console.warn("Manage Account: Button not register_209");
         break;
     }
   }
@@ -216,7 +217,7 @@ export default function ManageAccount() {
       <ConfirmMessage openConfirm={openConfirm} handleCloseConfirm={handleCloseConfirm} confirmValue={confirmValue} deleteFunction={onSubmit} />
       <AlertSnackBar openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} snackBarMessage={snackBarMessage} snackBarType={snackBarType} />
       <Box>
-        <TextField label="Search..." fullWidth onChange={filterData} size='large' className='mb-2' />
+        <TextField label="Search..." fullWidth onChange={(e) => setFilterValue(e.target.value)} size='large' className='mb-2' />
       </Box>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 370 }}>
@@ -239,7 +240,7 @@ export default function ManageAccount() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filterValue
+              {filterData()
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (

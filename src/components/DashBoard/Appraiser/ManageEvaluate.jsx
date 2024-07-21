@@ -48,7 +48,7 @@ export default function ManageEvaluate() {
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [snackBarType, setSnackBarType] = useState("success");
     const [snackBarMessage, setSnackBarMessage] = useState("");
-    const [filterValue, setFilterValue] = useState([]);
+    const [filterValue, setFilterValue] = useState("");
     const { register, handleSubmit, setValue, reset, clearErrors, formState: { errors } } = useForm();
 
     useEffect(() => {
@@ -215,10 +215,9 @@ export default function ManageEvaluate() {
         setOpen(false);
     }
 
-    const filterData = (e) => {
-        var keyword = e.target.value;
-        var data = timepieceEvaluate.filter(item => item.timepiece.timepieceName.toLowerCase().includes(keyword.toLowerCase()));
-        setFilterValue(data);
+    const filterData = () => {
+        var data = timepieceEvaluate.filter(item => item.timepiece.timepieceName.toLowerCase().includes(filterValue.toLowerCase()));
+        return data;
     }
 
 
@@ -226,7 +225,7 @@ export default function ManageEvaluate() {
         <Box>
             <AlertSnackBar snackBarMessage={snackBarMessage} snackBarType={snackBarType} openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} />
             <Box marginBottom={2}>
-                <TextField onChange={filterData} fullWidth size='large' label="Search..." />
+                <TextField onChange={(e) => setFilterValue(e.target.value)} fullWidth size='large' label="Search..." />
             </Box>
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 360 }}>
@@ -247,7 +246,7 @@ export default function ManageEvaluate() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filterValue
+                            {filterData
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => {
                                     return (
