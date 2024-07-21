@@ -50,12 +50,12 @@ const Dashboard = () => {
       label: <Link to="account_manage">Manage User</Link>,
       role: ["ADMIN"]
     },
-    {
-      key: "2",
-      icon: <ProductOutlined onClick={() => setCurrentSideBar("2")} />,
-      label: <Link to="product_manage">Manage Product</Link>,
-      role: ["ADMIN"]
-    },
+    // {
+    //   key: "2",
+    //   icon: <ProductOutlined onClick={() => setCurrentSideBar("2")} />,
+    //   label: <Link to="product_manage">Manage Product</Link>,
+    //   role: ["ADMIN"]
+    // },
     {
       key: "3",
       icon: <ProductOutlined onClick={() => setCurrentSideBar("3")} />,

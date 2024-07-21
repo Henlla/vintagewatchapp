@@ -11,7 +11,7 @@ const CustomRating = (props) => {
     const calculateRating = (rating) => {
         const totalStar = rating.filter((item) => item.ratingStar)
             .map((item) => +item.ratingStar)
-            .reduce((sum, current) => sum + current);
+            .reduce((sum, current) =>  sum + current);
         setAvgRating(Math.ceil(totalStar / rating.length))
     }
 

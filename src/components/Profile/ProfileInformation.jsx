@@ -7,12 +7,12 @@ import AlertSnackBar from "../AlertSnackBar";
 
 
 const profile = [
-    { key: "userId", label: "User ID", column: 6, hidden: true },
-    { key: "firstName", label: "First Name", column: 6, hidden: false },
-    { key: "lastName", label: "Last Name", column: 6, hidden: false },
-    { key: "email", label: "Email", column: 6, hidden: false },
-    { key: "phoneNumber", label: "Phone Number", column: 6, hidden: false },
-    { key: "address", label: "Address", column: 12, hidden: false }
+    { key: "userId", label: "User ID", column: 6, hidden: true, multiline: false, row: 1, validate: { required: "Please enter user id" } },
+    { key: "firstName", label: "First Name", column: 6, hidden: false, multiline: false, row: 1, validate: { required: "Please enter first name" } },
+    { key: "lastName", label: "Last Name", column: 6, hidden: false, multiline: false, row: 1, validate: { required: "Please enter last name" } },
+    { key: "email", label: "Email", column: 6, hidden: true, multiline: false, row: 1, validate: { required: "Please enter user id" } },
+    { key: "phoneNumber", label: "Phone Number", column: 6, hidden: false, multiline: false, row: 1, validate: { required: "Please enter phone number" } },
+    { key: "address", label: "Address", column: 12, hidden: false, multiline: true, row: 5, validate: { required: "Please enter address" } }
 ]
 
 const ProfileInformation = () => {
@@ -99,12 +99,12 @@ const ProfileInformation = () => {
                                 !item.hidden &&
                                 <Grid key={index} item xs={12} md={item.column}>
                                     <TextField
-                                        {...register(item.key, { required: "This is required" })}
+                                        {...register(item.key, item.validate)}
                                         error={errors[item.key]?.message != null}
                                         helperText={errors[item.key]?.message}
                                         fullWidth
-                                        multiline={item.key === "address"}
-                                        rows={item.key === "address" ? 4 : 1}
+                                        multiline={item.multiline}
+                                        rows={item.row}
                                         name={item.key}
                                         label={item.label}
                                         value={values[item.key] || ""}

@@ -1,28 +1,31 @@
 import React, { useEffect, useState } from "react";
-import Ratting from "../components/Ratting";
 import { Link } from "react-router-dom";
 import productAPI from "../api/product/productAPI";
 import categoryApi from "../api/category/categoryAPI";
+import { Rating } from "@mui/material";
+import CustomRating from "../components/CustomRating";
 
 const title = "Our Products";
 
 const CategoryShowCase = () => {
-  const [items, setItems] = useState([]);
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [filterValue, setFilterValue] = useState("ALL");
+  const [ratingValue, setRatingValue] = useState(0);
 
   //category baded filtering 
-  const filterItem = (categItem) => {
-    const updateItems = data.filter((curElem) => {
-      return curElem.category?.some(item => item.category.categoryName == categItem)
+  const filterItem = () => {
+    if (filterValue == 'ALL') {
+      return data;
+    }
+    return data.filter((curElem) => {
+      curElem.category?.some(item => item.category.categoryName == categItem)
     });
-    setItems(updateItems)
   }
 
   const fetchData = async () => {
     var response = await productAPI.getProduct();
     if (response.isSuccess) {
-      setItems(response.data);
       setData(response.data);
     }
   }
@@ -62,13 +65,13 @@ const CategoryShowCase = () => {
           <h2 className="title">{title}</h2>
           <div className="course-filter-group">
             <ul className="lab-ul">
-              <li onClick={() => setItems(data)}>All</li>
+              <li onClick={() => setFilterValue("ALL")}>All</li>
               {
                 categories
                   .sort((a, b) => a.categoryId - b.categoryId)
                   .slice(0, 5).map((item, index) =>
                   (
-                    <li key={index} onClick={() => filterItem(item.categoryName)}>{item.categoryName}</li>
+                    <li key={index} onClick={() => setFilterValue(item.categoryName)}>{item.categoryName}</li>
                   ))
               }
             </ul>
@@ -80,7 +83,7 @@ const CategoryShowCase = () => {
           <div className="row g-4 justify-content-center row-cols-x1-4 row-cols-lg-3 row-cols-md-2 row-cols-1
           course-filter">
             {
-              items && items.slice(0, 9).map((product) =>
+              filterItem().slice(0, 9).map((product) =>
                 <div key={product.timepiece.timepieceId} className="col">
                   <div className="course-item style-4">
                     <div className="course-inner">
@@ -90,8 +93,8 @@ const CategoryShowCase = () => {
                           <div className="course-cate">
                             <Link href="#">{product.cate}</Link>
                           </div>
-                          <div className="course-review">
-                            <Ratting />
+                          <div className="course-review ms-2">
+                            <CustomRating ratingCount={setRatingValue} item={product.timepiece} />
                           </div>
                         </div>
                       </div>
@@ -101,8 +104,6 @@ const CategoryShowCase = () => {
                         <Link to={`/shop/${product.timepiece.timepieceId}`}><h6>{product.timepiece.timepieceName}</h6></Link>
                         <div className="course-footer">
                           <div className="course-author">
-
-
                             <Link to="/" className="ca-name">{product.timepiece.brand.brandName}</Link>
                           </div>
                           <div className="course-price">

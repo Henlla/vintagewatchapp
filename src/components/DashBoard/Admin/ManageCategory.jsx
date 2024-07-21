@@ -49,7 +49,7 @@ export default function ManageCategory() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [categoryData, setCategoryData] = useState([]);
-    const [filterValue, setFilterValue] = useState([]);
+    const [filterValue, setFilterValue] = useState("");
     const { register, handleSubmit, setValue, reset, clearErrors, formState: { errors } } = useForm();
     // modal
     const [open, setOpen] = useState(false);
@@ -73,14 +73,12 @@ export default function ManageCategory() {
         var response = await categoryApi.getCategory();
         if (response.isSuccess) {
             setCategoryData(response.data);
-            setFilterValue(response.data);
         }
     };
 
-    const filterData = async (e) => {
-        var keyword = e.target.value;
-        var data = categoryData.filter(x => x.categoryName.toLowerCase().includes(keyword.toLowerCase()));
-        setFilterValue(data);
+    const filterData = () => {
+        var data = categoryData.filter(x => x.categoryName.toLowerCase().includes(filterValue.toLowerCase()));
+        return data;
     }
 
     const handleCloseConfirm = () => {
@@ -157,7 +155,7 @@ export default function ManageCategory() {
             <ConfirmMessage openConfirm={openConfirm} handleCloseConfirm={handleCloseConfirm} confirmValue={confirmValue} deleteFunction={onSubmit} />
             <AlertSnackBar openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} snackBarMessage={snackBarMessage} snackBarType={snackBarType} />
             <Box>
-                <TextField label="Search..." onChange={filterData} size='small' className='mb-2' />
+                <TextField label="Search..." onChange={(e) => setFilterValue(e.target.value)} size='small' className='mb-2' />
             </Box>
             <Box>
                 <Button variant='contained' name="add" onClick={(event) => buttonClick(event)} className='mb-2'>Add</Button>
@@ -183,7 +181,7 @@ export default function ManageCategory() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filterValue
+                            {filterData()
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => {
                                     return (
