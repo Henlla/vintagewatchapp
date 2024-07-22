@@ -41,7 +41,6 @@ const TransactionPage = () => {
     };
 
     const handlOpenModal = (event, row) => {
-        console.log(row);
     }
 
     const getOrderOfUser = async () => {

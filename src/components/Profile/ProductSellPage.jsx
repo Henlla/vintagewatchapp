@@ -6,6 +6,7 @@ import { Delete, Edit, Visibility } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import ModalPopup from "../ModalPopup";
 import AlertSnackBar from "../AlertSnackBar";
+import ConfirmMessage from "../ConfirmMessage";
 
 const columns = [
     { id: 'timepieceId', label: 'Timepiece Id', minWidth: 100, hidden: true, align: "center" },
@@ -44,6 +45,10 @@ const ProductSellPage = () => {
     const [snackBarMessage, setSnackBarMessage] = useState("");
     const [snackBarType, setSnackBarType] = useState("success");
     const [openSnackBar, setOpenSnackBar] = useState(false);
+
+    // Confirm
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [confirmValue, setConfirmValue] = useState("");
 
     const { register, clearErrors, reset, setValue, formState: { errors }, handleSubmit } = useForm();
 
@@ -115,7 +120,6 @@ const ProductSellPage = () => {
                 setModalOpen(true);
                 break;
             case "edit":
-                console.log(row)
                 canEdit = true;
                 evaluationCol.forEach((item) => {
                     setValue(item.key, evaluation[item.key]);
@@ -147,6 +151,11 @@ const ProductSellPage = () => {
                 setModalButton(false)
                 setModalOpen(true);
                 break;
+            case "delete":
+                const { timepieceId } = row.timepiece;
+                setConfirmValue(timepieceId);
+                setOpenConfirm(true);
+                break;
             default:
                 break;
         }
@@ -160,6 +169,26 @@ const ProductSellPage = () => {
         reset();
         clearErrors();
         setModalOpen(false);
+    }
+
+    const handleCloseConfirm = () => {
+        setOpenConfirm(false);
+    }
+
+    const handleDelete = async (value) => {
+        setOpenConfirm(false);
+        var response = await productAPI.deleteTimepiece(value);
+        console.log(response);
+        if (response.isSuccess) {
+            setSnackBarMessage("Cancle selling success");
+            setSnackBarType("success");
+            setOpenSnackBar(true);
+        } else {
+            setSnackBarMessage("Cancle selling fail");
+            setSnackBarType("error");
+            setOpenSnackBar(true);
+        }
+        getProductNotHavePrice();
     }
 
     const onSubmit = async (data) => {
@@ -182,6 +211,7 @@ const ProductSellPage = () => {
     }
 
     return <>
+        <ConfirmMessage openConfirm={openConfirm} handleCloseConfirm={handleCloseConfirm} confirmValue={confirmValue} deleteFunction={handleDelete} />
         <AlertSnackBar snackBarMessage={snackBarMessage} snackBarType={snackBarType} openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} />
         <ModalPopup
             modalData={modalData}
@@ -274,7 +304,7 @@ const ProductSellPage = () => {
                                                                     <Edit color='secondary' />
                                                                 </Link>
                                                             }
-                                                            <Link name="edit" onClick={(event) => handlOpenModal(event, row)}>
+                                                            <Link name="delete" onClick={(event) => handlOpenModal(event, row)}>
                                                                 <Delete color='error' />
                                                             </Link>
                                                         </TableCell>

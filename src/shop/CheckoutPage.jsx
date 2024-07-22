@@ -90,7 +90,7 @@ const CheckoutPage = () => {
         formData.append("userId", user.userId);
         var response = await productAPI.checkoutProduct(formData);
         if (response.isSuccess) {
-            setSnackBarMessage(response.message);
+            setSnackBarMessage("Buy successful");
             setSnackBarType("success");
             setOpenSnackBar(true);
         } else if (response.status == 400) {

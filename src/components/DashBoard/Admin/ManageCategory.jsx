@@ -52,7 +52,7 @@ export default function ManageCategory() {
     const [filterValue, setFilterValue] = useState("");
     const { register, handleSubmit, setValue, reset, clearErrors, formState: { errors } } = useForm();
     // modal
-    const [open, setOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [modalButtonName, setModalButtonName] = useState("");
     // snackbar
@@ -62,8 +62,6 @@ export default function ManageCategory() {
     // confirm
     const [openConfirm, setOpenConfirm] = useState(false);
     const [confirmValue, setConfirmValue] = useState("");
-
-
 
     useEffect(() => {
         getCategoryData();
@@ -86,7 +84,7 @@ export default function ManageCategory() {
     }
 
     const handleCloseModal = () => {
-        setOpen(false);
+        setModalOpen(false);
     };
 
     const handleSnackBarClose = (event, reason) => {
@@ -113,7 +111,7 @@ export default function ManageCategory() {
             case "add":
                 setModalTitle("Add new category");
                 setModalButtonName("add");
-                setOpen(true);
+                setModalOpen(true);
                 break;
             case "delete":
                 var { categoryId } = row;
@@ -133,7 +131,7 @@ export default function ManageCategory() {
             formData.append("categoryString", JSON.stringify(data));
             var response = await categoryApi.createNewCategory(formData);
             if (response.isSuccess) {
-                setOpen(false);
+                setModalOpen(false);
                 setSnackBarMessage("Create category success");
                 setSnackBarType("success");
                 setOpenSnackBar(true);
@@ -155,20 +153,20 @@ export default function ManageCategory() {
             <ConfirmMessage openConfirm={openConfirm} handleCloseConfirm={handleCloseConfirm} confirmValue={confirmValue} deleteFunction={onSubmit} />
             <AlertSnackBar openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} snackBarMessage={snackBarMessage} snackBarType={snackBarType} />
             <Box>
-                <TextField label="Search..." onChange={(e) => setFilterValue(e.target.value)} size='small' className='mb-2' />
+                <Button variant='contained' name="add" onClick={(event) => buttonClick(event)} className='mb-2'>Add</Button>
             </Box>
             <Box>
-                <Button variant='contained' name="add" onClick={(event) => buttonClick(event)} className='mb-2'>Add</Button>
+                <TextField fullWidth label="Search..." onChange={(e) => setFilterValue(e.target.value)} size='small' className='mb-2' />
             </Box>
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 370 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                {columns.map((column) => (
+                                {columns.map((column,index) => (
                                     <StyledTableCell
                                         hidden={column.hidden}
-                                        key={column.id}
+                                        key={index}
                                         align={column.align}
                                         style={{ minWidth: column.minWidth }}
                                     >
@@ -183,22 +181,22 @@ export default function ManageCategory() {
                         <TableBody>
                             {filterData()
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => {
+                                .map((row,index) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.categoryId}>
-                                            {columns.map((column) => {
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                            {columns.map((column,index) => {
                                                 let value;
                                                 if (column.id == "categoryId") {
                                                     value = row.categoryId;
                                                 } else if (column.id == "categoryName") {
                                                     value = row.categoryName;
-                                                } else {
+                                                } else if (column.id == "index") {
                                                     value = categoryData.indexOf(row) + 1;
                                                 }
                                                 return (
                                                     <TableCell
                                                         hidden={column.hidden}
-                                                        key={column.id}
+                                                        key={index}
                                                         align={column.align}>
                                                         {column.format && typeof value === 'number'
                                                             ? column.format(value)
@@ -208,7 +206,7 @@ export default function ManageCategory() {
                                             })}
                                             <TableCell align='center'>
                                                 <Link name={"delete"} onClick={(event) => buttonClick(event, row)}>
-                                                    <Delete color='secondary' className='me-2' />
+                                                    <Delete color='error' className='me-2' />
                                                 </Link>
                                             </TableCell>
                                         </TableRow>
@@ -228,7 +226,7 @@ export default function ManageCategory() {
                 />
             </Paper>
             <Modal
-                open={open}
+                open={modalOpen}
                 onClose={() => handleCloseModal()}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"

@@ -8,7 +8,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import productApi from "../../../api/product/productAPI"
 import { useEffect, useState } from 'react';
-import { Alert, Box, Button, Grid, Link, Modal, Snackbar, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, Grid, InputLabel, Link, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import { Edit, Visibility } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import AlertSnackBar from "../../AlertSnackBar"
@@ -21,6 +21,46 @@ const columns = [
     { id: 'userId', label: 'User Name', minWidth: 100, hidden: false, align: "left" },
     { id: 'brandId', label: 'Brand Name', minWidth: 100, hidden: false, align: "left" },
 ];
+
+const movement = [
+    { value: "Quartz", display: "Quartz" },
+    { value: "Automatic", display: "Automatic" },
+    { value: "Manual", display: "Manual" },
+    { value: "Hybrid", display: "Hybrid" },
+    { value: "Kinetic", display: "Kinetic" },
+]
+
+const caseMaterial = [
+    { value: "Titanium", display: "Titanium" },
+    { value: "Platinum", display: "Platinum" },
+    { value: "Ceramic", display: "Ceramic" },
+    { value: "Bronze", display: "Bronze" },
+    { value: "Aluminum", display: "Aluminum" },
+]
+
+const caseDiameter = [
+    { value: "38mm", display: "38mm" },
+    { value: "40mm", display: "40mm" },
+    { value: "44mm", display: "44mm" },
+    { value: "46mm", display: "46mm" },
+    { value: "48mm", display: "48mm" },
+]
+
+const crystal = [
+    { value: "Sapphire", display: "Sapphire" },
+    { value: "Mineral", display: "Mineral" },
+    { value: "Acrylic", display: "Acrylic" },
+    { value: "Synthetic", display: "Synthetic" },
+    { value: "Hesalite", display: "Hesalite" },
+]
+
+const waterResistance = [
+    { value: "50m", display: "50m" },
+    { value: "100m", display: "100m" },
+    { value: "200m", display: "200m" },
+    { value: "300m", display: "300m" },
+    { value: "500m", display: "500m" },
+]
 
 const style = {
     height: "90%",
@@ -41,13 +81,16 @@ export default function ManageEvaluate() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [timepieceEvaluate, setTimepieceEvaluate] = useState([]);
+    //modal
     const [open, setOpen] = useState(false);
     const [modalData, setModalData] = useState([]);
     const [timepieceImage, setTimepieceImage] = useState([]);
     const [submitButton, setSubmitButton] = useState(true);
+    //snack bar
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [snackBarType, setSnackBarType] = useState("success");
     const [snackBarMessage, setSnackBarMessage] = useState("");
+
     const [filterValue, setFilterValue] = useState("");
     const { register, handleSubmit, setValue, reset, clearErrors, formState: { errors } } = useForm();
 
@@ -76,8 +119,11 @@ export default function ManageEvaluate() {
         setTimepieceEvaluate(response.data);
         if (response.isSuccess) {
             setTimepieceEvaluate(response.data)
-            setFilterValue(response.data);
         }
+    }
+
+    const onchangeData = (event) => {
+        var { name, value } = event.target;
     }
 
     const handlOpenModal = (event, data) => {
@@ -88,19 +134,19 @@ export default function ManageEvaluate() {
             canEdit = false;
             setSubmitButton(true);
             timepieceData = [
-                { key: "timepieceId", label: "Timepiece Id", data: timepiece.timepieceId, canEdit: canEdit, hidden: true },
-                { key: "timepieceName", label: "Timepiece Name", data: timepiece.timepieceName, canEdit: canEdit, hidden: false },
-                { key: "caseDiameter", labe: "Case Diameter", label: "Case Diameter", data: timepiece.caseDiameter, canEdit: canEdit, hidden: false },
-                { key: "caseMaterial", label: "Case Material", data: timepiece.caseMaterial, canEdit: canEdit, hidden: false },
-                { key: "caseThickness", label: "Case Thickness", data: timepiece.caseThickness, canEdit: canEdit, hidden: false },
-                { key: "crystal", label: "Crystal", data: timepiece.crystal, canEdit: canEdit, hidden: false },
-                { key: "datePost", label: "Date Post", data: timepiece.datePost, canEdit: canEdit, hidden: false },
-                { key: "description", label: "Description", data: timepiece.description, canEdit: canEdit, hidden: false },
-                { key: "movement", label: "Movement", data: timepiece.movement, canEdit: canEdit, hidden: false },
-                { key: "strapMaterial", label: "Strap Material", data: timepiece.strapMaterial, canEdit: canEdit, hidden: false },
-                { key: "strapWidth", label: "StrapWidth", data: timepiece.strapWidth, canEdit: canEdit, hidden: false },
-                { key: "style", label: "Style", data: timepiece.style, canEdit: canEdit, hidden: false },
-                { key: "waterResistance", label: "Water Resistance", data: timepiece.waterResistance, canEdit: canEdit, hidden: false },
+                { key: "timepieceId", label: "Timepiece Id", data: timepiece.timepieceId, canEdit: canEdit, hidden: true, type: "text" },
+                { key: "timepieceName", label: "Timepiece Name", data: timepiece.timepieceName, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "caseDiameter", labe: "Case Diameter", label: "Case Diameter", data: timepiece.caseDiameter, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "caseMaterial", label: "Case Material", data: timepiece.caseMaterial, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "caseThickness", label: "Case Thickness", data: timepiece.caseThickness, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "crystal", label: "Crystal", data: timepiece.crystal, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "datePost", label: "Date Post", data: timepiece.datePost, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "description", label: "Description", data: timepiece.description, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "movement", label: "Movement", data: timepiece.movement, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "strapMaterial", label: "Strap Material", data: timepiece.strapMaterial, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "strapWidth", label: "StrapWidth", data: timepiece.strapWidth, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "style", label: "Style", data: timepiece.style, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "waterResistance", label: "Water Resistance", data: timepiece.waterResistance, canEdit: canEdit, hidden: false, type: "text" },
             ]
             timepieceData.forEach((item) => {
                 setValue(item.key, item.data);
@@ -111,64 +157,127 @@ export default function ManageEvaluate() {
             timepieceData = [
                 { key: "timepieceId", label: "Timepiece Id", data: timepiece?.timepieceId, canEdit: canEdit, hidden: true },
                 {
-                    key: "movementStatus", label: "Movement Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "movementStatus",
+                    label: "Movement",
+                    data: timepiece.movement,
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Movement Status"
-                    }
+                    },
+                    type: "select"
                 },
                 {
-                    key: "caseDiameterStatus", label: "Case Diameter Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "caseDiameterStatus",
+                    label: "Case Diameter",
+                    data: timepiece.caseDiameter,
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Case Diameter Status"
-                    }
+                    },
+                    type: "select"
                 },
                 {
-                    key: "caseMaterialStatus", label: "Case Material Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "caseMaterialStatus",
+                    label: "Case Material",
+                    data: timepiece.caseMaterial,
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Case Material Status"
-                    }
+                    },
+                    type: "select"
                 },
                 {
-                    key: "waterResistanceStatus", label: "Water Resistance Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "waterResistanceStatus",
+                    label: "Water Resistance",
+                    data: timepiece.waterResistance,
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Water Resistance Status"
-                    }
+                    },
+                    type: "select"
                 },
                 {
-                    key: "crystalTypeStatus", label: "Crystal Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "crystalTypeStatus",
+                    label: "Crystal",
+                    data: timepiece.crystal,
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Crystal Type Status"
-                    }
+                    },
+                    type: "select"
                 },
                 {
-                    key: "dialStatus", label: "Dial Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "dialStatus",
+                    label: "Dial",
+                    data: "",
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Dial Status"
-                    }
+                    },
+                    type: "text"
                 },
                 {
-                    key: "handsStatus", label: "Hand Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "handsStatus",
+                    label: "Hand Status",
+                    data: "", canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Hands Status"
                     }
                 },
                 {
-                    key: "braceletStatus", label: "Bracelet Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "braceletStatus",
+                    label: "Bracelet",
+                    data: "",
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Bracelet Status"
-                    }
+                    },
+                    type: "text"
                 },
                 {
-                    key: "buckleStatus", label: "Buckle Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "buckleStatus",
+                    label: "Buckle",
+                    data: "",
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Buckle Status"
-                    }
+                    },
+                    type: "text"
                 },
                 {
-                    key: "accuracyStatus", label: "Accuracy Status", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "accuracyStatus",
+                    label: "Accuracy",
+                    data: "",
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Accuracy Status"
-                    }
+                    },
+                    type: "text"
                 },
                 {
-                    key: "valueExtimatedStatus", label: "Value Estimate", data: "", canEdit: canEdit, hidden: false, validation: {
+                    key: "valueExtimatedStatus",
+                    label: "Value Estimate", data: "",
+                    canEdit: canEdit,
+                    hidden: false,
+                    validation: {
                         required: "Please enter Value Estimate",
                         min: { value: 1, message: "Value must be > 0" },
                         pattern: {
                             value: /^\d+$/,
                             message: "This field must be a number"
                         }
-                    }
+                    },
+                    type: "text"
                 },
             ]
             timepieceData.forEach((item) => {
@@ -216,7 +325,7 @@ export default function ManageEvaluate() {
     }
 
     const filterData = () => {
-        var data = timepieceEvaluate.filter(item => item.timepiece.timepieceName.toLowerCase().includes(filterValue.toLowerCase()));
+        var data = timepieceEvaluate.filter(item => item.timepiece.timepieceName.includes(filterValue.toLocaleLowerCase()));
         return data;
     }
 
@@ -246,7 +355,7 @@ export default function ManageEvaluate() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filterData
+                            {filterData()
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => {
                                     return (
@@ -310,17 +419,63 @@ export default function ManageEvaluate() {
                     </Typography>
                     <Grid container spacing={2}>
                         {modalData?.map((item, index) => (
-                            !item.hidden &&
+                            !item.hidden && item.type == "text" &&
                             <Grid item xs={12} md={6} textAlign={"center"} key={index}>
                                 <TextField
+                                    {...register(item.key, item.validation)}
                                     error={errors[item.key]?.message != null}
                                     helperText={errors[item.key]?.message}
-                                    {...register(item.key, item.validation)}
                                     fullWidth
                                     id={item.key}
                                     name={item.key}
                                     disabled={!item.canEdit}
                                     size='large' label={item.label} />
+                            </Grid>
+                            ||
+                            !item.hidden && item.type == "select" &&
+                            <Grid item xs={12} md={6} textAlign={"center"} key={index}>
+                                <FormControl
+                                    fullWidth
+                                    error={errors[item.key]?.message != null}>
+                                    <InputLabel id="demo-select-small-label">{item.label}</InputLabel>
+                                    <Select
+                                        {...register(item.key, { required: `Please select ${item.key}` })}
+                                        className="text-start"
+                                        labelId="demo-select-small-label"
+                                        id="demo-select-small"
+                                        label={item.label}
+                                        defaultValue={""}
+                                        onChange={(event) => onchangeData(event)}
+                                    >
+                                        {
+                                            item.key === "movementStatus" &&
+                                            movement.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                            ))
+                                            ||
+                                            item.key === "caseDiameterStatus" &&
+                                            caseDiameter.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                            ))
+                                            ||
+                                            item.key === "caseMaterialStatus" &&
+                                            caseMaterial.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                            ))
+                                            ||
+                                            item.key === "waterResistanceStatus" &&
+                                            waterResistance.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                            ))
+                                            ||
+                                            item.key === "crystalTypeStatus" &&
+                                            crystal.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                    {errors[item.key]?.message && <FormHelperText>{errors[item.key]?.message}</FormHelperText>}
+                                </FormControl>
                             </Grid>
                         ))}
                         <Grid item xs={12} md={12} textAlign={"end"} hidden={submitButton}>

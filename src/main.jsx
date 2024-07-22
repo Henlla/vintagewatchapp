@@ -31,6 +31,7 @@ import UnAuthorize from "./home/UnAuthorize.jsx";
 import ManageCategory from "./components/DashBoard/Admin/ManageCategory.jsx";
 import CheckoutPage from "./shop/CheckoutPage.jsx";
 import ProfilePage from "./components/ProfilePage.jsx";
+import ManageOrder from "./components/DashBoard/Admin/ManageOrder.jsx";
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
       {
         path: "category_manage",
         element: <ProtectedRoute role={["ADMIN"]}><ManageCategory /></ProtectedRoute>
+      },
+      {
+        path: "order_manage",
+        element: <ProtectedRoute role={["ADMIN"]}><ManageOrder /></ProtectedRoute>
       }
     ],
   },

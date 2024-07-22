@@ -7,7 +7,7 @@ import { Autoplay } from "swiper/modules";
 import ProductDisplay from "./ProductDisplay";
 import Review from "./Review";
 import MakeOffer from "./MakeOffer";
-import { Box, Button, Grid, InputLabel, TextField } from "@mui/material";
+import { Box, Grid, InputLabel } from "@mui/material";
 import TradeIn from "./TradeIn";
 import { NumericFormat } from "react-number-format";
 

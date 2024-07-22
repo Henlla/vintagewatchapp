@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import productAPI from "../api/product/productAPI";
 
 const subTitle = "Choose Any Products";
 const title = "Buy Everything with Us";
@@ -45,6 +46,33 @@ const categoryList = [
 ];
 
 const HomeCategory = () => {
+
+  const [brandData, setBrandData] = useState([]);
+
+  useEffect(() => {
+    getAllCategory();
+  }, [])
+
+  const getAllCategory = async () => {
+    var response = await productAPI.getBrand();
+    if (response.isSuccess) {
+      setBrandData(response.data);
+    }
+  }
+
+  const filterData = () => {
+    var categoryCurrent = []
+    brandData.slice(0, 6).forEach((item, index) => {
+      categoryCurrent.push({
+        imgUrl: `src/assets/images/category/0${index + 1}.jpg`,
+        imgAlt: `${item.brandName}`,
+        iconName: "icofont-brand-windows",
+        title: `${item.brandName}`,
+      })
+    });
+    return categoryCurrent;
+  }
+
   return (
     <div className="category-section style-4 padding-tb">
       <div className="container">
@@ -57,7 +85,7 @@ const HomeCategory = () => {
         <div className="section-wrapper">
           <div className="row g-4 justify-content-center row-cols-md-3 row-cols-sm-2 row-cols-1">
             {
-              categoryList.map((val, i) => (
+              filterData().slice(0, 6).map((val, i) => (
                 <div key={i} className="col">
                   <Link to="/shop" className="category-item">
                     <div className="category-inner">

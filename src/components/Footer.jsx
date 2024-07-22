@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-const title = "About ShopCart";
-const desc = "Eduaid theme number one world class university in the world There are student are studing always in this university for all time.";
+const title = "About Vintage Watch";
+const desc = "";
 const ItemTitle = "Categories";
-const quickTitle = "Quick Links";
+const quickTitle = "Brand";
 const tweetTitle = "Recent Tweets";
 
 const addressList = [
@@ -17,7 +17,7 @@ const addressList = [
     },
     {
         iconName: 'icofont-envelope',
-        text: '  shopdonghocu.com',
+        text: ' vintagetwatch.com',
     },
 ]
 
@@ -58,47 +58,43 @@ const ItemList = [
         text: 'Shop',
         link: '/shop',
     },
-    {
-        text: 'Blog',
-        link: '/blog',
-    },
-    {
-        text: 'About',
-        link: '/about',
-    },
-    {
-        text: 'Contact',
-        link: '/contact',
-    },
-    {
-        text: 'FAQs',
-        link: '/about',
-    }
+    // {
+    //     text: 'Blog',
+    //     link: '/blog',
+    // },
+    // {
+    //     text: 'About',
+    //     link: '/about',
+    // },
+    // {
+    //     text: 'Contact',
+    //     link: '/contact',
+    // },
+    // {
+    //     text: 'FAQs',
+    //     link: '/about',
+    // }
 ]
 
 const quickList = [
     {
-        text: 'Summer Sessions',
+        text: 'Rolex',
         link: '#',
     },
     {
-        text: 'Events',
+        text: 'Omega',
         link: '#',
     },
     {
-        text: 'Gallery',
+        text: 'Casio',
         link: '#',
     },
     {
-        text: 'Forums',
+        text: 'Citizen',
         link: '#',
     },
     {
-        text: 'Privacy Policy',
-        link: '#',
-    },
-    {
-        text: 'Terms of Use',
+        text: 'IWC',
         link: '#',
     },
 ]
@@ -134,89 +130,89 @@ const footerbottomList = [
 ];
 
 const Footer = () => {
-  return <footer className='style-2'>
-    <div className='footer-top dark-view padding-tb'>
-        <div className='container'>
-            <div className='row g-4 row-cols-xl-4 row-cols-sm-2 row-cols-1 justify-content-center'>
-                <div className='col'>
-                    <div className='footer-item our-address'>
-                        <div className='footer-inner'>
-                            <div className='footer-content'>
-                                <div className='title'>
-                                    <h4>{title}</h4>
-                                </div>
-                                <div className='content'>
-                                    <p>{desc}</p>
-                                    <ul className='lab-ul office-address'>
-                                        {
-                                            addressList.map((val,i) => (
-                                                <li key={i}>
-                                                    <i className={val.iconName}>{val.text}</i>
-                                                </li>
-                                            ))
-                                        }
-                                    </ul>
-                                    <ul className='lab-ul social-icons'>
-                                        {
-                                            socialList.map((val, i) => (
-                                                <li key={i}>
-                                                    <a href="#" className={val.className}><i className={val.iconName}>{val.text}</i></a>
-                                                </li>
-                                            ))
-                                        }
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='col'>
-                    <div className='footer-item our-address'>
-                        <div className='footer-inner'>
-                            <div className='footer-content'>
-                                <div className='title'>
-                                    <h4>{ItemTitle}</h4>
-                                </div>
-                                <div className='content'>
-                                    <ul className='lab-ul office-address'>
-                                        {
-                                            ItemList.map((val,i) => (
-                                                <li key={i}>
-                                                   <a href={val.link}>{val.text}</a>
-                                                </li>
-                                            ))
-                                        }
-                                    </ul>
-                                    
+    return <footer className='style-2'>
+        <div className='footer-top dark-view padding-tb'>
+            <div className='container'>
+                <div className='row g-4 row-cols-xl-4 row-cols-sm-2 row-cols-1 justify-content-center'>
+                    <div className='col'>
+                        <div className='footer-item our-address'>
+                            <div className='footer-inner'>
+                                <div className='footer-content'>
+                                    <div className='title'>
+                                        <h4>{title}</h4>
+                                    </div>
+                                    <div className='content'>
+                                        <p>{desc}</p>
+                                        <ul className='lab-ul office-address'>
+                                            {
+                                                addressList.map((val, i) => (
+                                                    <li key={i}>
+                                                        <i className={val.iconName}>{val.text}</i>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul>
+                                        <ul className='lab-ul social-icons'>
+                                            {
+                                                socialList.map((val, i) => (
+                                                    <li key={i}>
+                                                        <a href={val.siteLink} className={val.className}><i className={val.iconName}>{val.text}</i></a>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className='col'>
-                    <div className='footer-item our-address'>
-                        <div className='footer-inner'>
-                            <div className='footer-content'>
-                                <div className='title'>
-                                    <h4>{quickTitle}</h4>
-                                </div>
-                                <div className='content'>
-                                    <ul className='lab-ul office-address'>
-                                        {
-                                            quickList.map((val,i) => (
-                                                <li key={i}>
-                                                   <a href="#">{val.text}</a>
-                                                </li>
-                                            ))
-                                        }
-                                    </ul>
-                                    
+                    <div className='col'>
+                        <div className='footer-item our-address'>
+                            <div className='footer-inner'>
+                                <div className='footer-content'>
+                                    <div className='title'>
+                                        <h4>{ItemTitle}</h4>
+                                    </div>
+                                    <div className='content'>
+                                        <ul className='lab-ul office-address'>
+                                            {
+                                                ItemList.map((val, i) => (
+                                                    <li key={i}>
+                                                        <a href={val.link}>{val.text}</a>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className='col'>
+                    <div className='col'>
+                        <div className='footer-item our-address'>
+                            <div className='footer-inner'>
+                                <div className='footer-content'>
+                                    <div className='title'>
+                                        <h4>{quickTitle}</h4>
+                                    </div>
+                                    <div className='content'>
+                                        <ul className='lab-ul office-address'>
+                                            {
+                                                quickList.map((val, i) => (
+                                                    <li key={i}>
+                                                        <a href="#">{val.text}</a>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <div className='col'>
                     <div className='footer-item our-address'>
                         <div className='footer-inner'>
                             <div className='footer-content'>
@@ -234,33 +230,32 @@ const Footer = () => {
                                             ))
                                         }
                                     </ul>
-                                    
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div> */}
                 </div>
             </div>
         </div>
-    </div>
 
-    {/* footer bottom*/}
-    <div className='footer-bottom'>
-        <div className='container'>
-            <div className='section-wrapper'>
-                <p>&copy; 2023<Link to="/">Shop cart</Link> Designed by <a href="/" target='_blank'>Team 6</a></p>
-                <div className='footer-bottom-list'>
+        {/* footer bottom*/}
+        <div className='footer-bottom'>
+            <div className='container'>
+                <div className='section-wrapper'>
+                    <p>&copy; 2024<a >Vintage Watch</a> Designed by <a target='_blank'>Team 6</a></p>
+                    {/* <div className='footer-bottom-list'>
                     {
                         footerbottomList.map((val,i)=>(
                             <a href="#" key={i}>{val.text}</a>
                         ))
                     }
+                </div> */}
                 </div>
             </div>
         </div>
-    </div>
-  </footer> 
-  
+    </footer>
+
 }
 
 export default Footer

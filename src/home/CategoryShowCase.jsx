@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import productAPI from "../api/product/productAPI";
 import categoryApi from "../api/category/categoryAPI";
-import { Rating } from "@mui/material";
 import CustomRating from "../components/CustomRating";
 
 const title = "Our Products";
@@ -13,13 +12,18 @@ const CategoryShowCase = () => {
   const [filterValue, setFilterValue] = useState("ALL");
   const [ratingValue, setRatingValue] = useState(0);
 
+  useEffect(() => {
+    fetchData();
+    fetchCategory();
+  }, []);
+
   //category baded filtering 
   const filterItem = () => {
     if (filterValue == 'ALL') {
       return data;
     }
-    return data.filter((curElem) => {
-      curElem.category?.some(item => item.category.categoryName == categItem)
+    return data.filter((product) => {
+      return product.category?.some(cate => cate.category.categoryName === filterValue)
     });
   }
 
@@ -36,11 +40,6 @@ const CategoryShowCase = () => {
       setCategories(response.data);
     }
   }
-
-  useEffect(() => {
-    fetchData();
-    fetchCategory();
-  }, [])
 
   return (
     <div className="course-section style-3 padding-tb">
@@ -69,7 +68,7 @@ const CategoryShowCase = () => {
               {
                 categories
                   .sort((a, b) => a.categoryId - b.categoryId)
-                  .slice(0, 5).map((item, index) =>
+                  .slice(0, 7).map((item, index) =>
                   (
                     <li key={index} onClick={() => setFilterValue(item.categoryName)}>{item.categoryName}</li>
                   ))
