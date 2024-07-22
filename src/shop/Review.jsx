@@ -99,26 +99,35 @@ const Review = (props) => {
     return (
         <>
             <AlertSnackBar openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} snackBarMessage={snackBarMessage} snackBarType={snackBarType} />
-            <ul
+            {/* <ul
                 className={`review-nav lab-ui ${reviewShow ? "RevActive" : "DescActive"
                     }`}
+            > */}
+            <ul
+                className={`review-nav lab-ui RevActive`}
             >
-                <li onClick={() => setReviewShow(!reviewShow)} className="desc">
+                {/* <li onClick={() => setReviewShow(!reviewShow)} className="desc">
                     Description
-                </li>
-                <li onClick={() => setReviewShow(!reviewShow)} className="rev">
+                </li> */}
+                {/* <li onClick={() => setReviewShow(!reviewShow)} className="rev">
+                    Reviews ({ratings.length})
+                </li> */}
+                <li className="rev">
                     Reviews ({ratings.length})
                 </li>
             </ul>
 
             {/* desc content */}
-            <div
+            {/* <div
                 className={`review-content ${reviewShow ? "review-content-show" : "description-show"
                     }`}
+            > */}
+            <div
+                className={`review-content review-content-show`}
             >
                 <div className="review-showing">
                     <ul className="content lab-ui">
-                        {ratings?.map((review, index) => (
+                        {ratings?.slice(0,5).map((review, index) => (
                             <li key={index}>
                                 <div className="post-thumb">
                                     <img src={review.user.avatar} alt="" />

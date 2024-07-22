@@ -5,10 +5,10 @@ import productAPI from "../api/product/productAPI";
 
 const title = (
   <h2>
-    Search Your One From <span>Thounsand</span> of Products
+    Search Your One From <span>Thounsand</span> of Watchs
   </h2>
 );
-const desc = "We have the lagest collection of Products";
+const desc = "We have the lagest collection of Watchs";
 const bannerList = [
   {
     iconName: "icofont-users-alt-4",

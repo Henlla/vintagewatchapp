@@ -5,13 +5,15 @@ import productAPI from "../api/product/productAPI";
 const CustomRating = (props) => {
     const [avgRating, setAvgRating] = useState(0);
     useEffect(() => {
-        props.item && getRating()
-    }, [props.item])
+        if (props.item?.timepieceId) {
+            getRating();
+        }
+    }, [props.item?.timepieceId]);
 
     const calculateRating = (rating) => {
         const totalStar = rating.filter((item) => item.ratingStar)
             .map((item) => +item.ratingStar)
-            .reduce((sum, current) =>  sum + current);
+            .reduce((sum, current) => sum + current);
         setAvgRating(Math.ceil(totalStar / rating.length))
     }
 

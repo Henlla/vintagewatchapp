@@ -41,7 +41,7 @@ const Login = () => {
     setOpenSnackBar(false);
   };
 
-  const from = location.state?.from.pasthname || "/";
+  const from = location.state?.from.pathname || "/";
 
   const onSubmit = async (data) => {
     var response = await authAPI.login(data);

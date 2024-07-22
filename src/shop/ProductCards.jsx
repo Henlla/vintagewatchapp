@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { Link } from "react-router-dom";
 import CustomRating from "../components/CustomRating"
-import { useAuth } from "../utilis/AuthProvider";
 
 const ProductCards = ({ GridList, products }) => {
   const [ratingCount, setRatingCount] = useState(0);
@@ -26,12 +25,6 @@ const ProductCards = ({ GridList, products }) => {
                 <Link to={`/shop/${product.timepiece?.timepieceId}`}>
                   <i className="icofont-eye"></i>
                 </Link>
-                {/* <a href="#">
-                  <i className="icofont-heart"></i>
-                </a>
-                <Link onClick={() => addCart(product)}>
-                  <i className="icofont-cart-alt"></i>
-                </Link> */}
               </div>
             </div>
             {/* product content*/}
@@ -40,10 +33,7 @@ const ProductCards = ({ GridList, products }) => {
                 <Link to={`/shop/${product.timepiece?.timepieceId}`}>{product.timepiece?.timepieceName}</Link>
               </h5>
               <p className="productRating">
-
-                {/* <Rating /> */}
                 <CustomRating ratingCount={setRatingCount} item={product.timepiece} />
-
               </p>
               <h6>
                 <NumericFormat displayType="text" value={product.timepiece?.price} thousandSeparator="," suffix=" vnd" />
@@ -74,7 +64,7 @@ const ProductCards = ({ GridList, products }) => {
             {/* product content*/}
             <div className="product-content">
               <h5>
-                <Link to={`shop/${product.timepiece?.timepieceId}`}>{product.timepiece?.timepieceName}</Link>
+                <Link to={`/shop/${product.timepiece?.timepieceId}`}>{product.timepiece?.timepieceName}</Link>
               </h5>
               <p className="productRating">
                 <CustomRating ratingCount={setRatingCount} item={product.timepiece} />

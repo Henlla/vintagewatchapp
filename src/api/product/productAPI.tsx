@@ -62,9 +62,24 @@ class ProductAPI {
         return axiosClient.put(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
     }
 
+    deleteTimepiece = (params) => {
+        var url = "timepiece/DeleteTimepiece";
+        return axiosClient.delete(url + `/${params}`) as Promise<APIResponse>;
+    }
+
     orderOfUser = () => {
         var url = "order";
         return axiosClient.get(url) as Promise<APIResponse>;
+    }
+
+    allOrder = () => {
+        var url = "order/GetAllOrder";
+        return axiosClient.get(url) as Promise<APIResponse>;
+    }
+
+    updateOrderStatus = (params) => {
+        var url = "order/UpdateOrderStatus";
+        return axiosClient.put(url, params, { headers: { "Content-Type": "multipart/data" } }) as Promise<APIResponse>;
     }
 }
 

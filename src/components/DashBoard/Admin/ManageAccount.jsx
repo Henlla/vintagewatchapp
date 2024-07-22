@@ -265,14 +265,11 @@ export default function ManageAccount() {
                       })}
                       <TableCell align='center'>
                         <Link id={"view"} name="view" onClick={(event) => handlOpenModal(event, row)}>
-                          <Visibility color='primary' />
+                          <Visibility className='me-2' color='primary' />
                         </Link>
                         <Link id={"edit"} name="edit" onClick={(event) => handlOpenModal(event, row)}>
                           <Edit color='secondary' />
                         </Link>
-                        {/* <Link id={"delete"} name="delete" onClick={(event) => handlOpenModal(event, row)}>
-                          <Delete color='error' />
-                        </Link> */}
                       </TableCell>
                     </TableRow>
                   );

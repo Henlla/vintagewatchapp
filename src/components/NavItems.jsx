@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/images/logo/logo.png";
+import logo from "../assets/images/logo/logo1.png";
 import { useAuth } from "../utilis/AuthProvider";
 import authAPI from "../api/auth/authAPI";
 import UserDropDown from "./UserDropodown";
+import { Typography } from "@mui/material";
 
 
 const NavItems = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [socialToggle, setSocialToggle] = useState(false);
   const [headerFixed, setHeaderFixed] = useState(false);
-  const { user, logout, isAuthenticate, saveLoggedUserData } = useAuth();
+  const { user, logout, isAuthenticate } = useAuth();
   const location = useLocation();
 
   const navigate = useNavigate()
@@ -53,8 +54,9 @@ const NavItems = () => {
             {/* logo */}
             <div className="logo-search-acte">
               <div className="logo">
-                <Link to={"/"}>
-                  <img src={logo} alt="" />
+                <Link className="d-flex align-items-center">
+                  <img src={logo} alt="" width={"100px"} height={"100px"} />
+                  <Typography variant="h6">VINTAGE WATCH</Typography>
                 </Link>
               </div>
             </div>

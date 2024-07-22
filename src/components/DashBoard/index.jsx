@@ -50,12 +50,12 @@ const Dashboard = () => {
       label: <Link to="account_manage">Manage User</Link>,
       role: ["ADMIN"]
     },
-    // {
-    //   key: "2",
-    //   icon: <ProductOutlined onClick={() => setCurrentSideBar("2")} />,
-    //   label: <Link to="product_manage">Manage Product</Link>,
-    //   role: ["ADMIN"]
-    // },
+    {
+      key: "2",
+      icon: <ProductOutlined onClick={() => setCurrentSideBar("2")} />,
+      label: <Link to="order_manage">Manage Order</Link>,
+      role: ["ADMIN"]
+    },
     {
       key: "3",
       icon: <ProductOutlined onClick={() => setCurrentSideBar("3")} />,
@@ -79,7 +79,7 @@ const Dashboard = () => {
 
   const renderItem = () => {
     var data = menuItem.filter((item) => item.role.some((item) => item == role));
-    return data
+    return data;
   };
 
   return (

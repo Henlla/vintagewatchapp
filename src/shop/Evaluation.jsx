@@ -1,4 +1,4 @@
-import {FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
+import { FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
 import PageHeader from "../components/PageHeader";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
@@ -15,23 +15,96 @@ const delay = ms => new Promise(
 );
 
 const arrayProperty = [
-    { key: "TimepieceName", label: "Timepiece Name", type: "text" },
+    { key: "TimepieceName", label: "Timepiece Name", type: "text", validate: { required: "Please enter timepiece name" } },
     { key: "BrandId", label: "Brand", type: "select" },
-    { key: "Movement", label: "Movement", type: "text" },
-    { key: "CaseMaterial", label: "Case Material", type: "text" },
-    { key: "CaseDiameter", label: "Case Diameter", type: "text" },
-    { key: "CaseThickness", label: "Case Thickness", type: "text" },
-    { key: "Crystal", label: "Crystal", type: "text" },
-    { key: "WaterResistance", label: "Water Resistance", type: "text" },
-    { key: "StrapMaterial", label: "Strap Material", type: "text" },
-    { key: "StrapWidth", label: "Strap Width", type: "text" },
-    { key: "Style", label: "Style", type: "text" },
+    { key: "Movement", label: "Movement", type: "select" },
+    { key: "CaseMaterial", label: "Case Material", type: "select" },
+    { key: "CaseDiameter", label: "Case Diameter", type: "select" },
+    { key: "CaseThickness", label: "Case Thickness", type: "select" },
+    { key: "Crystal", label: "Crystal", type: "select" },
+    { key: "WaterResistance", label: "Water Resistance", type: "select" },
+    { key: "StrapMaterial", label: "Strap Material", type: "select" },
+    { key: "StrapWidth", label: "Strap Width", type: "select" },
+    { key: "Style", label: "Style", type: "select" },
     { key: "CategoryId", label: "Category", type: "select" },
-    { key: "Description", label: "Description", type: "text" }
+    { key: "Description", label: "Description", type: "text", validate: { required: "Please enter description" } }
 ]
 
+const movement = [
+    { value: "Quartz", display: "Quartz" },
+    { value: "Automatic", display: "Automatic" },
+    { value: "Manual", display: "Manual" },
+    { value: "Hybrid", display: "Hybrid" },
+    { value: "Kinetic", display: "Kinetic" },
+]
+
+
+const caseMaterial = [
+    { value: "Titanium", display: "Titanium" },
+    { value: "Platinum", display: "Platinum" },
+    { value: "Ceramic", display: "Ceramic" },
+    { value: "Bronze", display: "Bronze" },
+    { value: "Aluminum", display: "Aluminum" },
+]
+
+const caseDiameter = [
+    { value: "38mm", display: "38mm" },
+    { value: "40mm", display: "40mm" },
+    { value: "44mm", display: "44mm" },
+    { value: "46mm", display: "46mm" },
+    { value: "48mm", display: "48mm" },
+]
+
+const caseThickness = [
+    { value: "8mm", display: "8mm" },
+    { value: "10mm", display: "10mm" },
+    { value: "12mm", display: "12mm" },
+    { value: "14mm", display: "14mm" },
+    { value: "16mm", display: "16mm" },
+]
+
+const crystal = [
+    { value: "Sapphire", display: "Sapphire" },
+    { value: "Mineral", display: "Mineral" },
+    { value: "Acrylic", display: "Acrylic" },
+    { value: "Synthetic", display: "Synthetic" },
+    { value: "Hesalite", display: "Hesalite" },
+]
+
+const waterResistance = [
+    { value: "50m", display: "50m" },
+    { value: "100m", display: "100m" },
+    { value: "200m", display: "200m" },
+    { value: "300m", display: "300m" },
+    { value: "500m", display: "500m" },
+]
+
+const strapMaterial = [
+    { value: "Nylon", display: "Nylon" },
+    { value: "Alligator", display: "Alligator" },
+    { value: "Silicone", display: "Silicone" },
+    { value: "Canvas", display: "Canvas" },
+    { value: "Metal", display: "Metal" },
+]
+
+const strapWidth = [
+    { value: "18mm", display: "18mm" },
+    { value: "20mm", display: "20mm" },
+    { value: "22mm", display: "22mm" },
+    { value: "24mm", display: "24mm" },
+    { value: "26mm", display: "26mm" },
+]
+const style = [
+    { value: "Pilot", display: "Pilot" },
+    { value: "Field", display: "Field" },
+    { value: "Chronograph", display: "Chronograph" },
+    { value: "Skeleton", display: "Skeleton" },
+    { value: "Moonphase", display: "Moonphase" },
+]
+
+
 const Evaluation = () => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm()
+    const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm()
     const filesInputs = [useRef(null), useRef(null), useRef(null)];
     const [images, setImages] = useState([
         plusImage,
@@ -53,10 +126,7 @@ const Evaluation = () => {
     const [snackBarMessage, setSnackBarMessage] = useState("");
 
     const [brands, setBrand] = useState([]);
-    const [selectedBrand, setSelectedBrand] = useState('');
-
     const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState('');
 
     const navigate = useNavigate();
 
@@ -78,12 +148,9 @@ const Evaluation = () => {
 
     }
 
-    const handleBrandChange = (e) => {
-        setSelectedBrand(e.target.value)
-    }
-
-    const handleCategoryChange = (e) => {
-        setSelectedCategory(e.target.value);
+    const onchangeData = (e) => {
+        var { name, value } = e.target;
+        setValue(name, value);
     }
 
     const handleFileChange = (event, index) => {
@@ -263,22 +330,70 @@ const Evaluation = () => {
                                             size="small">
                                             <InputLabel id="demo-select-small-label">{item.label}</InputLabel>
                                             <Select
-                                                {...register(item.key, { required: `Select ${item.key} required` })}
+                                                {...register(item.key, { required: `Please select ${item.key}` })}
                                                 className="text-start"
                                                 labelId="demo-select-small-label"
                                                 id="demo-select-small"
-                                                value={item.key === "BrandId" ? selectedBrand : selectedCategory}
                                                 label={item.label}
-                                                onChange={item.key === "BrandId" ? handleBrandChange : handleCategoryChange}
+                                                defaultValue={""}
+                                                onChange={(event) => onchangeData(event)}
                                             >
-                                                {item.key === "BrandId" ?
+                                                {
+                                                    item.key === "BrandId" &&
                                                     brands.map((item, index) => (
                                                         <MenuItem key={index} value={item.brandId}>{item.brandName}</MenuItem>
                                                     ))
-                                                    :
+                                                    ||
+                                                    item.key === "CategoryId" &&
                                                     categories.map((item, index) => (
                                                         <MenuItem key={index} value={item.categoryId}>{item.categoryName}</MenuItem>
                                                     ))
+                                                    ||
+                                                    item.key === "Movement" &&
+                                                    movement.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                                    ))
+                                                    ||
+                                                    item.key === "CaseMaterial" &&
+                                                    caseMaterial.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                                    ))
+                                                    ||
+                                                    item.key === "CaseDiameter" &&
+                                                    caseDiameter.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                                    ))
+                                                    ||
+                                                    item.key === "Crystal" &&
+                                                    crystal.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                                    ))
+                                                    ||
+                                                    item.key === "WaterResistance" &&
+                                                    waterResistance.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                                    ))
+                                                    ||
+                                                    item.key === "StrapMaterial" &&
+                                                    strapMaterial.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                                    ))
+                                                    ||
+                                                    item.key === "StrapWidth" &&
+                                                    strapWidth.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                                    ))
+                                                    ||
+                                                    item.key === "CaseThickness" &&
+                                                    caseThickness.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                                    ))
+                                                    ||
+                                                    item.key === "Style" &&
+                                                    style.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>{item.display}</MenuItem>
+                                                    ))
+
                                                 }
                                             </Select>
                                             {errors[item.key]?.message && <FormHelperText>{errors[item.key]?.message}</FormHelperText>}
@@ -292,7 +407,7 @@ const Evaluation = () => {
                                             name={item.key}
                                             fullWidth
                                             label={`${item.label} *`}
-                                            {...register(item.key, { required: "This is required" })}
+                                            {...register(item.key, item.validate)}
                                         />
                                     }
                                 </Grid>
