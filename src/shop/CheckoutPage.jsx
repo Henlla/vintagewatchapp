@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
-import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
+import { Button, FormControl, FormControlLabel, Grid, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import productAPI from "../api/product/productAPI";
 import { useAuth } from "../utilis/AuthProvider";
@@ -10,12 +10,23 @@ import AlertSnackBar from "../components/AlertSnackBar";
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+const columns = [
+    { key: "userId", label: "User Id", grid: 6, hidden: true, multiline: false, rows: 1 },
+    { key: "firstName", label: "First Name", grid: 6, hidden: false, multiline: false, rows: 1, validate: { required: "Please enter first name" } },
+    { key: "lastName", label: "Last Name", grid: 6, hidden: false, multiline: false, rows: 1, validate: { required: "Please enter last name" } },
+    { key: "email", label: "Email", grid: 6, hidden: false, multiline: false, rows: 1, validate: { required: "Please enter email" } },
+    { key: "phoneNumber", label: "Phone Number", grid: 6, hidden: false, multiline: false, rows: 1, validate: { required: "Please enter phone number" } },
+    { key: "address", label: "Address", grid: 12, hidden: false, multiline: true, rows: 3, validate: { required: "Please enter address" } },
+    { key: "description", label: "Order Description", grid: 12, hidden: false, multiline: true, rows: 3, validate: { required: "Please enter description" } },
+]
+
 const CheckoutPage = () => {
     const { user } = useAuth();
+    const { timepieceId } = useParams();
     const [product, setProduct] = useState(null);
-    const { productId } = useParams();
     const { register, handleSubmit, setValue, clearErrors, formState: { errors }, reset } = useForm();
-    const [checked, setChecked] = useState(false);
+    const { paymentInfomation, setPaymentInformation } = useState("");
+    // const [checked, setChecked] = useState(false);
     // snack bar
     const [snackBarType, setSnackBarType] = useState("success");
     const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -29,7 +40,7 @@ const CheckoutPage = () => {
     }, []);
 
     const getProductById = async () => {
-        var response = await productAPI.getOneProduct(productId);
+        var response = await productAPI.getOneProduct(timepieceId);
         if (response.isSuccess) {
             setProduct(response.data);
         }
@@ -43,63 +54,37 @@ const CheckoutPage = () => {
     };
 
     const renderInformation = () => {
-        setValue("fullName", `${user.firstName} ${user.lastName}`);
+        setValue("userId", user.userId);
+        setValue("firstName", user.firstName);
+        setValue("lastName", user.lastName);
         setValue("email", user.email);
         setValue("phoneNumber", user.phoneNumber);
         setValue("address", user.address);
     }
 
-    const handleChange = (e) => {
-        var { name, value } = e.target
-        setValue(name, value);
-    }
-
-
     const changePaymentMethod = (e) => {
-        const { name, value } = e.target;
-        setPaymentInfo({
-            ...paymentInfo,
-            [name]: value
-        });
-        if (value == "card") {
-            setChecked(true);
-        } else {
-            setChecked(false);
-            setPaymentInfo({
-                ...paymentInfo,
-                method: value,
-                cardNumber: "",
-                cardHolder: "",
-                expiredDate: "",
-                cvv: "",
-                billingAddress: ""
-            });
-            reset({
-                cardNumber: "",
-                cardHolder: "",
-                expiredDate: "",
-                cvv: "",
-                billingAddress: ""
-            });
-        }
+        const { value } = e.target;
+        setValue("method", value);
     }
 
-    const onSubmit = async () => {
+    const onSubmit = async (data) => {
+        const { userId, method } = data;
+        var formValue = { ...data, userId, timepieceId, method };
         var formData = new FormData();
-        formData.append("timepieceId", productId);
-        formData.append("userId", user.userId);
+        formData.append("paymentInformation", JSON.stringify(formValue));
         var response = await productAPI.checkoutProduct(formData);
-        if (response.isSuccess) {
-            setSnackBarMessage("Buy successful");
-            setSnackBarType("success");
-            setOpenSnackBar(true);
-        } else if (response.status == 400) {
-            setSnackBarMessage(response.data.message);
-            setSnackBarType("error");
-            setOpenSnackBar(true);
-        }
-        await delay(2000);
-        navigate("/shop", { replace: true });
+        console.log(response);
+        // if (response.isSuccess) {
+        //     setSnackBarMessage("Buy successful");
+        //     setSnackBarType("success");
+        //     setOpenSnackBar(true);
+        // } else if (response.status == 400) {
+        //     setSnackBarMessage(response.data.message);
+        //     setSnackBarType("error");
+        //     setOpenSnackBar(true);
+        // }
+        // await delay(2000);
+        // navigate("/shop", { replace: true });
     }
 
     return (
@@ -119,55 +104,25 @@ const CheckoutPage = () => {
                                         </Typography>
                                         <form onSubmit={handleSubmit(onSubmit)}>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField
-                                                        {...register("fullName", { required: "This is required" })}
-                                                        error={errors.fullName?.message != null}
-                                                        helperText={errors.fullName?.message}
-                                                        id="fullName"
-                                                        name="fullName"
-                                                        label="Full Name*"
-                                                        fullWidth
-                                                        onChange={handleChange}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField
-                                                        {...register("phoneNumber", { required: "This is required" })}
-                                                        error={errors.phoneNumber?.message != null}
-                                                        helperText={errors.phoneNumber?.message}
-                                                        id="phoneNumber"
-                                                        name="phoneNumber"
-                                                        label="Phone Number*"
-                                                        fullWidth
-                                                        onChange={handleChange}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField
-                                                        {...register("email", { required: "This is required" })}
-                                                        error={errors.email?.message != null}
-                                                        helperText={errors.email?.message}
-                                                        id="email"
-                                                        name="email"
-                                                        label="Email*"
-                                                        fullWidth
-                                                        onChange={handleChange}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} md={12}>
-                                                    <TextField
-                                                        {...register("address", { required: "This is required" })}
-                                                        error={errors.address?.message != null}
-                                                        helperText={errors.address?.message}
-                                                        multiline
-                                                        rows={3}
-                                                        id="address"
-                                                        name="address"
-                                                        label="Address*"
-                                                        fullWidth
-                                                        onChange={handleChange}
-                                                    />
+                                                {columns.map((item, index) => (
+                                                    !item.hidden &&
+                                                    <Grid item xs={12} md={item.grid} key={index}>
+                                                        <TextField
+                                                            {...register(item.key, item.validate)}
+                                                            error={errors[item.key]?.message != null}
+                                                            helperText={errors[item.key]?.message}
+                                                            name={item.key}
+                                                            label={item.label}
+                                                            fullWidth
+                                                            multiline={item.multiline}
+                                                            rows={item.rows}
+                                                        />
+                                                    </Grid>
+                                                ))}
+                                                <Grid item textAlign={"end"} xs={12} md={12}>
+                                                    <Button type="submit" variant="contained" color="primary">
+                                                        Continue
+                                                    </Button>
                                                 </Grid>
                                             </Grid>
                                         </form>
@@ -181,18 +136,21 @@ const CheckoutPage = () => {
                                                     Product
                                                 </Typography>
                                             </Grid>
-                                            <Grid item md={12} display={"flex"} justifyContent={"space-between"} marginBottom={2}>
-                                                <Typography>
+                                            <Grid item md={12} display={"flex"} alignItems={"center"} justifyContent={"space-between"} padding={2}>
+                                                <Typography width={100} height={100}>
+                                                    <img src={product?.mainImage.imageUrl} alt={product?.timepiece.timepieceName} />
+                                                </Typography>
+                                                <Typography fontWeight={"bolder"}>
                                                     {product?.timepiece.timepieceName}
                                                 </Typography>
-                                                <Typography>
+                                                <Typography fontWeight={"bolder"}>
                                                     {product?.timepiece.brand.brandName}
                                                 </Typography>
-                                                <Typography>
+                                                <Typography fontWeight={"bolder"}>
                                                     <NumericFormat value={product?.timepiece.price} thousandSeparator="," displayType="text" suffix=" vnd" />
                                                 </Typography>
                                             </Grid>
-                                            {/* <Grid item md={12}>
+                                            <Grid item md={12}>
                                                 <Typography variant="h6">
                                                     Checkout Method
                                                 </Typography>
@@ -200,84 +158,19 @@ const CheckoutPage = () => {
                                                     <RadioGroup
                                                         row
                                                         onChange={changePaymentMethod}
-                                                        defaultValue={"cash"}
+                                                        defaultValue={"VNPAY"}
                                                         aria-labelledby="demo-row-radio-buttons-group-label"
                                                         name="method"
+                                                        {...register("method")}
                                                     >
-                                                        <FormControlLabel value="cash" control={<Radio />} label="Cash" />
-                                                        <FormControlLabel value="card" control={<Radio />} label="Card" />
-                                                        <FormControlLabel value="momo" control={<Radio />} label="MoMo" />
+                                                        {/* <FormControlLabel value="CASH" control={<Radio />} label="Cash" /> */}
+                                                        <FormControlLabel value="VNPAY" control={<Radio />} label="VNPAY" />
                                                     </RadioGroup>
                                                 </FormControl>
-                                            </Grid> */}
-                                            {/* <Grid item md={12}>
-                                                <Collapse orientation="vertical" in={checked}>
-                                                    <Grid container spacing={2}>
-                                                        <Grid item md={12} xs={12}>
-                                                            <TextField
-                                                                {...register("cardNumber", { required: paymentInfo.method === "card" })}
-                                                                error={errors.cardNumber?.message != null}
-                                                                helperText={errors.cardNumber && "This is required"}
-                                                                onChange={handleChange}
-                                                                id="cardNumber"
-                                                                name="cardNumber"
-                                                                label="Card Number"
-                                                                fullWidth />
-                                                        </Grid>
-                                                        <Grid item md={6} xs={12}>
-                                                            <TextField
-                                                                {...register("cardHolder", { required: paymentInfo.method === "card" })}
-                                                                error={errors.cardHolder?.message != null}
-                                                                helperText={errors.cardHolder && "This is required"}
-                                                                onChange={handleChange}
-                                                                id="cardHolder"
-                                                                name="cardHolder"
-                                                                label="Card Holder"
-                                                                fullWidth />
-                                                        </Grid>
-                                                        <Grid item md={6} xs={12}>
-                                                            <TextField
-                                                                {...register("expiredDate", { required: paymentInfo.method === "card" })}
-                                                                error={errors.expiredDate?.message != null}
-                                                                helperText={errors.expiredDate && "This is required"}
-                                                                onChange={handleChange}
-                                                                id="expiredDate"
-                                                                name="expiredDate"
-                                                                label="Expired Date"
-                                                                fullWidth />
-                                                        </Grid>
-                                                        <Grid item md={6} xs={12}>
-                                                            <TextField
-                                                                {...register("cvv", { required: paymentInfo.method === "card" })}
-                                                                error={errors.cvv?.message != null}
-                                                                helperText={errors.cvv && "This is required"}
-                                                                onChange={handleChange}
-                                                                id="cvv"
-                                                                name="cvv"
-                                                                label="CVV"
-                                                                fullWidth />
-                                                        </Grid>
-                                                        <Grid item md={12} xs={12}>
-                                                            <TextField
-                                                                {...register("billingAddress", { required: paymentInfo.method === "card" })}
-                                                                error={errors.billingAddress?.message != null}
-                                                                helperText={errors.billingAddress && "This is required"}
-                                                                onChange={handleChange}
-                                                                id="billingAddress"
-                                                                name="billingAddress"
-                                                                multiline
-                                                                rows={3}
-                                                                label="Billing Address"
-                                                                fullWidth />
-                                                        </Grid>
-                                                    </Grid>
-                                                </Collapse>
-                                            </Grid> */}
+                                            </Grid>
                                             <Grid item xs={12} textAlign={"end"}>
                                                 <form onSubmit={handleSubmit(onSubmit)}>
-                                                    <Button type="submit" variant="contained" color="primary">
-                                                        Continue
-                                                    </Button>
+
                                                 </form>
                                             </Grid>
                                         </Grid>
