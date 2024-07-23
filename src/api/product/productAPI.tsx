@@ -53,7 +53,7 @@ class ProductAPI {
     }
 
     checkoutProduct = (params) => {
-        var url = "timepiece/checkout";
+        var url = "payment/Checkout";
         return axiosClient.post(url, params, { headers: { "Content-Type": "multipart/form-data" } }) as Promise<APIResponse>;
     }
 

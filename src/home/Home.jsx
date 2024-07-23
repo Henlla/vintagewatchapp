@@ -10,7 +10,7 @@ const Home = () => {
       <Banner />
       <HomeCategory />
       <CategoryShowCase/>
-      <Register/>
+      {/* <Register/> */}
     </div>
   );
 };
