@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import { Button, FormControl, FormControlLabel, Grid, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -72,8 +72,8 @@ const CheckoutPage = () => {
         var formValue = { ...data, userId, timepieceId, method };
         var formData = new FormData();
         formData.append("paymentInformation", JSON.stringify(formValue));
-        var response = await productAPI.checkoutProduct(formData);
-        console.log(response);
+        var response = await productAPI.checkoutProduct(formValue);
+        window.location.href = response;
         // if (response.isSuccess) {
         //     setSnackBarMessage("Buy successful");
         //     setSnackBarType("success");
