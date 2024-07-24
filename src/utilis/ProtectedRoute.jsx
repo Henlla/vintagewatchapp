@@ -5,19 +5,23 @@ const ProtectedRoute = (props) => {
     const { user, isLoading } = useAuth();
     const roleName = user?.role.roleName;
     const authorize = props.role.some((item) => item == roleName);
-    
-    if(isLoading){
+
+    if (isLoading) {
         return <div>Loading...</div>
     }
 
+    if (!user) {
+        return <Navigate to={"/login"} />
+    }
+
     if (authorize) {
-        return props.children
+        return props.children;
     }
     else if (roleName == "ADMIN" || roleName == "APPRAISER") {
         return <Navigate to={"/dashboard"} />
     }
     else {
-        return <Navigate to={"/login"} />
+        return <Navigate to={"/unauthorize"} />
     }
 }
 

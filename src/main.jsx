@@ -32,6 +32,7 @@ import ManageCategory from "./components/DashBoard/Admin/ManageCategory.jsx";
 import CheckoutPage from "./shop/CheckoutPage.jsx";
 import ProfilePage from "./components/ProfilePage.jsx";
 import ManageOrder from "./components/DashBoard/Admin/ManageOrder.jsx";
+import CheckoutResponsePage from "./shop/CheckoutResponsePage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -40,27 +41,27 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <ProtectedRoute role={["USERS", null]}><Home /></ProtectedRoute>
+        element: <Home />
       },
       {
         path: "/blog",
-        element: <ProtectedRoute role={["USERS", null]}><Blog /></ProtectedRoute>
+        element: <Blog />
       },
       {
         path: "/shop",
-        element: <ProtectedRoute role={["USERS", null]}><Shop /></ProtectedRoute>
+        element: <Shop />
       },
       {
         path: "/login",
-        element: <ProtectedRoute role={["USERS", null]}><Login /></ProtectedRoute>
+        element: <Login />
       },
       {
         path: "/sign-up",
-        element: <ProtectedRoute role={["USERS", null]}><Signup /></ProtectedRoute>
+        element: <Signup />
       },
       {
         path: "/shop/:productId",
-        element: <ProtectedRoute role={["USERS", null]}><SingleProduct /></ProtectedRoute>
+        element: <SingleProduct />
       },
       {
         path: "/check-out/:timepieceId",
@@ -68,21 +69,26 @@ const router = createBrowserRouter([
       },
       {
         path: "/contact",
-        element: <ProtectedRoute role={["USERS", null]}><Contact /></ProtectedRoute>
+        element: <Contact />
       },
       {
         path: "/evaluation",
         element: <ProtectedRoute role={["USERS"]}><Evaluation /></ProtectedRoute>
       },
-      {
-        path: "/unauthorize",
-        element: <UnAuthorize />
-      },
+
       {
         path: "/profile",
         element: <ProtectedRoute role={["USERS"]}><ProfilePage /></ProtectedRoute>
       }
     ],
+  },
+  {
+    path: "/unauthorize",
+    element: <UnAuthorize />
+  },
+  {
+    path: "/payment_response",
+    element: <ProtectedRoute role={["USERS"]}><CheckoutResponsePage /></ProtectedRoute>
   },
   {
     path: "/dashboard",
