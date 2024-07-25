@@ -24,11 +24,9 @@ const columns = [
 const TransactionPage = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [orders, setOrders] = useState([]);
-    const [filterValue, setFilterValue] = useState([]);
+    const [transactions, setTransaction] = useState([]);
 
     useEffect(() => {
-        getOrderOfUser();
     }, []);
 
     const handleChangePage = (event, newPage) => {
@@ -43,13 +41,7 @@ const TransactionPage = () => {
     const handlOpenModal = (event, row) => {
     }
 
-    const getOrderOfUser = async () => {
-        var response = await productAPI.orderOfUser();
-        if (response.isSuccess) {
-            setOrders(response.data)
-            setFilterValue(response.data);
-        }
-    }
+
 
     return <>
         <Box>
@@ -74,7 +66,7 @@ const TransactionPage = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filterValue
+                            {transactions
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     return (
@@ -111,7 +103,7 @@ const TransactionPage = () => {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25, 100]}
                     component="div"
-                    count={orders.length}
+                    count={transactions.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

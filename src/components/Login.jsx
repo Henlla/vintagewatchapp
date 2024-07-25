@@ -52,13 +52,13 @@ const Login = () => {
         setSnackBarMessage("Login success");
         setSnackBarType("success");
         setOpenSnackBar(true);
-        await delay(2000);
+        // await delay(2000);
         navigate("/dashboard", { replace: true });
       } else {
         setSnackBarMessage("Login success");
         setSnackBarType("success");
         setOpenSnackBar(true);
-        await delay(2000);
+        // await delay(2000);
         navigate(from, { replace: true });
       }
     } else {
