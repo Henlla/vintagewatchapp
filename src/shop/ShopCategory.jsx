@@ -1,6 +1,6 @@
 import React from "react";
 const ShopCategory = ({
-    filterItem,
+    onChangeCategory,
     menuItems,
     selectedCategory,
 }) => {
@@ -10,7 +10,7 @@ const ShopCategory = ({
                 <h5 className="ms-2"> All Categories</h5>
             </div>
             <div>
-                <button onClick={() => filterItem("All")} className={`m-2 ${selectedCategory === "All" ? "bg-warning" : ""
+                <button onClick={() => onChangeCategory("All")} className={`m-2 ${selectedCategory === "All" ? "bg-warning" : ""
                     }`}>All</button>
                 {menuItems.map((Val, id) => {
                     return (
@@ -18,7 +18,7 @@ const ShopCategory = ({
                             className={`m-2 ${selectedCategory === Val ? "bg-warning" : ""
                                 }`}
                             key={id}
-                            onClick={() => filterItem(Val)}
+                            onClick={() => onChangeCategory(Val)}
                         >
                             {Val}
                         </button>

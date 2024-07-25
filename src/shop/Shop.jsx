@@ -10,29 +10,32 @@ import ShopCategory from "./ShopCategory";
 import categoryApi from "../api/category/categoryAPI";
 const Shop = () => {
   const [GridList, setGridList] = useState(true);
-  const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
-  const [data, setData] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   // paginate
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
+  const [totalPages, setTotalPages] = useState(0);
   const productPerPage = 9;
 
-  const indexOfLastProduct = currentPage * productPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  useEffect(() => {
+    getCategory();
+  }, []);
 
-  const getProducts = async () => {
-    var response = await productAPI.getProduct();
+  useEffect(() => {
+    filterItem();
+  }, [currentPage,selectedCategory]);
+
+  const getProductWithPaging = async () => {
+    var pagingModel = {
+      PageNumber: currentPage,
+      PageSize: productPerPage
+    }
+    var response = await productAPI.getProductWithPaging(pagingModel);
     if (response.isSuccess) {
-      setProducts(response.data)
-      setData(response.data);
-
+      setProducts(response.data);
+      setTotalPages(response.totalPages);
     }
   }
 
@@ -43,26 +46,30 @@ const Shop = () => {
     }
   }
 
-  useEffect(() => {
-    getCategory()
-    getProducts()
-  }, [])
-
-  const menuItems = [...new Set(category.map((val) => val.categoryName))];
-  const filterItem = (curcat) => {
-    let newItem = [];
-    if (curcat === "All") {
-      newItem = [...data];
-    } else {
-      newItem = data.filter((item) => {
-        return item.category?.some((cate) => cate.category?.categoryName === curcat)
-      })
+  const getProductByCategory = async () => {
+    var pagingModel = {
+      PageNumber: currentPage,
+      PageSize: productPerPage,
     }
-    setSelectedCategory(curcat);
-    setProducts(newItem);
+    var response = await productAPI.getProductByCategoryWithPaging(pagingModel, selectedCategory);
+    setProducts(response.data);
+    setTotalPages(response.totalPages);
   }
 
-  // function change page
+  const menuItems = [...new Set(category.map((val) => val.categoryName))];
+
+  const filterItem = () => {
+    if (selectedCategory === "All") {
+      getProductWithPaging();
+    } else {
+      getProductByCategory();
+    }
+  }
+
+  const onChangeCategory = (value) => {
+    setSelectedCategory(value);
+  }
+
   const paginate = (event, pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -94,12 +101,11 @@ const Shop = () => {
 
                 {/*Product cards*/}
                 <div>
-                  <ProductCards GridList={GridList} products={currentProducts} />
+                  <ProductCards GridList={GridList} products={products} />
                 </div>
 
                 <Pagination
-                  productPerPage={productPerPage}
-                  totalProducts={products.length}
+                  totalPages={totalPages}
                   paginate={paginate}
                   activePage={currentPage}
                 />
@@ -107,9 +113,9 @@ const Shop = () => {
             </div>
             <div className="col-lg-4 col-12">
               <aside>
-                <Search products={products} GridList={GridList} />
+                <Search products={products} />
                 <ShopCategory
-                  filterItem={filterItem}
+                  onChangeCategory={onChangeCategory}
                   menuItems={menuItems}
                   selectedCategory={selectedCategory} />
               </aside>

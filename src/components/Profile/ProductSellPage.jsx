@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import productAPI from "../../api/product/productAPI"
 import { Link } from "react-router-dom";
@@ -292,23 +292,20 @@ const ProductSellPage = () => {
                                                             </StyledTableCell>
                                                         );
                                                     })}
-                                                    {
-                                                        row.evaluation != null &&
-                                                        <TableCell align='center'>
-                                                            <Link name="view" className="me-2" onClick={(event) => handlOpenModal(event, row)}>
-                                                                <Visibility color='primary' />
-                                                            </Link>
-                                                            {
-                                                                row.timepiece.price == null &&
-                                                                <Link name="edit" className="me-2" onClick={(event) => handlOpenModal(event, row)}>
-                                                                    <Edit color='secondary' />
-                                                                </Link>
-                                                            }
-                                                            <Link name="delete" onClick={(event) => handlOpenModal(event, row)}>
-                                                                <Delete color='error' />
-                                                            </Link>
-                                                        </TableCell>
-                                                    }
+
+                                                    <TableCell align='center'>
+                                                        <Link name="view" onClick={(event) => row.evaluation != null && handlOpenModal(event, row)}>
+                                                            <Visibility color={`${row.evaluation == null && 'disabled' || 'primary'}`} />
+                                                        </Link>
+                                                        <Link name="edit" className="mx-1" onClick={(event) => row.timepiece.price == null && handlOpenModal(event, row)}>
+                                                            <Edit color={`${(row.timepiece.price == null && row.evaluation == null) && 'disabled'
+                                                                || (row.timepiece.price == null && row.evaluation != null) && 'secondary'
+                                                                || (row.timepiece.price != null && row.evaluation != null) && 'disabled'}`} />
+                                                        </Link>
+                                                        <Link name="delete" onClick={(event) => row.evaluation != null && handlOpenModal(event, row)}>
+                                                            <Delete color={`${row.evaluation == null && 'disabled' || 'error'}`} />
+                                                        </Link>
+                                                    </TableCell>
                                                 </TableRow>
                                             );
                                         })}

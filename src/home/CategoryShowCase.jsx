@@ -9,28 +9,43 @@ const title = "Our Products";
 const CategoryShowCase = () => {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [filterValue, setFilterValue] = useState("ALL");
+  const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [ratingValue, setRatingValue] = useState(0);
 
   useEffect(() => {
-    fetchData();
     fetchCategory();
   }, []);
 
+  useEffect(() => {
+    filterData();
+  }, [selectedCategory]);
+
   //category baded filtering 
-  const filterItem = () => {
-    if (filterValue == 'ALL') {
-      return data;
+
+
+  const fetchProductWithCategory = async () => {
+    var pagingModel = {
+      PageNumber: 1,
+      PageSize: 9,
     }
-    return data.filter((product) => {
-      return product.category?.some(cate => cate.category.categoryName === filterValue)
-    });
+    var response = await productAPI.getProductByCategoryWithPaging(pagingModel, selectedCategory);
+    setData(response.data);
   }
 
-  const fetchData = async () => {
-    var response = await productAPI.getProduct();
-    if (response.isSuccess) {
-      setData(response.data);
+  const fetchAllProduct = async () => {
+    var pagingModel = {
+      PageNumber: 1,
+      PageSize: 9,
+    }
+    var response = await productAPI.getProductWithPaging(pagingModel);
+    setData(response.data);
+  }
+
+  const filterData = () => {
+    if (selectedCategory == "ALL") {
+      fetchAllProduct();
+    } else {
+      fetchProductWithCategory();
     }
   }
 
@@ -64,13 +79,13 @@ const CategoryShowCase = () => {
           <h2 className="title">{title}</h2>
           <div className="course-filter-group">
             <ul className="lab-ul">
-              <li onClick={() => setFilterValue("ALL")}>All</li>
+              <li onClick={() => setSelectedCategory("ALL")}>All</li>
               {
                 categories
                   .sort((a, b) => a.categoryId - b.categoryId)
                   .slice(0, 7).map((item, index) =>
                   (
-                    <li key={index} onClick={() => setFilterValue(item.categoryName)}>{item.categoryName}</li>
+                    <li key={index} onClick={() => setSelectedCategory(item.categoryName)}>{item.categoryName}</li>
                   ))
               }
             </ul>
@@ -82,7 +97,7 @@ const CategoryShowCase = () => {
           <div className="row g-4 justify-content-center row-cols-x1-4 row-cols-lg-3 row-cols-md-2 row-cols-1
           course-filter">
             {
-              filterItem().slice(0, 9).map((product) =>
+              data.slice(0, 9).map((product) =>
                 <div key={product.timepiece.timepieceId} className="col">
                   <div className="course-item style-4">
                     <div className="course-inner">

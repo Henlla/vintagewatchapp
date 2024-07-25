@@ -6,15 +6,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import ProductDisplay from "./ProductDisplay";
 import Review from "./Review";
-import MakeOffer from "./MakeOffer";
 import { Box, Grid, InputLabel } from "@mui/material";
-import TradeIn from "./TradeIn";
 import { NumericFormat } from "react-number-format";
 
 const SingleProduct = () => {
     const [products, setProducts] = useState([]);
-    const [offerForm, setOfferForm] = useState(false);
-    const [tradeInForm, setTradeInForm] = useState(false);
     const { productId } = useParams();
 
     useEffect(() => {
@@ -32,21 +28,7 @@ const SingleProduct = () => {
     const onRefresh = () => {
         getProduct();
     }
-
-    const handleClickOffer = () => {
-        if (tradeInForm) {
-            setTradeInForm(!tradeInForm)
-        }
-        setOfferForm(!offerForm)
-    }
-
-    const handleClickTradeIn = () => {
-        if (offerForm) {
-            setOfferForm(!offerForm)
-        }
-        setTradeInForm(!tradeInForm)
-    }
-
+   
     return (<>
         <div>
             <PageHeader title={"SINGLE PRODUCT"} curPage="Shop / Single Product" />
