@@ -121,7 +121,7 @@ class ProductAPI {
 
     // transaction
     getAllTransactionOfUser = () => {
-        var url = "transaction";
+        var url = "transaction/GetTransactionOfUser";
         return axiosClient.get(url) as Promise<APIResponse>;
     }
 }

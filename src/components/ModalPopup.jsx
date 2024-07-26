@@ -15,8 +15,8 @@ const style = {
     p: 4,
 };
 
-const ModalPopup = (props) => {
-    const { modalOpen, handleCloseModal, onSubmit, handleSubmit, modalTitle, modalData, modalButtonName, modalButton, errors, register } = props
+const ModalPopup = ({ modalOpen, modalTitle, modalData, modalButtonName, modalButton, handleCloseModal, onSubmit, handleSubmit, errors, register }) => {
+    // const { modalOpen, modalTitle, modalData, modalButtonName, modalButton, handleCloseModal, onSubmit, handleSubmit, errors, register } = props
     return <>
         <Modal
             open={modalOpen}

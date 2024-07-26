@@ -163,7 +163,7 @@ export default function ManageEvaluate() {
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Movement Status"
+                        required: "Please select Movement"
                     },
                     type: "select"
                 },
@@ -174,7 +174,7 @@ export default function ManageEvaluate() {
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Case Diameter Status"
+                        required: "Please select Case Diameter"
                     },
                     type: "select"
                 },
@@ -185,7 +185,7 @@ export default function ManageEvaluate() {
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Case Material Status"
+                        required: "Please select Case Material"
                     },
                     type: "select"
                 },
@@ -196,7 +196,7 @@ export default function ManageEvaluate() {
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Water Resistance Status"
+                        required: "Please select Water Resistance"
                     },
                     type: "select"
                 },
@@ -207,18 +207,18 @@ export default function ManageEvaluate() {
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Crystal Type Status"
+                        required: "Please select Crystal Type"
                     },
                     type: "select"
                 },
                 {
                     key: "dialStatus",
-                    label: "Dial",
+                    label: "Dial Status",
                     data: "",
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Dial Status"
+                        required: "Please enter Dial"
                     },
                     type: "text"
                 },
@@ -228,39 +228,40 @@ export default function ManageEvaluate() {
                     data: "", canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Hands Status"
-                    }
+                        required: "Please enter Hand"
+                    },
+                    type: "text"
                 },
                 {
                     key: "braceletStatus",
-                    label: "Bracelet",
+                    label: "Bracelet Status",
                     data: "",
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Bracelet Status"
+                        required: "Please enter Bracelet"
                     },
                     type: "text"
                 },
                 {
                     key: "buckleStatus",
-                    label: "Buckle",
+                    label: "Buckle Status",
                     data: "",
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Buckle Status"
+                        required: "Please enter Buckle"
                     },
                     type: "text"
                 },
                 {
                     key: "accuracyStatus",
-                    label: "Accuracy",
+                    label: "Accuracy Status",
                     data: "",
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
-                        required: "Please enter Accuracy Status"
+                        required: "Please enter Accuracy"
                     },
                     type: "text"
                 },
@@ -439,7 +440,7 @@ export default function ManageEvaluate() {
                                     error={errors[item.key]?.message != null}>
                                     <InputLabel id="demo-select-small-label">{item.label}</InputLabel>
                                     <Select
-                                        {...register(item.key, { required: `Please select ${item.key}` })}
+                                        {...register(item.key, item.validation)}
                                         className="text-start"
                                         labelId="demo-select-small-label"
                                         id="demo-select-small"
