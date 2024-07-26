@@ -163,7 +163,7 @@ export default function ManageCategory() {
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                {columns.map((column,index) => (
+                                {columns.map((column, index) => (
                                     <StyledTableCell
                                         hidden={column.hidden}
                                         key={index}
@@ -181,17 +181,15 @@ export default function ManageCategory() {
                         <TableBody>
                             {filterData()
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row,index) => {
+                                .map((row, index) => {
                                     return (
                                         <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                                            {columns.map((column,index) => {
+                                            {columns.map((column, index) => {
                                                 let value;
-                                                if (column.id == "categoryId") {
-                                                    value = row.categoryId;
-                                                } else if (column.id == "categoryName") {
-                                                    value = row.categoryName;
-                                                } else if (column.id == "index") {
+                                                if (column.id == "index") {
                                                     value = categoryData.indexOf(row) + 1;
+                                                } else {
+                                                    value = row[column.id];
                                                 }
                                                 return (
                                                     <TableCell
