@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 export default function ConfirmMessage(props) {
-    const { openConfirm, handleCloseConfirm, confirmValue, deleteFunction } = props
+    const { openConfirm, handleCloseConfirm, confirmValue, deleteFunction, confirmContent } = props
 
     return (
         <Dialog
@@ -18,7 +18,7 @@ export default function ConfirmMessage(props) {
             <DialogTitle>Notification</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Are you want to delete this record?
+                    {confirmContent}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

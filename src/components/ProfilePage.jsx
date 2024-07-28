@@ -65,7 +65,7 @@ export default function ProfilePage() {
                     <ProductSellPage />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                    <Typography variant='h4' marginBottom={2}>Transaction</Typography>
+                    <Typography variant='h4' marginBottom={2}>Order</Typography>
                     <TransactionPage />
                 </CustomTabPanel>
             </Box>

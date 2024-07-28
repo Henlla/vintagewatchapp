@@ -1,13 +1,13 @@
 import axiosClient from "../axios/axiosClient";
 
 interface APIResponse {
-    isSuccess: boolean;
-    message: string;
-    data: any;
-    totalCount: any;
-    currentPage: any;
-    totalPages: any;
-    pageSize: any;
+    isSuccess: boolean,
+    message: string,
+    data: any,
+    totalCount: any,
+    currentPage: any,
+    totalPages: any,
+    pageSize: any,
 }
 
 class ProductAPI {
@@ -42,9 +42,9 @@ class ProductAPI {
         return axiosClient.get(url, { params }) as Promise<APIResponse>;
     }
 
-    getAllTimepieceNotEvaluate = () => {
+    getAllTimepieceNotEvaluate = (keyword) => {
         var url = "timepiece/GetAllTimepieceNotEvaluate";
-        return axiosClient.get(url) as Promise<APIResponse>;
+        return axiosClient.get(url, { params: { keyword: keyword } }) as Promise<APIResponse>;
     }
 
     getProductEvaluation = (params) => {
@@ -104,12 +104,12 @@ class ProductAPI {
 
 
     // order
-    orderOfUser = () => {
-        var url = "order";
+    getAllOrderOfUser = () => {
+        var url = "order/GetAllOrderOfUser";
         return axiosClient.get(url) as Promise<APIResponse>;
     }
 
-    allOrder = () => {
+    getAllOrder = () => {
         var url = "order/GetAllOrder";
         return axiosClient.get(url) as Promise<APIResponse>;
     }
@@ -123,6 +123,11 @@ class ProductAPI {
     getAllTransactionOfUser = () => {
         var url = "transaction/GetTransactionOfUser";
         return axiosClient.get(url) as Promise<APIResponse>;
+    }
+
+    getTransactionOfOrder = (orderId) => {
+        var url = "transaction/GetTransactionOfOrder";
+        return axiosClient.get(url, { params: { orderId: orderId } }) as Promise<APIResponse>;
     }
 }
 

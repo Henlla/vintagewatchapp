@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import productAPI from "../api/product/productAPI";
 import categoryApi from "../api/category/categoryAPI";
 import CustomRating from "../components/CustomRating";
+import { NumericFormat } from "react-number-format";
 
 const title = "Our Products";
 
@@ -121,7 +122,7 @@ const CategoryShowCase = () => {
                             <Link to="/" className="ca-name">{product.timepiece.brand.brandName}</Link>
                           </div>
                           <div className="course-price">
-                            {product.timepiece.price}
+                            <NumericFormat displayType="text" thousandSeparator="," suffix=" vnd" value={product.timepiece.price} />
                           </div>
                         </div>
                       </div>

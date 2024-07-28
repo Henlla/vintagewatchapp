@@ -4,6 +4,10 @@ interface APIResponse {
     isSuccess: boolean,
     message: string,
     data: any,
+    totalCount: any,
+    currentPage: any,
+    totalPages: any,
+    pageSize: any,
 }
 
 class CategoryAPI {

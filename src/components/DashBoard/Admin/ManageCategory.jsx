@@ -62,6 +62,7 @@ export default function ManageCategory() {
     // confirm
     const [openConfirm, setOpenConfirm] = useState(false);
     const [confirmValue, setConfirmValue] = useState("");
+    const [confirmContent,setConfirmContent] = useState("");
 
     useEffect(() => {
         getCategoryData();
@@ -117,6 +118,7 @@ export default function ManageCategory() {
                 var { categoryId } = row;
                 setModalButtonName("delete");
                 setConfirmValue(categoryId);
+                setConfirmContent("Are you want to delete this?");
                 setOpenConfirm(true)
                 break;
             default:
@@ -150,8 +152,17 @@ export default function ManageCategory() {
 
     return (
         <>
-            <ConfirmMessage openConfirm={openConfirm} handleCloseConfirm={handleCloseConfirm} confirmValue={confirmValue} deleteFunction={onSubmit} />
-            <AlertSnackBar openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} snackBarMessage={snackBarMessage} snackBarType={snackBarType} />
+            <ConfirmMessage
+                openConfirm={openConfirm}
+                handleCloseConfirm={handleCloseConfirm}
+                confirmValue={confirmValue}
+                deleteFunction={onSubmit} 
+                confirmContent={confirmContent}/>
+            <AlertSnackBar
+                openSnackBar={openSnackBar}
+                handleSnackBarClose={handleSnackBarClose}
+                snackBarMessage={snackBarMessage}
+                snackBarType={snackBarType} />
             <Box>
                 <Button variant='contained' name="add" onClick={(event) => buttonClick(event)} className='mb-2'>Add</Button>
             </Box>

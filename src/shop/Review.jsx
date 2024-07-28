@@ -126,8 +126,8 @@ const Review = (props) => {
                 className={`review-content review-content-show`}
             >
                 <div className="review-showing">
-                    <ul className="content lab-ui">
-                        {ratings?.slice(0,5).map((review, index) => (
+                    <ul className="content lab-ui" style={{ height: "600px", overflow: "scroll", overflowX:"hidden" }}>
+                        {ratings?.slice(0,100).map((review, index) => (
                             <li key={index}>
                                 <div className="post-thumb">
                                     <img src={review.user.avatar} alt="" />
@@ -137,6 +137,7 @@ const Review = (props) => {
                                         <div className="posted-on">
                                             <a>{review.user.firstName + " " + review.user.lastName}</a>
                                             <Typography>{new Date(review.ratingDate).toLocaleDateString('vi-VN')}</Typography>
+                                            <Typography display={"flex"} marginLeft={"1em"} alignItems={"center"}><Rating size="small" value={review.ratingStar} /></Typography>
                                         </div>
                                     </div>
                                     <div className="entry-content">
@@ -147,7 +148,7 @@ const Review = (props) => {
                         ))}
                     </ul>
 
-                    <div className="client-review">
+                    {/* <div className="client-review">
                         <div>
                             <div className="review-title">
                                 <h5>{reviewTitle}</h5>
@@ -203,7 +204,7 @@ const Review = (props) => {
                                 </Grid>
                             </Box>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 {/* description */}
                 <div className="description">

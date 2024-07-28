@@ -77,13 +77,14 @@ const ManageOrder = () => {
     // confirm
     const [openConfirm, setOpenConfirm] = useState(false);
     const [confirmValue, setConfirmValue] = useState("");
+    const [confirmContent, setConfirmContent] = useState("");
 
     useEffect(() => {
         fetchData();
     }, []);
 
     const fetchData = async () => {
-        var response = await productAPI.allOrder();
+        var response = await productAPI.getAllOrder();
         setOrderData(response.data);
     }
 
@@ -183,7 +184,12 @@ const ManageOrder = () => {
     }
 
     return <>
-        <ConfirmMessage openConfirm={openConfirm} handleCloseConfirm={handleCloseConfirm} confirmValue={confirmValue} deleteFunction={onSubmit} />
+        <ConfirmMessage
+            openConfirm={openConfirm}
+            handleCloseConfirm={handleCloseConfirm}
+            confirmValue={confirmValue}
+            deleteFunction={onSubmit}
+            confirmContent={confirmContent} />
         <AlertSnackBar openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} snackBarMessage={snackBarMessage} snackBarType={snackBarType} />
         <Box>
             <TextField fullWidth label="Search..." onChange={(e) => setFilterValue(e.target.value)} size='small' className='mb-2' />
@@ -251,6 +257,8 @@ const ManageOrder = () => {
                                                 } else if (value == "success") {
                                                     classStyle = "text-success"
                                                 } else if (value == "cancled") {
+                                                    classStyle = "text-danger"
+                                                }else if (value == "fail") {
                                                     classStyle = "text-danger"
                                                 }
                                             }
