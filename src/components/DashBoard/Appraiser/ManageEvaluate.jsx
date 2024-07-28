@@ -17,7 +17,7 @@ const columns = [
     { id: 'timepieceId', label: 'Timepiece Id', minWidth: 120, hidden: true, align: "center" },
     { id: 'index', label: 'No.', minWidth: 120, hidden: false, align: "left" },
     { id: 'timepieceName', label: 'Timepiece Name', minWidth: 140, hidden: false, align: "left" },
-    { id: 'datePost', label: 'Date Post', minWidth: 100, hidden: false, align: "left" },
+    { id: 'datePost', label: 'Date Post', minWidth: 100, hidden: false, align: "left", format: (value) => new Date(value).toLocaleDateString("vi-VN") },
     { id: 'userId', label: 'User Name', minWidth: 100, hidden: false, align: "left" },
     { id: 'brandId', label: 'Brand Name', minWidth: 100, hidden: false, align: "left" },
 ];
@@ -96,7 +96,7 @@ export default function ManageEvaluate() {
 
     useEffect(() => {
         getTimepieceNotEvaluate();
-    }, []);
+    }, [filterValue]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -115,15 +115,13 @@ export default function ManageEvaluate() {
     };
 
     const getTimepieceNotEvaluate = async () => {
-        var response = await productApi.getAllTimepieceNotEvaluate();
+        var response = await productApi.getAllTimepieceNotEvaluate(filterValue);
         setTimepieceEvaluate(response.data);
-        if (response.isSuccess) {
-            setTimepieceEvaluate(response.data)
-        }
     }
 
     const onchangeData = (event) => {
         var { name, value } = event.target;
+        setValue(name, value);
     }
 
     const handlOpenModal = (event, data) => {
@@ -134,19 +132,19 @@ export default function ManageEvaluate() {
             canEdit = false;
             setSubmitButton(true);
             timepieceData = [
-                { key: "timepieceId", label: "Timepiece Id", data: timepiece.timepieceId, canEdit: canEdit, hidden: true, type: "text" },
-                { key: "timepieceName", label: "Timepiece Name", data: timepiece.timepieceName, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "caseDiameter", labe: "Case Diameter", label: "Case Diameter", data: timepiece.caseDiameter, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "caseMaterial", label: "Case Material", data: timepiece.caseMaterial, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "caseThickness", label: "Case Thickness", data: timepiece.caseThickness, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "crystal", label: "Crystal", data: timepiece.crystal, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "datePost", label: "Date Post", data: timepiece.datePost, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "description", label: "Description", data: timepiece.description, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "movement", label: "Movement", data: timepiece.movement, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "strapMaterial", label: "Strap Material", data: timepiece.strapMaterial, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "strapWidth", label: "StrapWidth", data: timepiece.strapWidth, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "style", label: "Style", data: timepiece.style, canEdit: canEdit, hidden: false, type: "text" },
-                { key: "waterResistance", label: "Water Resistance", data: timepiece.waterResistance, canEdit: canEdit, hidden: false, type: "text" },
+                { key: "timepieceId", label: "Timepiece Id", data: timepiece.timepieceId, canEdit: canEdit, hidden: true, type: "text", column: 6 },
+                { key: "timepieceName", label: "Timepiece Name", data: timepiece.timepieceName, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "caseDiameter", labe: "Case Diameter", label: "Case Diameter", data: timepiece.caseDiameter, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "caseMaterial", label: "Case Material", data: timepiece.caseMaterial, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "caseThickness", label: "Case Thickness", data: timepiece.caseThickness, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "crystal", label: "Crystal", data: timepiece.crystal, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "datePost", label: "Date Post", data: timepiece.datePost, canEdit: canEdit, hidden: false, type: "text", column: 6, format: (value) => new Date(value).toLocaleDateString("vi-VN") },
+                { key: "description", label: "Description", data: timepiece.description, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "movement", label: "Movement", data: timepiece.movement, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "strapMaterial", label: "Strap Material", data: timepiece.strapMaterial, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "strapWidth", label: "StrapWidth", data: timepiece.strapWidth, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "style", label: "Style", data: timepiece.style, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "waterResistance", label: "Water Resistance", data: timepiece.waterResistance, canEdit: canEdit, hidden: false, type: "text", column: 6 },
             ]
             timepieceData.forEach((item) => {
                 setValue(item.key, item.data);
@@ -159,6 +157,7 @@ export default function ManageEvaluate() {
                 {
                     key: "movementStatus",
                     label: "Movement",
+                    column: 6,
                     data: timepiece.movement,
                     canEdit: canEdit,
                     hidden: false,
@@ -170,6 +169,7 @@ export default function ManageEvaluate() {
                 {
                     key: "caseDiameterStatus",
                     label: "Case Diameter",
+                    column: 6,
                     data: timepiece.caseDiameter,
                     canEdit: canEdit,
                     hidden: false,
@@ -181,6 +181,7 @@ export default function ManageEvaluate() {
                 {
                     key: "caseMaterialStatus",
                     label: "Case Material",
+                    column: 6,
                     data: timepiece.caseMaterial,
                     canEdit: canEdit,
                     hidden: false,
@@ -192,6 +193,7 @@ export default function ManageEvaluate() {
                 {
                     key: "waterResistanceStatus",
                     label: "Water Resistance",
+                    column: 6,
                     data: timepiece.waterResistance,
                     canEdit: canEdit,
                     hidden: false,
@@ -203,6 +205,7 @@ export default function ManageEvaluate() {
                 {
                     key: "crystalTypeStatus",
                     label: "Crystal",
+                    column: 6,
                     data: timepiece.crystal,
                     canEdit: canEdit,
                     hidden: false,
@@ -214,6 +217,7 @@ export default function ManageEvaluate() {
                 {
                     key: "dialStatus",
                     label: "Dial Status",
+                    column: 6,
                     data: "",
                     canEdit: canEdit,
                     hidden: false,
@@ -225,7 +229,9 @@ export default function ManageEvaluate() {
                 {
                     key: "handsStatus",
                     label: "Hand Status",
-                    data: "", canEdit: canEdit,
+                    column: 6,
+                    data: "",
+                    canEdit: canEdit,
                     hidden: false,
                     validation: {
                         required: "Please enter Hand"
@@ -235,6 +241,7 @@ export default function ManageEvaluate() {
                 {
                     key: "braceletStatus",
                     label: "Bracelet Status",
+                    column: 6,
                     data: "",
                     canEdit: canEdit,
                     hidden: false,
@@ -246,6 +253,7 @@ export default function ManageEvaluate() {
                 {
                     key: "buckleStatus",
                     label: "Buckle Status",
+                    column: 6,
                     data: "",
                     canEdit: canEdit,
                     hidden: false,
@@ -257,6 +265,7 @@ export default function ManageEvaluate() {
                 {
                     key: "accuracyStatus",
                     label: "Accuracy Status",
+                    column: 6,
                     data: "",
                     canEdit: canEdit,
                     hidden: false,
@@ -267,7 +276,9 @@ export default function ManageEvaluate() {
                 },
                 {
                     key: "valueExtimatedStatus",
-                    label: "Value Estimate", data: "",
+                    label: "Value Estimate",
+                    column: 12,
+                    data: "",
                     canEdit: canEdit,
                     hidden: false,
                     validation: {
@@ -289,7 +300,6 @@ export default function ManageEvaluate() {
         setModalData(timepieceData)
         setOpen(true)
     }
-
 
     const onSubmit = async (data) => {
         const { timepieceId, ...formValue } = data;
@@ -325,12 +335,6 @@ export default function ManageEvaluate() {
         setOpen(false);
     }
 
-    const filterData = () => {
-        var data = timepieceEvaluate.filter(item => item.timepiece.timepieceName.includes(filterValue.toLocaleLowerCase()));
-        return data;
-    }
-
-
     return (
         <Box>
             <AlertSnackBar snackBarMessage={snackBarMessage} snackBarType={snackBarType} openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} />
@@ -356,7 +360,7 @@ export default function ManageEvaluate() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filterData()
+                            {timepieceEvaluate
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => {
                                     return (
@@ -378,7 +382,7 @@ export default function ManageEvaluate() {
                                                         hidden={column.hidden}
                                                         key={column.id}
                                                         align={column.align}>
-                                                        {column.format && typeof value === 'number'
+                                                        {column.format
                                                             ? column.format(value)
                                                             : value}
                                                     </TableCell>
@@ -421,7 +425,7 @@ export default function ManageEvaluate() {
                     <Grid container spacing={2}>
                         {modalData?.map((item, index) => (
                             !item.hidden && item.type == "text" &&
-                            <Grid item xs={12} md={6} textAlign={"center"} key={index}>
+                            <Grid item xs={12} md={item.column} textAlign={"center"} key={index}>
                                 <TextField
                                     {...register(item.key, item.validation)}
                                     error={errors[item.key]?.message != null}
@@ -434,7 +438,7 @@ export default function ManageEvaluate() {
                             </Grid>
                             ||
                             !item.hidden && item.type == "select" &&
-                            <Grid item xs={12} md={6} textAlign={"center"} key={index}>
+                            <Grid item xs={12} md={item.column} textAlign={"center"} key={index}>
                                 <FormControl
                                     fullWidth
                                     error={errors[item.key]?.message != null}>
@@ -443,7 +447,8 @@ export default function ManageEvaluate() {
                                         {...register(item.key, item.validation)}
                                         className="text-start"
                                         labelId="demo-select-small-label"
-                                        id="demo-select-small"
+                                        id={item.key}
+                                        name={item.key}
                                         label={item.label}
                                         defaultValue={""}
                                         onChange={(event) => onchangeData(event)}

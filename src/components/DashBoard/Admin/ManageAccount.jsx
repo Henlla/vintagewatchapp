@@ -11,7 +11,7 @@ import { Box, Button, Grid, Link, Modal, styled, TextField } from '@mui/material
 import { useState } from 'react';
 import authAPI from '../../../api/auth/authAPI';
 import { useEffect } from 'react';
-import { Delete, Edit, Visibility } from '@mui/icons-material';
+import { Edit, Visibility } from '@mui/icons-material';
 import { Typography } from 'antd';
 import { useForm } from 'react-hook-form';
 import AlertSnackBar from '../../AlertSnackBar';
@@ -70,6 +70,7 @@ export default function ManageAccount() {
   // confirm
   const [openConfirm, setOpenConfirm] = useState(false);
   const [confirmValue, setConfirmValue] = useState("");
+  const [confirmContent, setConfirmContent] = useState("");
 
   const { register, handleSubmit, setValue, reset, clearErrors, formState: { errors } } = useForm();
 
@@ -214,8 +215,18 @@ export default function ManageAccount() {
 
   return (
     <>
-      <ConfirmMessage openConfirm={openConfirm} handleCloseConfirm={handleCloseConfirm} confirmValue={confirmValue} deleteFunction={onSubmit} />
-      <AlertSnackBar openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} snackBarMessage={snackBarMessage} snackBarType={snackBarType} />
+      <ConfirmMessage
+        openConfirm={openConfirm}
+        handleCloseConfirm={handleCloseConfirm}
+        confirmValue={confirmValue}
+        deleteFunction={onSubmit}
+        confirmContent={confirmContent}
+      />
+      <AlertSnackBar
+        openSnackBar={openSnackBar}
+        handleSnackBarClose={handleSnackBarClose}
+        snackBarMessage={snackBarMessage}
+        snackBarType={snackBarType} />
       <Box>
         <TextField label="Search..." fullWidth onChange={(e) => setFilterValue(e.target.value)} size='large' className='mb-2' />
       </Box>

@@ -49,6 +49,7 @@ const ProductSellPage = () => {
     // Confirm
     const [openConfirm, setOpenConfirm] = useState(false);
     const [confirmValue, setConfirmValue] = useState("");
+    const [confirmContent, setConfirmContent] = useState("");
 
     const { register, clearErrors, reset, setValue, formState: { errors }, handleSubmit } = useForm();
 
@@ -154,6 +155,7 @@ const ProductSellPage = () => {
             case "delete":
                 const { timepieceId } = row.timepiece;
                 setConfirmValue(timepieceId);
+                setConfirmContent("Are you want to delete this?")
                 setOpenConfirm(true);
                 break;
             default:
@@ -180,11 +182,11 @@ const ProductSellPage = () => {
         var response = await productAPI.deleteTimepiece(value);
         console.log(response);
         if (response.isSuccess) {
-            setSnackBarMessage("Cancle selling success");
+            setSnackBarMessage("Cancel selling success");
             setSnackBarType("success");
             setOpenSnackBar(true);
         } else {
-            setSnackBarMessage("Cancle selling fail");
+            setSnackBarMessage("Cancel selling fail");
             setSnackBarType("error");
             setOpenSnackBar(true);
         }
@@ -211,8 +213,17 @@ const ProductSellPage = () => {
     }
 
     return <>
-        <ConfirmMessage openConfirm={openConfirm} handleCloseConfirm={handleCloseConfirm} confirmValue={confirmValue} deleteFunction={handleDelete} />
-        <AlertSnackBar snackBarMessage={snackBarMessage} snackBarType={snackBarType} openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} />
+        <ConfirmMessage
+            openConfirm={openConfirm}
+            handleCloseConfirm={handleCloseConfirm}
+            confirmValue={confirmValue}
+            deleteFunction={handleDelete}
+            confirmContent={confirmContent} />
+        <AlertSnackBar
+            snackBarMessage={snackBarMessage}
+            snackBarType={snackBarType}
+            openSnackBar={openSnackBar}
+            handleSnackBarClose={handleSnackBarClose} />
         <ModalPopup
             modalData={modalData}
             modalTitle={modalTitle}

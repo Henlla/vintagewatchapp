@@ -18,14 +18,15 @@ const CheckoutResponsePage = () => {
         const urlParams = new URLSearchParams(queryString);
         const params = Object.fromEntries(urlParams.entries());
         var response = await productAPI.responsePayment(params);
+        console.log(response);
         if (response.isSuccess) {
             setIcon(successIcon);
             setTitle("Payment success!");
-            setContent("Thank for buying and choosing us system!");
+            setContent(response.data.message);
         } else {
             setIcon(failIcon);
             setTitle("Payment fail!");
-            setContent("Something wrong in your payment Try again!");
+            setContent(response.data.message);
         }
     }
 

@@ -1,10 +1,11 @@
-import { Box, Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
+import { Box, Button, Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TextField } from "@mui/material";
 import productAPI from "../../api/product/productAPI";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Visibility } from "@mui/icons-material";
+import { Cancel, Visibility } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import ModalPopup from "../ModalPopup";
+import ConfirmMessage from "../ConfirmMessage";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -27,7 +28,8 @@ const columns = [
 const TransactionPage = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [transactions, setTransaction] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [filterValue, setFilterValue] = useState("");
     const { register, handleSubmit, reset, setValue, formState: { errors }, clearErrors } = useForm();
 
     // Model
@@ -37,14 +39,20 @@ const TransactionPage = () => {
     const [modalButtonName, setModalButtonName] = useState("");
     const [modalButton, setModalButton] = useState(false);
 
+    // Confirm
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [confirmValue, setConfirmValue] = useState("");
+    const [confirmContent, setConfirmContent] = useState("");
+
     useEffect(() => {
-        fetchTransaction();
+        fetchOrder();
     }, []);
 
-    const fetchTransaction = async () => {
-        var response = await productAPI.getAllTransactionOfUser();
-        setTransaction(response.data);
+    const fetchOrder = async () => {
+        var response = await productAPI.getAllOrderOfUser();
+        setOrders(response.data);
     }
+
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -55,7 +63,20 @@ const TransactionPage = () => {
         setPage(0);
     };
 
-    const handlOpenModal = (event, row) => {
+    const handleCloseConfirm = () => {
+        setOpenConfirm(false);
+    }
+
+    const cancelOrder = (value) => {
+        setOpenConfirm(false);
+    }
+
+    const getTransactionOfOrder = async (id) => {
+        var response = await productAPI.getTransactionOfOrder(id);
+        return response.data;
+    }
+
+    const iconClick = async (event, row) => {
         var buttonName = event.currentTarget.name;
         let modalColumns = {};
         switch (buttonName) {
@@ -71,17 +92,23 @@ const TransactionPage = () => {
                 ]
                 setModalTitle("View Transaction");
                 setModalButton(true);
+                var transaction = await getTransactionOfOrder(row["order"].orderId);
                 modalColumns.map((item, index) => {
-                    setValue(item.key, item.format ? item.format(row[item.key]) : row[item.key]);
-                })
+                    setValue(item.key, item.format ? item.format(transaction[item.key]) : transaction[item.key]);
+                });
+                setModalData(modalColumns);
+                setOpenModal(true);
                 break;
             case "edit":
+                break;
+            case "cancel":
+                setConfirmValue(row["order"].orderId);
+                setConfirmContent("Are you want cancel this order?");
+                setOpenConfirm(true);
                 break;
             default:
                 break;
         }
-        setModalData(modalColumns);
-        setOpenModal(true);
     }
 
     const handleCloseModal = () => {
@@ -95,6 +122,13 @@ const TransactionPage = () => {
     }
 
     return <>
+        <ConfirmMessage
+            openConfirm={openConfirm}
+            handleCloseConfirm={handleCloseConfirm}
+            confirmValue={confirmValue}
+            deleteFunction={cancelOrder}
+            confirmContent={confirmContent}
+        />
         <ModalPopup
             modalOpen={modalOpen}
             modalTitle={modalTitle}
@@ -106,6 +140,7 @@ const TransactionPage = () => {
             handleSubmit={handleSubmit}
             errors={errors}
             register={register} />
+        <TextField label="Search..." onChange={(event) => setFilterValue(event.target.value)} fullWidth sx={{ mb: 2 }} />
         <Box>
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 370 }}>
@@ -128,7 +163,7 @@ const TransactionPage = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {transactions
+                            {orders
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     return (
@@ -136,13 +171,16 @@ const TransactionPage = () => {
                                             {columns.map((column) => {
                                                 let value;
                                                 if (column.id == "index") {
-                                                    value = transactions.indexOf(row) + 1;
+                                                    value = orders.indexOf(row) + 1;
                                                 } else if (column.id == "status") {
                                                     switch (row.order[column.id]) {
                                                         case "success":
                                                             value = <span style={{ textTransform: "capitalize" }} className="text-success">{row.order[column.id]}</span>
                                                             break;
                                                         case "cancled":
+                                                            value = <span style={{ textTransform: "capitalize" }} className="text-danger">{row.order[column.id]}</span>
+                                                            break;
+                                                        case "fail":
                                                             value = <span style={{ textTransform: "capitalize" }} className="text-danger">{row.order[column.id]}</span>
                                                             break;
                                                         case "pending":
@@ -167,9 +205,15 @@ const TransactionPage = () => {
                                                 );
                                             })}
                                             <TableCell align='center'>
-                                                <Link name="view" onClick={(event) => handlOpenModal(event, row)}>
-                                                    <Visibility color='primary' />
+                                                <Link name="view" onClick={(event) => row.order["status"] == "success" && iconClick(event, row)}>
+                                                    <Visibility sx={{ mr: 1 }} color={`${row.order["status"] != "success" && "disabled" || "primary"}`} />
                                                 </Link>
+                                                {/* {
+                                                    row.order["status"] == "success" &&
+                                                    <Link name="cancel" onClick={(event) => iconClick(event, row)}>
+                                                        <Cancel color='error' />
+                                                    </Link>
+                                                } */}
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -180,7 +224,7 @@ const TransactionPage = () => {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25, 100]}
                     component="div"
-                    count={transactions.length}
+                    count={orders.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
