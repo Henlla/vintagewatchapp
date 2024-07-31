@@ -53,7 +53,7 @@ export default function ProfilePage() {
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="Profile Information" {...a11yProps(0)} />
                         <Tab label="Product Sell" {...a11yProps(1)} />
-                        <Tab label="Transaction" {...a11yProps(2)} />
+                        <Tab label="Order" {...a11yProps(2)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>

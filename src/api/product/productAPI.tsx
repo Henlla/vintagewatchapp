@@ -102,11 +102,16 @@ class ProductAPI {
         return axiosClient.post(url, params) as Promise<APIResponse>;
     }
 
+    cancelOrder = (value) => {
+        var url = "payment/RequestRefundPayment"
+        return axiosClient.get(url, { params: { orderId: value } }) as Promise<APIResponse>;
+    }
+
 
     // order
-    getAllOrderOfUser = () => {
+    getAllOrderOfUser = (value) => {
         var url = "order/GetAllOrderOfUser";
-        return axiosClient.get(url) as Promise<APIResponse>;
+        return axiosClient.get(url, { params: { status: value } }) as Promise<APIResponse>;
     }
 
     getAllOrder = () => {

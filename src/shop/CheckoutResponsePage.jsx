@@ -22,7 +22,7 @@ const CheckoutResponsePage = () => {
         if (response.isSuccess) {
             setIcon(successIcon);
             setTitle("Payment success!");
-            setContent(response.data.message);
+            setContent(response.message);
         } else {
             setIcon(failIcon);
             setTitle("Payment fail!");

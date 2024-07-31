@@ -27,6 +27,7 @@ const Shop = () => {
     filterItem();
   }, [currentPage,selectedCategory]);
 
+  
   const getProductWithPaging = async () => {
     var pagingModel = {
       PageNumber: currentPage,
