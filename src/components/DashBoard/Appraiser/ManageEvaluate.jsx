@@ -149,7 +149,8 @@ export default function ManageEvaluate() {
             timepieceData.forEach((item) => {
                 setValue(item.key, item.data);
             });
-        } else if (event.currentTarget.id === "edit") {
+        }
+        else if (event.currentTarget.id === "edit") {
             canEdit = true;
             setSubmitButton(false);
             timepieceData = [

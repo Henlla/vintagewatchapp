@@ -1,11 +1,26 @@
-import { Box, Button, Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TextField } from "@mui/material";
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Paper, Rating, Select, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from "@mui/material";
 import productAPI from "../../api/product/productAPI";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Cancel, Visibility } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import ModalPopup from "../ModalPopup";
 import ConfirmMessage from "../ConfirmMessage";
+import AlertSnackBar from "../AlertSnackBar";
+import { useAuth } from "../../utilis/AuthProvider";
+const style = {
+    height: "70%",
+    position: 'absolute',
+    width: "50%",
+    top: '50%',
+    left: '50%',
+    overflow: "scroll",
+    overflowX: "hidden",
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -25,31 +40,48 @@ const columns = [
     { id: "status", label: "Status", hidden: false, align: "left", minWidth: 100 },
 ]
 
+const delay = ms => new Promise(resovle => setTimeout(ms, resovle));
+
 const TransactionPage = () => {
+    const { user } = useAuth();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [orders, setOrders] = useState([]);
-    const [filterValue, setFilterValue] = useState("");
+    const [orderDetails, setOrderDetails] = useState([]);
+    const [timeRemining, setTimeRemining] = useState(false);
+    const [filterValue, setFilterValue] = useState("all");
     const { register, handleSubmit, reset, setValue, formState: { errors }, clearErrors } = useForm();
+
+    // const [fullName, setFullName] = useState("");
+    // const [email, setEmail] = useState("");
+    const [ratingValue, setRatingValue] = useState(5);
 
     // Model
     const [modalOpen, setOpenModal] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [modalData, setModalData] = useState([]);
-    const [modalButtonName, setModalButtonName] = useState("");
-    const [modalButton, setModalButton] = useState(false);
 
     // Confirm
     const [openConfirm, setOpenConfirm] = useState(false);
     const [confirmValue, setConfirmValue] = useState("");
     const [confirmContent, setConfirmContent] = useState("");
 
+    // Alert
+    const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [snackBarMessage, setSnackBarMessage] = useState("");
+    const [snackBarType, setSnackBarType] = useState("");
+
+    // useEffect(() => {
+    //     setFullName(`${user.firstName} ${user.lastName}`);
+    //     setEmail(`${user.email}`);
+    // }, [])
+
     useEffect(() => {
         fetchOrder();
-    }, []);
+    }, [filterValue]);
 
     const fetchOrder = async () => {
-        var response = await productAPI.getAllOrderOfUser();
+        var response = await productAPI.getAllOrderOfUser(filterValue);
         setOrders(response.data);
     }
 
@@ -67,8 +99,19 @@ const TransactionPage = () => {
         setOpenConfirm(false);
     }
 
-    const cancelOrder = (value) => {
+    const cancelOrder = async (value) => {
+        var response = await productAPI.cancelOrder(value);
+        if (response.isSuccess) {
+            setSnackBarMessage("Cancel order successfull");
+            setSnackBarType("success");
+            setOpenSnackBar(true);
+        } else {
+            setSnackBarMessage(response.data.message);
+            setSnackBarType("error");
+            setOpenSnackBar(true);
+        }
         setOpenConfirm(false);
+        fetchOrder();
     }
 
     const getTransactionOfOrder = async (id) => {
@@ -91,12 +134,13 @@ const TransactionPage = () => {
                     { key: "description", label: "Description", hidden: false, canEdit: false, multiline: true, rows: 3, column: 12 },
                 ]
                 setModalTitle("View Transaction");
-                setModalButton(true);
                 var transaction = await getTransactionOfOrder(row["order"].orderId);
                 modalColumns.map((item, index) => {
                     setValue(item.key, item.format ? item.format(transaction[item.key]) : transaction[item.key]);
                 });
                 setModalData(modalColumns);
+                setTimeRemining(row.timeRemining);
+                setOrderDetails(row.orderDetail);
                 setOpenModal(true);
                 break;
             case "edit":
@@ -110,18 +154,55 @@ const TransactionPage = () => {
                 break;
         }
     }
-
     const handleCloseModal = () => {
+        clearErrors();
+        reset();
         setOpenModal(false);
     }
 
+    const handleSnackBarClose = () => {
+        setOpenSnackBar(false);
+    }
 
-
-    const onSubmit = () => {
-
+    const onSubmit = async (data, productId) => {
+        const { message } = data;
+        if (ratingValue == null) {
+            setSnackBarMessage("Please choose rating star");
+            setSnackBarType("error");
+            setOpenSnackBar(true);
+            return;
+        }
+        var ratingData = {
+            ratingStar: ratingValue,
+            timepieceId: productId,
+            feedbackContent: message
+        }
+        // console.log(ratingData);
+        var formData = new FormData();
+        formData.append("ratingString", JSON.stringify(ratingData));
+        var response = await productAPI.postRating(formData);
+        if (response.isSuccess) {
+            setSnackBarMessage(response.message);
+            setSnackBarType("success");
+            setOpenSnackBar(true);
+        } else if (response.status === 401) {
+            setSnackBarMessage("Please login before rating");
+            setSnackBarType("warning");
+            setOpenSnackBar(true);
+            await delay(2000);
+            navigate('/login', { replace: true });
+            return;
+        } else {
+            setSnackBarMessage(response.data.message);
+            setSnackBarType("error");
+            setOpenSnackBar(true);
+        }
+        reset();
+        setOpenModal(false);
     }
 
     return <>
+        <AlertSnackBar openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} snackBarMessage={snackBarMessage} snackBarType={snackBarType} />
         <ConfirmMessage
             openConfirm={openConfirm}
             handleCloseConfirm={handleCloseConfirm}
@@ -129,18 +210,120 @@ const TransactionPage = () => {
             deleteFunction={cancelOrder}
             confirmContent={confirmContent}
         />
-        <ModalPopup
-            modalOpen={modalOpen}
-            modalTitle={modalTitle}
-            modalData={modalData}
-            modalButtonName={modalButtonName}
-            modalButton={modalButton}
-            handleCloseModal={handleCloseModal}
-            onSubmit={onSubmit}
-            handleSubmit={handleSubmit}
-            errors={errors}
-            register={register} />
-        <TextField label="Search..." onChange={(event) => setFilterValue(event.target.value)} fullWidth sx={{ mb: 2 }} />
+
+        <Modal
+            open={modalOpen}
+            onClose={() => handleCloseModal()}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={style}>
+                <h5>{modalTitle}</h5>
+                <Grid container sx={{ mt: 1 }} spacing={2}>
+                    {
+                        modalData.map((item, index) => (
+                            !item.hidden &&
+                            <Grid item xs={12} md={item.column} key={index}>
+                                <TextField
+                                    name={item.key}
+                                    {...register(item.key, item.validation)}
+                                    error={errors[item.key]?.message != null}
+                                    helperText={errors[item.key]?.message}
+                                    fullWidth
+                                    label={item.label}
+                                    disabled={!item.canEdit}
+                                    multiline={item.multiline}
+                                    rows={item.rows}
+                                />
+                            </Grid>
+                        ))
+                    }
+                </Grid>
+                {
+                    !timeRemining && orderDetails.map((item, index) => {
+                        return <Box className="mt-4" component={"form"} key={index} onSubmit={handleSubmit((data) => onSubmit(data, item.timepiece.timepieceId))}>
+                            <Grid container spacing={2}>
+                                <Grid item >
+                                    <div className="review-title">
+                                        <h5>Review Product</h5>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} md={12}>
+                                    <div className="client-review">
+                                        <div>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12} md={4}>
+                                                    <TextField
+                                                        disabled
+                                                        fullWidth
+                                                        name="timepieceName"
+                                                        size="small"
+                                                        label={"Watch Name"}
+                                                        value={item.timepiece.timepieceName}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} md={4}>
+                                                    <TextField
+                                                        disabled
+                                                        fullWidth
+                                                        name="email"
+                                                        size="small"
+                                                        label={"Seller"}
+                                                        value={`${item.timepiece.user.firstName} ${item.timepiece.user.lastName}`}
+                                                    />
+                                                </Grid>
+                                                <Grid display={"flex"} alignItems={"center"} item xs={12} md={4}>
+                                                    <Typography>Your rating</Typography>
+                                                    <Rating
+                                                        name="rating"
+                                                        value={ratingValue}
+                                                        onChange={(event, newValue) => {
+                                                            setRatingValue(newValue);
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} md={12}>
+                                                    <TextField
+                                                        {...register("message", { required: "Please enter message" })}
+                                                        error={!!errors.message}
+                                                        helperText={errors["message"]?.message}
+                                                        multiline
+                                                        rows={3}
+                                                        fullWidth
+                                                        size="small"
+                                                        name="message"
+                                                        label={"Type Here Message"}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                </Grid>
+                                <Grid item md={12}>
+                                    <Button type='submit' fullWidth variant='contained'>Send Review</Button>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    })
+                }
+            </Box>
+        </Modal >
+        <FormControl fullWidth >
+            <InputLabel id="demo-select-small-label">Select Status</InputLabel>
+            <Select
+                className="text-start mb-2"
+                labelId="demo-select-small-label"
+                label="Select Status"
+                defaultValue={""}
+                onChange={(event) => setFilterValue(event.target.value)}
+            >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="success">Success</MenuItem>
+                <MenuItem value="fail">Fail</MenuItem>
+                <MenuItem value="canceled">Canceled</MenuItem>
+            </Select>
+        </FormControl>
+        {/* <TextField label="Search..." onChange={(event) => setFilterValue(event.target.value)} fullWidth sx={{ mb: 2 }} /> */}
         <Box>
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 370 }}>
@@ -177,7 +360,7 @@ const TransactionPage = () => {
                                                         case "success":
                                                             value = <span style={{ textTransform: "capitalize" }} className="text-success">{row.order[column.id]}</span>
                                                             break;
-                                                        case "cancled":
+                                                        case "canceled":
                                                             value = <span style={{ textTransform: "capitalize" }} className="text-danger">{row.order[column.id]}</span>
                                                             break;
                                                         case "fail":
@@ -205,15 +388,23 @@ const TransactionPage = () => {
                                                 );
                                             })}
                                             <TableCell align='center'>
-                                                <Link name="view" onClick={(event) => row.order["status"] == "success" && iconClick(event, row)}>
-                                                    <Visibility sx={{ mr: 1 }} color={`${row.order["status"] != "success" && "disabled" || "primary"}`} />
-                                                </Link>
-                                                {/* {
-                                                    row.order["status"] == "success" &&
+                                                {
+                                                    (row.order["status"] == "success" || row.order["status"] != "success")
+                                                    &&
+                                                    <Link name="view" onClick={(event) => row.order["status"] == "success" && iconClick(event, row)}>
+                                                        <Visibility className="me-2" color={`${row.order["status"] != "success" && "disabled" || "primary"}`} />
+                                                    </Link>
+                                                }
+                                                {
+                                                    (row.order["status"] == "success"
+                                                        && row.transaction != null
+                                                        && row.refundTransaction == null
+                                                        && row.timeRemining)
+                                                    &&
                                                     <Link name="cancel" onClick={(event) => iconClick(event, row)}>
                                                         <Cancel color='error' />
                                                     </Link>
-                                                } */}
+                                                }
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -231,7 +422,7 @@ const TransactionPage = () => {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-        </Box>
+        </Box >
     </>;
 }
 
