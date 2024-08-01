@@ -279,11 +279,13 @@ const ProductSellPage = () => {
                                                         }
                                                         else if (column.id == "status") {
                                                             if (row.evaluation == null) {
-                                                                value = "Pending";
+                                                                value = <span className="text-warning">Pending</span>;
                                                             } else if (row.evaluation != null && row.timepiece.price == null) {
-                                                                value = "Evaluated";
-                                                            } else if (row.evaluation != null && row.timepiece.price != null) {
-                                                                value = "Selling";
+                                                                value = <span className="text-success">Evaluated</span>;
+                                                            } else if (row.evaluation != null && row.timepiece.price != null && !row.timepiece.isBuy) {
+                                                                value = <span className="text-warning">Selling</span>;
+                                                            } else if (row.evaluation != null && row.timepiece.price != null && row.timepiece.isBuy) {
+                                                                value = <span className="text-success">Selled</span>;
                                                             }
                                                         }
                                                         else if (column.id == "brandName") {
@@ -297,7 +299,7 @@ const ProductSellPage = () => {
                                                                 hidden={column.hidden}
                                                                 key={column.id}
                                                                 align={column.align}>
-                                                                {column.format && typeof value === 'number'
+                                                                {column.format
                                                                     ? column.format(value)
                                                                     : value}
                                                             </StyledTableCell>
@@ -305,17 +307,24 @@ const ProductSellPage = () => {
                                                     })}
 
                                                     <TableCell align='center'>
-                                                        <Link name="view" onClick={(event) => row.evaluation != null && handlOpenModal(event, row)}>
+                                                        <Link name="view" className="me-1" onClick={(event) => row.evaluation != null && handlOpenModal(event, row)}>
                                                             <Visibility color={`${row.evaluation == null && 'disabled' || 'primary'}`} />
                                                         </Link>
-                                                        <Link name="edit" className="mx-1" onClick={(event) => row.timepiece.price == null && handlOpenModal(event, row)}>
-                                                            <Edit color={`${(row.timepiece.price == null && row.evaluation == null) && 'disabled'
-                                                                || (row.timepiece.price == null && row.evaluation != null) && 'secondary'
-                                                                || (row.timepiece.price != null && row.evaluation != null) && 'disabled'}`} />
-                                                        </Link>
-                                                        <Link name="delete" onClick={(event) => row.evaluation != null && handlOpenModal(event, row)}>
-                                                            <Delete color={`${row.evaluation == null && 'disabled' || 'error'}`} />
-                                                        </Link>
+                                                        {
+                                                            (row.evaluation != null && !row.timepiece.isBuy) &&
+                                                            <Link name="edit" className="me-1" onClick={(event) => handlOpenModal(event, row)}>
+                                                                {/* <Edit color={`${((row.timepiece.price == null && row.evaluation == null)) && 'disabled'
+                                                                    || (row.timepiece.price == null && row.evaluation != null) && 'secondary'
+                                                                    || (row.timepiece.price != null && row.evaluation != null) && 'disabled'}`} /> */}
+                                                                <Edit color="secondary" />
+                                                            </Link>
+                                                        }
+                                                        {
+                                                            (row.evaluation != null && !row.timepiece.isBuy) &&
+                                                            <Link name="delete" onClick={(event) => (row.evaluation != null && !row.timepiece.isBuy) && handlOpenModal(event, row)}>
+                                                                <Delete color={`${row.evaluation == null && 'disabled' || 'error'}`} />
+                                                            </Link>
+                                                        }
                                                     </TableCell>
                                                 </TableRow>
                                             );

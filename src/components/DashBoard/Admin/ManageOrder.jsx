@@ -209,7 +209,7 @@ const ManageOrder = () => {
                         <MenuItem value={"All"}>All</MenuItem>
                         <MenuItem value={"pending"}>Pending</MenuItem>
                         <MenuItem value={"success"}>Success</MenuItem>
-                        <MenuItem value={"cancled"}>Cancled</MenuItem>
+                        <MenuItem value={"canceled"}>Canceled</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>
@@ -256,7 +256,7 @@ const ManageOrder = () => {
                                                     classStyle = "text-warning"
                                                 } else if (value == "success") {
                                                     classStyle = "text-success"
-                                                } else if (value == "cancled") {
+                                                } else if (value == "canceled") {
                                                     classStyle = "text-danger"
                                                 }else if (value == "fail") {
                                                     classStyle = "text-danger"
@@ -284,7 +284,7 @@ const ManageOrder = () => {
                                                 <Visibility color='primary' className='me-2' />
                                             </Link>
                                             {
-                                                (row.order.status != "cancled" && row.order.status != "success") &&
+                                                (row.order.status != "canceled" && row.order.status != "success") &&
                                                 <Link name={"edit"} onClick={(event) => buttonClick(event, row)}>
                                                     <Edit color='secondary' />
                                                 </Link>

@@ -9,9 +9,10 @@ import TableRow from '@mui/material/TableRow';
 import productApi from "../../../api/product/productAPI"
 import { useEffect, useState } from 'react';
 import { Box, Button, FormControl, FormHelperText, Grid, InputLabel, Link, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
-import { Edit, Visibility } from '@mui/icons-material';
+import { Edit, Send, Visibility } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import AlertSnackBar from "../../AlertSnackBar"
+import ConfirmMessage from '../../ConfirmMessage';
 
 const columns = [
     { id: 'timepieceId', label: 'Timepiece Id', minWidth: 120, hidden: true, align: "center" },
@@ -91,6 +92,13 @@ export default function ManageEvaluate() {
     const [snackBarType, setSnackBarType] = useState("success");
     const [snackBarMessage, setSnackBarMessage] = useState("");
 
+    // Confirm
+    //  openConfirm, handleCloseConfirm, confirmValue, deleteFunction, confirmContent
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [confirmValue, setConfirmValue] = useState("");
+    const [confirmContent, setConfirmContent] = useState("");
+
+
     const [filterValue, setFilterValue] = useState("");
     const { register, handleSubmit, setValue, reset, clearErrors, formState: { errors } } = useForm();
 
@@ -119,6 +127,25 @@ export default function ManageEvaluate() {
         setTimepieceEvaluate(response.data);
     }
 
+    const sendReport = async (timepieceId) => {
+        const response = await productApi.sendReportToMail(timepieceId);
+        if (response.isSuccess) {
+            setSnackBarMessage("Send email success");
+            setSnackBarType("success")
+            setOpenSnackBar(true);
+            setOpenConfirm(false);
+        } else {
+            setSnackBarMessage("Send email fail");
+            setSnackBarType("error")
+            setOpenSnackBar(true);
+        }
+        getTimepieceNotEvaluate();
+    };
+
+    const handleCloseConfirm = () => {
+        setOpenConfirm(false);
+    }
+
     const onchangeData = (event) => {
         var { name, value } = event.target;
         setValue(name, value);
@@ -134,11 +161,11 @@ export default function ManageEvaluate() {
             timepieceData = [
                 { key: "timepieceId", label: "Timepiece Id", data: timepiece.timepieceId, canEdit: canEdit, hidden: true, type: "text", column: 6 },
                 { key: "timepieceName", label: "Timepiece Name", data: timepiece.timepieceName, canEdit: canEdit, hidden: false, type: "text", column: 6 },
-                { key: "caseDiameter", labe: "Case Diameter", label: "Case Diameter", data: timepiece.caseDiameter, canEdit: canEdit, hidden: false, type: "text", column: 6 },
+                { key: "caseDiameter", label: "Case Diameter", data: timepiece.caseDiameter, canEdit: canEdit, hidden: false, type: "text", column: 6 },
                 { key: "caseMaterial", label: "Case Material", data: timepiece.caseMaterial, canEdit: canEdit, hidden: false, type: "text", column: 6 },
                 { key: "caseThickness", label: "Case Thickness", data: timepiece.caseThickness, canEdit: canEdit, hidden: false, type: "text", column: 6 },
                 { key: "crystal", label: "Crystal", data: timepiece.crystal, canEdit: canEdit, hidden: false, type: "text", column: 6 },
-                { key: "datePost", label: "Date Post", data: timepiece.datePost, canEdit: canEdit, hidden: false, type: "text", column: 6, format: (value) => new Date(value).toLocaleDateString("vi-VN") },
+                { key: "datePost", label: "Date Post", data: new Date(timepiece.datePost).toLocaleDateString("vi-VN"), canEdit: canEdit, hidden: false, type: "text", column: 6 },
                 { key: "description", label: "Description", data: timepiece.description, canEdit: canEdit, hidden: false, type: "text", column: 6 },
                 { key: "movement", label: "Movement", data: timepiece.movement, canEdit: canEdit, hidden: false, type: "text", column: 6 },
                 { key: "strapMaterial", label: "Strap Material", data: timepiece.strapMaterial, canEdit: canEdit, hidden: false, type: "text", column: 6 },
@@ -338,6 +365,7 @@ export default function ManageEvaluate() {
 
     return (
         <Box>
+            <ConfirmMessage openConfirm={openConfirm} handleCloseConfirm={handleCloseConfirm} confirmValue={confirmValue} deleteFunction={sendReport} confirmContent={confirmContent} />
             <AlertSnackBar snackBarMessage={snackBarMessage} snackBarType={snackBarType} openSnackBar={openSnackBar} handleSnackBarClose={handleSnackBarClose} />
             <Box marginBottom={2}>
                 <TextField onChange={(e) => setFilterValue(e.target.value)} fullWidth size='large' label="Search..." />
@@ -357,7 +385,7 @@ export default function ManageEvaluate() {
                                         {column.label}
                                     </TableCell>
                                 ))}
-                                <TableCell align='left'>Action</TableCell>
+                                <TableCell align='center'>Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -389,13 +417,26 @@ export default function ManageEvaluate() {
                                                     </TableCell>
                                                 );
                                             })}
-                                            <TableCell align='left'>
+                                            <TableCell align='center'>
                                                 <Link id={"view"} onClick={(event) => handlOpenModal(event, row)}>
                                                     <Visibility color='primary' className='me-2' />
                                                 </Link>
-                                                <Link id={"edit"} onClick={(event) => handlOpenModal(event, row)}>
-                                                    <Edit color='secondary' className='me-2' />
-                                                </Link>
+                                                {
+                                                    row.timepiece.isReceive &&
+                                                    <Link id={"edit"} onClick={(event) => handlOpenModal(event, row)}>
+                                                        <Edit color='secondary' className='me-2' />
+                                                    </Link>
+                                                }
+                                                {
+                                                    !row.timepiece.isReceive &&
+                                                    <Link onClick={() => {
+                                                        setConfirmValue(row.timepiece.timepieceId)
+                                                        setConfirmContent("Are you sure that you have receive the watch of customer?")
+                                                        setOpenConfirm(true);
+                                                    }}>
+                                                        <Send color='secondary' />
+                                                    </Link>
+                                                }
                                             </TableCell>
                                         </TableRow>
                                     );
