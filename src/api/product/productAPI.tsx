@@ -134,6 +134,11 @@ class ProductAPI {
         var url = "transaction/GetTransactionOfOrder";
         return axiosClient.get(url, { params: { orderId: orderId } }) as Promise<APIResponse>;
     }
+
+    sendReportToMail = (value) => {
+        var url = "evaluation/SendReportToMail";
+        return axiosClient.get(url, { params: { timepieceId: value } }) as Promise<APIResponse>;
+    }
 }
 
 const productAPI = new ProductAPI();

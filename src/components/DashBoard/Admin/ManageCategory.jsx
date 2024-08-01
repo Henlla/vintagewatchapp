@@ -142,8 +142,13 @@ export default function ManageCategory() {
             var response = await categoryApi.deleteCategory(data);
             if (response.isSuccess) {
                 setOpenConfirm(false);
-                setSnackBarMessage("Delete category success");
+                setSnackBarMessage(response.message);
                 setSnackBarType("success");
+                setOpenSnackBar(true);
+            }else{
+                setOpenConfirm(false);
+                setSnackBarMessage(response.data.message);
+                setSnackBarType("error");
                 setOpenSnackBar(true);
             }
         }

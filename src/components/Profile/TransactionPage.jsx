@@ -43,12 +43,12 @@ const columns = [
 const delay = ms => new Promise(resovle => setTimeout(ms, resovle));
 
 const TransactionPage = () => {
-    const { user } = useAuth();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [orders, setOrders] = useState([]);
     const [orderDetails, setOrderDetails] = useState([]);
     const [timeRemining, setTimeRemining] = useState(false);
+    const [refundTransaction, setRefundTransaction] = useState(null);
     const [filterValue, setFilterValue] = useState("all");
     const { register, handleSubmit, reset, setValue, formState: { errors }, clearErrors } = useForm();
 
@@ -71,10 +71,6 @@ const TransactionPage = () => {
     const [snackBarMessage, setSnackBarMessage] = useState("");
     const [snackBarType, setSnackBarType] = useState("");
 
-    // useEffect(() => {
-    //     setFullName(`${user.firstName} ${user.lastName}`);
-    //     setEmail(`${user.email}`);
-    // }, [])
 
     useEffect(() => {
         fetchOrder();
@@ -141,6 +137,7 @@ const TransactionPage = () => {
                 setModalData(modalColumns);
                 setTimeRemining(row.timeRemining);
                 setOrderDetails(row.orderDetail);
+                setRefundTransaction(row.refundTransaction);
                 setOpenModal(true);
                 break;
             case "edit":
@@ -240,7 +237,8 @@ const TransactionPage = () => {
                     }
                 </Grid>
                 {
-                    !timeRemining && orderDetails.map((item, index) => {
+                    // The product buy success
+                    (!timeRemining && !refundTransaction) && orderDetails.map((item, index) => {
                         return <Box className="mt-4" component={"form"} key={index} onSubmit={handleSubmit((data) => onSubmit(data, item.timepiece.timepieceId))}>
                             <Grid container spacing={2}>
                                 <Grid item >
@@ -304,7 +302,76 @@ const TransactionPage = () => {
                                 </Grid>
                             </Grid>
                         </Box>
-                    })
+                    }) ||
+
+                    // The product has canceled and refund
+                    refundTransaction && <Box className="mt-4" component={"form"}>
+                        <Grid container spacing={2}>
+                            <Grid item >
+                                <div className="review-title">
+                                    <h5>Refund detail</h5>
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} md={12}>
+                                <div className="client-review">
+                                    <div>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} md={6}>
+                                                <TextField
+                                                    disabled
+                                                    fullWidth
+                                                    name="refundBankCode"
+                                                    size="large"
+                                                    label={"Refund Bank Code"}
+                                                    value={refundTransaction.refundBankCode}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} md={6}>
+                                                <TextField
+                                                    disabled
+                                                    fullWidth
+                                                    name="refundDate"
+                                                    size="large"
+                                                    label={"Refund Date"}
+                                                    value={new Date(refundTransaction.refundDate).toLocaleDateString("vi-VN")}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} md={6}>
+                                                <TextField
+                                                    disabled
+                                                    fullWidth
+                                                    name="refundType"
+                                                    size="large"
+                                                    label={"Refund Type"}
+                                                    value={refundTransaction.refundType}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} md={6}>
+                                                <TextField
+                                                    disabled
+                                                    fullWidth
+                                                    name="refundAmount"
+                                                    size="large"
+                                                    label={"Refund Amount"}
+                                                    value={`${new Intl.NumberFormat("vi-VN").format(refundTransaction.refundAmount)} vnd` }
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} md={12}>
+                                                <TextField
+                                                    disabled
+                                                    fullWidth
+                                                    name="refundInfo"
+                                                    size="large"
+                                                    label={"Refund Info"}
+                                                    value={refundTransaction.refundInfo}
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </div>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </Box>
                 }
             </Box>
         </Modal >
@@ -391,8 +458,8 @@ const TransactionPage = () => {
                                                 {
                                                     (row.order["status"] == "success" || row.order["status"] != "success")
                                                     &&
-                                                    <Link name="view" onClick={(event) => row.order["status"] == "success" && iconClick(event, row)}>
-                                                        <Visibility className="me-2" color={`${row.order["status"] != "success" && "disabled" || "primary"}`} />
+                                                    <Link name="view" onClick={(event) => row.transaction != null && iconClick(event, row)}>
+                                                        <Visibility className="me-2" color={`${row.transaction == null && "disabled" || "primary"}`} />
                                                     </Link>
                                                 }
                                                 {
