@@ -181,6 +181,13 @@ const Evaluation = () => {
         mainImageInput.current.click();
     }
 
+    const getSafeImageSrc = (src) => {
+        if (typeof src !== "string") return plusImage;
+        if (src.startsWith("blob:")) return src;
+        if (src.startsWith("data:image/")) return src;
+        return plusImage;
+    }
+
     const handleMainImageChange = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -278,7 +285,7 @@ const Evaluation = () => {
                             <img
                                 onClick={() => mainImageClick()}
                                 className="border border-secondary border-2 rounded-4"
-                                src={mainImage}
+                                src={getSafeImageSrc(mainImage)}
                                 alt="image"
                                 width={210}
                                 height={210} />
