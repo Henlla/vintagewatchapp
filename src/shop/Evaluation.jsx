@@ -183,10 +183,21 @@ const Evaluation = () => {
 
     const handleMainImageChange = (event) => {
         const file = event.target.files[0];
-        if (file) {
-            setMainImage(URL.createObjectURL(file));
-            setMainFile(file);
+        if (!file) return;
+
+        const allowedImageTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"];
+        if (!allowedImageTypes.includes(file.type)) {
+            setSnackBarType("error");
+            setSnackBarMessage("Please select a valid image file.");
+            setOpenSnackBar(true);
+            event.target.value = "";
+            setMainFile(null);
+            setMainImage(plusImage);
+            return;
         }
+
+        setMainImage(URL.createObjectURL(file));
+        setMainFile(file);
     }
 
     const onSubmit = async (data) => {
@@ -273,6 +284,7 @@ const Evaluation = () => {
                                 height={210} />
                             <input
                                 type="file"
+                                accept="image/*"
                                 ref={mainImageInput}
                                 onChange={(event) => handleMainImageChange(event)}
                                 hidden />
